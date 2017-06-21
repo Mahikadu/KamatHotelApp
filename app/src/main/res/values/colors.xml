@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#303F9F</color>
+
+    <!--
+        <color name="head_blue">#0261CF</color>
+    -->
+
+    <color name="head_blue">#3399dd</color>
+    <color name="red">#B31117</color>
+    <color name="dark_grey">#58595B</color>
+    <color name="dark_grey1">#58595B</color>
+
+    <color name="background">#fcfdeb</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="light_grey">#919191</color>
+
+    <color name="grey">#DBDBDB</color>
+    <color name="box_back">#e3e4d4</color>
+    <color name="blue">#0067AC</color>
+    <color name="yellow">#FDEEC5</color>
+    <color name="bluebackgroud">#0A80C6</color>
+    <color name="pink">#EADBBE</color>
+    <color name="actionbar">#D9DACA</color>
+    <color name="light_yellow">#fafbe9</color>
+    <color name="light_blue">#1a99dd</color>
+    <color name="text_dark_blue">#005e9e</color>
+    <color name="text_light_blue">#1e9bdd</color>
+    <color name="button_light_blue">#FF0295CF</color>
+
+
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="background_button_pressed">#DF5B5A</color>
+
+    <!-- Kaustubh colors-->
+    <color name="colorBackground">#fcfdeb</color>
+    <color name="colorBlueText">#1e9bdd</color>
+    <color name="colorButtonandTextBlue">#005E9E</color>
+    <color name="colorRedText">#b11116</color>
+    <color name="colorCardViewBackground">#e3e4d4</color>
+    <color name="colorButton">#cdcdcd</color>
+    <color name="colorButtonText">#00609f</color>
+    <color name="colorLine">#696968</color>
+    <color name="layout_top">#a6a6a6</color>
+    <color name="layout_bottom">#666666</color>
+    <color name="colorLeftBlueTextnew">#00488f</color>
+    <color name="colorRightBlueTextnew">#0c93db</color>
+    <color name="colortablelayoutbackground">#e3e4d4</color>
+
+    <color name="snackbar_red">#EA232A</color>
+    <color name="snackbar_green">#25D366</color>
+
+</resources>

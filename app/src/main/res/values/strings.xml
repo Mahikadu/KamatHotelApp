@@ -1,0 +1,587 @@
+<resources>
+    <string name="app_name">KHIL</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="legal_entity">
+        <item>Select Legal Entity</item>
+        <item>Entity 1</item>
+        <item>Entity 2</item>
+        <item>Entity 3</item>
+        <item>Entity 4</item>
+        <item>Entity 5</item>
+        <item>Entity 6</item>
+        <item>Entity 7</item>
+    </string-array>
+
+    <string-array name="property">
+        <item>Select Property</item>
+        <item>Property 1</item>
+        <item>Property 2</item>
+        <item>Property 3</item>
+        <item>Property 4</item>
+        <item>Property 5</item>
+        <item>Property 6</item>
+        <item>Property 7</item>
+    </string-array>
+
+    <string-array name="month">
+        <item>Select Month</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <string-array name="year">
+        <item>Select Year</item>
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+    </string-array>
+
+    <string-array name="quarter">
+        <item>Select Quarter</item>
+        <item>Quarter 1</item>
+        <item>Quarter 2</item>
+        <item>Quarter 3</item>
+        <item>Quarter 4</item>
+    </string-array>
+
+    <string-array name="location">
+        <item>Select Location</item>
+        <item>L-1</item>
+        <item>L-2</item>
+        <item>L-3</item>
+        <item>L-4</item>
+    </string-array>
+
+    <string-array name="type">
+        <item>Select Type</item>
+        <item>T-1</item>
+        <item>T-2</item>
+        <item>T-3</item>
+        <item>T-4</item>
+    </string-array>
+
+    <string-array name="finance_type">
+        <item>Select Finance Type</item>
+        <item>Direct Taxation(DTX)</item>
+        <item>In-direct Taxation(IDTX)</item>
+        <item>Finance(FNC)</item>
+        <item>Accounts(ACNTS)</item>
+        <item>Banking(BNKG)</item>
+        <item>Audit(AUDIT)</item>
+    </string-array>
+
+    <string-array name="direct_taxation">
+        <item>Select Direct Taxation</item>
+        <item>Income Tax Return(ITR)</item>
+        <item>Assessment(ASMT)</item>
+        <item>Apeal(APL)</item>
+        <item>E-tds Return (Non-salary)(ETDR(NON))</item>
+        <item>E-tds Return (Salaries)(ETDR(S))</item>
+    </string-array>
+
+    <string-array name="income_tax_return">
+        <item>Select Income Tax Return</item>
+        <item>Acknowledgement(ACK)</item>
+        <item>ITR(ITR)</item>
+        <item>Advance Tax Payment(ATP)</item>
+        <item>Self Assessment Tax Payment(SATP)</item>
+        <item>Regular Assessment Tax Payment(RATP)</item>
+    </string-array>
+
+    <string-array name="assessment">
+        <item>Select Assessment</item>
+        <item>Dividend Tax Payment(DTP)</item>
+        <item>Scrutiny(SRT)</item>
+    </string-array>
+
+    <string-array name="scrutiny">
+        <item>Select Scrutiny</item>
+        <item>Notice(NT)</item>
+        <item>Scrutiny(SRT)</item>
+        <item>Replies &amp; Details(RAD)</item>
+        <item>Assessment Order(ASO)</item>
+        <item>Rectification(RCT)</item>
+        <item>Stay</item>
+        <item>Order giving effect - CIT A order(OGECAO)</item>
+    </string-array>
+
+    <string-array name="appeal">
+        <item>Select Appeal</item>
+        <item>CIT-A(CIT-A)</item>
+        <item>ITAT(ITAT)</item>
+        <item>High Court(HCRT)</item>
+        <item>Supreme Court(SPRMCT)</item>
+    </string-array>
+
+    <string-array name="cit_a">
+        <item>Select CIT-A</item>
+        <item>Form 35(FRM35)</item>
+        <item>statement of facts &amp; grounds(SOFAG)</item>
+        <item>Filing Fees(FLFES)</item>
+        <item>Efiling Of  appeal(ELOA)</item>
+        <item>Notice(NT)</item>
+        <item>written submissions(WSM)</item>
+        <item>Paper book(PRBK)</item>
+        <item>Order(ORDR)</item>
+    </string-array>
+
+    <string-array name="itat">
+        <item>Select ITAT</item>
+        <item>Form 36(FRM36)</item>
+        <item>statement of facts &amp; grounds(SOFAG)</item>
+        <item>Filing Fees(FLFES)</item>
+        <item>Efiling Of  appeal(ELOA)</item>
+        <item>Notice(NT)</item>
+        <item>written submissions(WSM)</item>
+        <item>Paper book(PRBK)</item>
+        <item>Order(ORDR)</item>
+    </string-array>
+
+    <string-array name="high_court">
+        <item>Select High Court</item>
+        <item>Vakalatnama(VKLTMA)</item>
+        <item>Filing(FLN)</item>
+        <item>Affitdavits(AFDT)</item>
+        <item>Order(ORDR)</item>
+    </string-array>
+
+    <string-array name="supreme_court">
+        <item>Select Supreme Court</item>
+        <item>Vakalatnama(VKLTMA)</item>
+        <item>Filing(FLN)</item>
+        <item>Affitdavits(AFDT)</item>
+        <item>Order(ORDR)</item>
+    </string-array>
+
+    <string-array name="e_tds_non_salaries">
+        <item>Select E-tds Return</item>
+        <item>TAN Details(TANDLS)</item>
+        <item>Lower deduction(LRDT)</item>
+        <item>TDS Challan Payment Receipt Monthly(TCPRM)</item>
+        <item>Form 16(FRM16)</item>
+        <item>Quarterly Return(QRTUN)</item>
+        <item>FVV File(FVVF)</item>
+        <item>Revised Return(RVSR)</item>
+        <item>Notice(NT)</item>
+    </string-array>
+
+    <string-array name="e_tds_salaries">
+        <item>Select E-tds Return</item>
+        <item>TDS Challan Payment Receipt Monthly(TCPRM)</item>
+        <item>Quarterly Return(QRTUN)</item>
+        <item>FVV File(FVVF)</item>
+        <item>Revised Return(RVSR)</item>
+        <item>Notice(NT)</item>
+    </string-array>
+
+    <string-array name="indirect_taxation">
+        <item>Select In-Direct Taxation</item>
+        <item>Location/Property/Unit(LOPU)</item>
+        <item>State(STE)</item>
+    </string-array>
+
+    <string-array name="location_pro_unit">
+        <item>Select Location/Property/Unit</item>
+        <item>Foreign Remittances(FRMTNC)</item>
+        <item>Employee TDS(EMPTDS)</item>
+        <item>Service Tax(SRTX)</item>
+    </string-array>
+
+    <string-array name="foreign_remittances">
+        <item>Select Foreign remittances</item>
+        <item>Form 15CA/CB(FRM15CA/CB)</item>
+        <item>Tax Residency Certificates(TXCRT)</item>
+        <item>Form 10F(FRM10F)</item>
+        <item>Invoice etc(INVETC)</item>
+    </string-array>
+
+    <string-array name="employee_tds">
+        <item>Select Employee TDS</item>
+        <item>Form 12BB(FRM12BB)</item>
+        <item>INVESTMENT PROOF(INVSTPRF)</item>
+        <item>Deductions proof(DUTPRF)</item>
+        <item>MEDICAL REIMBURESEMENT(MDREMNT)</item>
+        <item>FORM 16(FORM16)</item>
+    </string-array>
+
+    <string-array name="service_tax">
+        <item>Select Service Tax</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="state">
+        <item>Select State</item>
+        <item>Central Excise(CTREX)</item>
+        <item>VAT(VAT)</item>
+        <item>Luxury Tax(LXRTX)</item>
+        <item>Profession Tax(PFSTX)</item>
+        <item>Local Body Tax(LCLBDTX)</item>
+        <item>GST(GST)</item>
+        <item>Customs(CUTMS)</item>
+    </string-array>
+
+    <string-array name="central_excise">
+        <item>Select Central Excise</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="vat">
+        <item>Select VAT</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="luxury_tax">
+        <item>Select Luxury Tax</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="profession_tax">
+        <item>Select Profession Tax</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="local_body_tax">
+        <item>Select Local Body Tax</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="gst">
+        <item>Select GST</item>
+        <item>Registration Certificate(REGSTCRF)</item>
+        <item>Monthly Payments(MNTPYT)</item>
+        <item>Returns(RTNS)</item>
+        <item>Audit(AUT)</item>
+        <item>Notice(NT)</item>
+        <item>Submissions(SUBMNS)</item>
+        <item>Order(ORD)</item>
+        <item>Appeal(APL)</item>
+    </string-array>
+
+    <string-array name="customs">
+        <item>Select Customs</item>
+        <item>FIRC(FIRC)</item>
+        <item>Licenses(LISNS)</item>
+    </string-array>
+
+    <string-array name="licenses">
+        <item>Select Licenses</item>
+        <item>Notices(NTCS)</item>
+        <item>Redemption(RDMPT)</item>
+        <item>Application(APLCTN)</item>
+        <item>Installation Certificates(ITCF)</item>
+    </string-array>
+
+    <string-array name="finance">
+        <item>Select Finance</item>
+        <item>Lender List(LDL)</item>
+        <item>ARC List(ARCL)</item>
+    </string-array>
+
+    <string-array name="lender_list">
+        <item>Select Lender List</item>
+        <item>Application/Proposals(A/P)</item>
+        <item>Valuations(VLTNS)</item>
+        <item>Sanction Letter(SNTLTR)</item>
+        <item>Loan Agreements(LNAGRMNT)</item>
+        <item>Disb Requests(DBRTS)</item>
+        <item>Security Creation(STCRTN)</item>
+        <item>Registration(REGSTN)</item>
+    </string-array>
+
+    <string-array name="arc_list">
+        <item>Select Lender List</item>
+        <item>Application/Proposals(A/P)</item>
+        <item>Valuations(VLTNS)</item>
+        <item>Sanction Letter(SNTLTR)</item>
+        <item>Loan Agreements(LNAGRMNT)</item>
+        <item>Disb Requests(DBRTS)</item>
+        <item>Security Creation(STCRTN)</item>
+        <item>Registration(REGSTN)</item>
+    </string-array>
+
+    <string-array name="accounts">
+        <item>Select Accounts</item>
+        <item>Receivable(RCVABL)</item>
+        <item>Payable(PYBL)</item>
+        <item>Fixed Assets(FXASTS)</item>
+    </string-array>
+
+    <string-array name="receivable">
+        <item>Select Receivable</item>
+        <item>Rent(RENT)</item>
+        <item>Interest(RNTRT)</item>
+        <item>DSR(DSR)</item>
+        <item>Royalty fee(ROLTFEE)</item>
+        <item>Franchisee fee(FRHFEE)</item>
+        <item>Management fee(MGNTFEE)</item>
+        <item>AMC(AMC)</item>
+        <item>Dividends(DVDND)</item>
+    </string-array>
+
+    <string-array name="payable">
+        <item>Select Payable</item>
+        <item>Others(OTRS)</item>
+        <item>Contractors(CNTCTRS)</item>
+        <item>PO(PO)</item>
+        <item>Retainer(RTNR)</item>
+        <item>Paysheet(PYSHT)</item>
+        <item>Interest(ITRST)</item>
+    </string-array>
+
+    <string-array name="fixed_assets">
+        <item>Select Fixed Assets</item>
+        <item>Others(OTRS)</item>
+        <item>Capex(CPX)</item>
+        <item>Purchase Bills(PURCHSBL)</item>
+        <item>Sale Bills(SLBL)</item>
+        <item>Depreciation(DPRCTN)</item>
+        <item>Physical Verification(PHIVRFT)</item>
+    </string-array>
+
+    <string-array name="banking">
+        <item>Select Banking</item>
+        <item>Daily Finance Memo(DFMO)</item>
+        <item>Monthly CashFlow(MCFW)</item>
+        <item>Investments(INVSMNT)</item>
+    </string-array>
+
+    <string-array name="audit">
+        <item>Select Audit</item>
+        <item>Statutory Audit(STTAT)</item>
+        <item>Internal Audit(ITLAT)</item>
+        <item>Concurrent Audit(CCRAT)</item>
+    </string-array>
+
+    <string-array name="hr">
+        <item>Select HR</item>
+        <item>New Joinee(NJNE)</item>
+        <item>Existing employees(EXEMP)</item>
+        <item>Retainer(RTNR)</item>
+        <item>Colletrals(CLTRLS)</item>
+    </string-array>
+
+    <string-array name="new_joinee">
+        <item>Select New Joinee</item>
+        <item>Payroll(PYRL)</item>
+        <item>FTC(FTC)</item>
+    </string-array>
+
+    <string-array name="payroll">
+        <item>Select Payroll</item>
+        <item>Offer Letter(OFFLTR)</item>
+        <item>Documentation(DCNT)</item>
+        <item>Appointment Letter(APLTR)</item>
+        <item>Confirmation Letter(CTLTR)</item>
+        <item>Appreciation(APRCN)</item>
+        <item>Warning Letter(WNLT)</item>
+    </string-array>
+
+    <string-array name="FTC">
+        <item>Select FTC</item>
+        <item>Offer Letter</item>
+        <item>Documentation</item>
+        <item>Appointment Letter</item>
+        <item>Confirmation Letter</item>
+        <item>Appreciation</item>
+        <item>Warning Letter</item>
+        <item>Trainings</item>
+        <item>performance apprasial</item>
+        <item>Trainings</item>
+        <item>Exit formalities</item>
+    </string-array>
+
+    <string-array name="existing_emp">
+        <item>Select Existing Employee</item>
+        <item>Offer Letter</item>
+        <item>Documentation</item>
+        <item>Appointment Letter</item>
+        <item>Confirmation Letter</item>
+        <item>Appreciation</item>
+        <item>Warning Letter</item>
+        <item>Trainings</item>
+        <item>performance apprasial</item>
+        <item>Trainings</item>
+        <item>Exit formalities</item>
+    </string-array>
+
+    <string-array name="retainer">
+        <item>Select Retainer</item>
+        <item>Terms of Employment</item>
+        <item>Offer Letter</item>
+        <item>Documentation</item>
+        <item>Appreciation</item>
+        <item>Warning Letter</item>
+        <item>Trainings</item>
+        <item>performance apprasial</item>
+        <item>Trainings</item>
+        <item>Exit formalities</item>
+    </string-array>
+
+    <string-array name="collateral">
+        <item>Select Collateral</item>
+        <item>PPTS</item>
+        <item>Video</item>
+        <item>Audio</item>
+    </string-array>
+
+    <string-array name="marketing">
+        <item>Select Marketing</item>
+        <item>General</item>
+        <item>Gallery</item>
+        <item>Restaurant List</item>
+        <item>Agreements</item>
+        <item>Agency List</item>
+    </string-array>
+
+    <string-array name="general">
+        <item>Select General</item>
+        <item>Broucher</item>
+        <item>Factsheet</item>
+        <item>Wedding</item>
+        <item>Ecotel</item>
+        <item>F &amp; B Calendar</item>
+        <item>Environments</item>
+        <item>Loyalty Program</item>
+    </string-array>
+
+    <string-array name="environment">
+        <item>Select Environment</item>
+        <item>Acitivity Creatives</item>
+        <item>Activities Images</item>
+    </string-array>
+
+    <string-array name="loyalty_program">
+        <item>Select Loyalty Program</item>
+        <item>Creatives</item>
+    </string-array>
+
+    <string-array name="gallery">
+        <item>Select Gallery</item>
+        <item>Images</item>
+        <item>Event Photos</item>
+        <item>Celebrity Visit</item>
+    </string-array>
+
+    <string-array name="gallery_images">
+        <item>Select Gallery</item>
+        <item>Property Images</item>
+        <item>Fascade Images</item>
+        <item>Room Images</item>
+        <item>Public Areas</item>
+        <item>Property Logo</item>
+        <item>Fitness Club</item>
+        <item>Swimming Pool</item>
+        <item>AAI Musuem</item>
+        <item>Property Video</item>
+        <item>Hall Category</item>
+        <item>Banquet Photos</item>
+        <item>Set-up Images</item>
+        <item>Food Shot</item>
+        <item>Restaurant Images</item>
+    </string-array>
+
+    <string-array name="event_photos">
+        <item>Select Event Photos</item>
+        <item>Wedding</item>
+        <item>Corporates Parties</item>
+        <item>Cocktail Parties</item>
+        <item>Parties</item>
+    </string-array>
+
+    <string-array name="celebrity_visit">
+        <item>Select Celebrity Visit</item>
+        <item>Photos</item>
+        <item>Videos</item>
+    </string-array>
+
+    <string-array name="restaurant_list">
+        <item>Select Restaurant List</item>
+        <item>Promotions</item>
+    </string-array>
+
+    <string-array name="promotions">
+        <item>Select Promotions</item>
+        <item>One Day</item>
+        <item>10 Days</item>
+        <item>Seasonal</item>
+        <item>On-going</item>
+    </string-array>
+
+    <string-array name="ongoing">
+        <item>Select Ongoing</item>
+        <item>Concept Note</item>
+        <item>Creative</item>
+        <item>Food Menu</item>
+        <item>Press Release</item>
+        <item>Coverage</item>
+    </string-array>
+
+    </resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_pressed="true" >
+        <shape android:shape="rectangle"  >
+
+            <stroke android:width="1dip" android:color="@color/colorButtonandTextBlue" />
+            <gradient android:angle="-90" android:startColor="@color/text_dark_blue" android:endColor="@color/button_light_blue"  />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+
+            <stroke android:width="1dip" android:color="@color/colorButtonandTextBlue" />
+            <solid android:color="@color/text_light_blue"/>
+        </shape>
+    </item>
+    <item >
+        <shape android:shape="rectangle"  >
+
+            <stroke android:width="1dip" android:color="@color/text_light_blue" />
+            <gradient android:angle="-90" android:startColor="@color/background_tab_pressed" android:endColor="@color/button_light_blue" />
+        </shape>
+    </item>
+</selector>
+
+<!--<corners android:radius="3dip" />-->
