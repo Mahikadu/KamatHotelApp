@@ -1,8 +1,8 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.admin.kamathotelapp.Fragments.DashboardFragment">
 
@@ -14,7 +14,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/white"
+            android:visibility="visible"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="2dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinLegalEntity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:completionThreshold="1"
+                    android:gravity="center_vertical"
+                    android:hint="Legal Entity"
+                    android:imeOptions="actionNext"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:windowSoftInputMode="stateHidden"
+                    android:inputType="none"
+                    android:textIsSelectable="true"
+                    android:maxLength="50"
+                    android:nextFocusDown="@+id/spinProperty"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="15dp"
+                    app:customFont="@string/font_lightl" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.v7.widget.CardView>
+
+   <!-- <TextView
         android:id="@+id/txtLegalEntity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -23,9 +66,53 @@
         android:id="@+id/spinLegalEntity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp" />-->
 
-    <TextView
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/white"
+            android:visibility="visible"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="2dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinProperty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:completionThreshold="1"
+                    android:gravity="center_vertical"
+                    android:hint="Property"
+                    android:imeOptions="actionNext"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:windowSoftInputMode="stateHidden"
+                    android:inputType="none"
+                    android:textIsSelectable="true"
+                    android:maxLength="50"
+                    android:nextFocusDown="@+id/spinMonth"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="15dp"
+                    app:customFont="@string/font_lightl" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.v7.widget.CardView>
+
+   <!-- <TextView
         android:id="@+id/txtProperty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinProperty"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,9 +135,52 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginRight="2dp"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/white"
+                android:visibility="visible"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="2dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:completionThreshold="1"
+                        android:gravity="center_vertical"
+                        android:hint="Month"
+                        android:imeOptions="actionNext"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:windowSoftInputMode="stateHidden"
+                        android:inputType="none"
+                        android:textIsSelectable="true"
+                        android:maxLength="50"
+                        android:nextFocusDown="@+id/spinYear"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="5dp"
+                        android:singleLine="true"
+                        android:textColor="@color/app_text_color"
+                        android:textSize="15dp"
+                        app:customFont="@string/font_lightl" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <!--<TextView
                 android:id="@+id/txtMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -60,16 +190,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/white"
+                android:visibility="visible"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="2dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:completionThreshold="1"
+                        android:gravity="center_vertical"
+                        android:hint="Year"
+                        android:imeOptions="actionNext"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:windowSoftInputMode="stateHidden"
+                        android:inputType="none"
+                        android:textIsSelectable="true"
+                        android:maxLength="50"
+                        android:nextFocusDown="@+id/spinQuarter"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="5dp"
+                        android:singleLine="true"
+                        android:textColor="@color/app_text_color"
+                        android:textSize="15dp"
+                        app:customFont="@string/font_lightl" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </android.support.v7.widget.CardView>
+
+          <!--  <TextView
                 android:id="@+id/txtYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -79,16 +253,59 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinYear"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginLeft="2dp"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/white"
+                android:visibility="visible"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="2dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinQuarter"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:completionThreshold="1"
+                        android:gravity="center_vertical"
+                        android:hint="Quarter"
+                        android:imeOptions="actionNext"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:windowSoftInputMode="stateHidden"
+                        android:inputType="none"
+                        android:textIsSelectable="true"
+                        android:maxLength="50"
+                        android:nextFocusDown="@+id/spinLoc"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="5dp"
+                        android:singleLine="true"
+                        android:textColor="@color/app_text_color"
+                        android:textSize="15dp"
+                        app:customFont="@string/font_lightl" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </android.support.v7.widget.CardView>
+
+           <!-- <TextView
                 android:id="@+id/txtQuarter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -97,7 +314,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinQuarter"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
     </LinearLayout>
 
@@ -105,7 +322,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:weightSum="2">
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -113,7 +330,49 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/white"
+                android:visibility="visible"
+                app:cardCornerRadius="3dp"
+                app:cardElevation="2dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinLoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:completionThreshold="1"
+                        android:gravity="center_vertical"
+                        android:hint="Location"
+                        android:imeOptions="actionNext"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:windowSoftInputMode="stateHidden"
+                        android:inputType="none"
+                        android:textIsSelectable="true"
+                        android:maxLength="50"
+                        android:nextFocusDown="@+id/spinLevel2"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="5dp"
+                        android:singleLine="true"
+                        android:textColor="@color/app_text_color"
+                        android:textSize="15dp"
+                        app:customFont="@string/font_lightl" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </android.support.v7.widget.CardView>
+
+         <!--   <TextView
                 android:id="@+id/txtLoc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -123,30 +382,56 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinLoc"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinType"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/white"
+            android:visibility="visible"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="2dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinLevel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:completionThreshold="1"
+                    android:gravity="center_vertical"
+                    android:hint="Financial Type"
+                    android:imeOptions="actionNext"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:windowSoftInputMode="stateHidden"
+                    android:inputType="none"
+                    android:textIsSelectable="true"
+                    android:maxLength="50"
+                    android:nextFocusDown="@+id/spinLevel3"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="15dp"
+                    app:customFont="@string/font_lightl" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+       <!-- <TextView
         android:id="@+id/txtLevel2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -158,9 +443,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp" />-->
 
-    <TextView
+        <android.support.v7.widget.CardView
+            android:id="@+id/level3cardview"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/white"
+            android:visibility="gone"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="2dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/level3txtlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinLevel3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:completionThreshold="1"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    android:imeOptions="actionNext"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:windowSoftInputMode="stateHidden"
+                    android:inputType="none"
+                    android:textIsSelectable="true"
+                    android:maxLength="50"
+                    android:nextFocusDown="@+id/edt_sub_source"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/app_text_color"
+                    android:textSize="15dp"
+                    app:customFont="@string/font_lightl" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.v7.widget.CardView>
+
+   <!-- <TextView
         android:id="@+id/txtLevel3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -173,7 +503,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:visibility="gone"/>
+        android:visibility="gone"/>-->
 
     <TextView
         android:id="@+id/txtLevel4"
@@ -234,7 +564,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Upload"
-        android:visibility="gone"/>
+        />
 
     <HorizontalScrollView
         android:layout_width="wrap_content"

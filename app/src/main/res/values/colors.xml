@@ -38,6 +38,7 @@
     <color name="background_button_pressed">#DF5B5A</color>
 
     <!-- Kaustubh colors-->
+    <color name="app_text_color">#636363</color>
     <color name="colorBackground">#fcfdeb</color>
     <color name="colorBlueText">#1e9bdd</color>
     <color name="colorButtonandTextBlue">#005E9E</color>

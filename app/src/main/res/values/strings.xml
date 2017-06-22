@@ -10,6 +10,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="font_extralightl">fonts/montserrat_extralight.ttf</string>
+    <string name="font_semibold">fonts/montserrat_semibold.ttf</string>
+    <string name="font_lightl">fonts/montserrat_light.ttf</string>
+    <string name="font_normal">fonts/montserrat_regular.ttf</string>
+
     <string-array name="legal_entity">
         <item>Select Legal Entity</item>
         <item>Entity 1</item>

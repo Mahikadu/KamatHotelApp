@@ -1,6 +1,8 @@
 package com.example.admin.kamathotelapp;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,8 +12,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.admin.kamathotelapp.Utils.SharedPref;
+import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
+import com.example.admin.kamathotelapp.dbConfig.DatabaseCopy;
+import com.example.admin.kamathotelapp.dbConfig.DbHelper;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         sharedPref = new SharedPref(MainActivity.this);
+
+        DatabaseCopy databaseCopy = new DatabaseCopy();
+        AssetManager assetManager = this.getAssets();
+        databaseCopy.copy(assetManager, MainActivity.this);
+        KHIL.dbCon = DataBaseCon.getInstance(getApplicationContext());
+
+        exportDB();
 
         etUserName = (EditText) findViewById(R.id.etUserName);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -84,5 +103,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void exportDB() {
+        File sd = Environment.getExternalStorageDirectory();
+        File data = Environment.getDataDirectory();
+        FileChannel source = null;
+        FileChannel destination = null;
+        String currentDBPath = "/data/" + "com.example.admin.kamathotelapp" + "/databases/" + DbHelper.DATABASE_NAME;
+        String backupDBPath = DbHelper.DATABASE_NAME;
+        File currentDB = new File(data, currentDBPath);
+        File backupDB = new File(sd, backupDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+  //          Toast.makeText(this, "DB Exported!", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
