@@ -47,8 +47,7 @@ public class UploadFragment extends Fragment {
     UploadModel uploadModel;
     private UploadAdapter adapter;
     private String valLevel2, valLevel3, valLevel4, valLevel5, valLevel6;
-    private TextView txtL4, txtL5, txtL6;
-    private AutoCompleteTextView txtlegalEntity,txtProperty,txtMonth,txtYear,txtQuarter,txtLoc,txtL2,txtL3;
+    private AutoCompleteTextView txtlegalEntity,txtProperty,txtMonth,txtYear,txtQuarter,txtLoc,txtL2,txtL3,txtL4,txtL5,txtL6;
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
     String[] strMonthArray = null;
@@ -57,11 +56,14 @@ public class UploadFragment extends Fragment {
     String[] strLocArray = null;
     String[] strLevel2Array = null;
     String[] strLevel3Array = null;
-    private String strLegalEntity,strProperty,strMonth,strYear,strQuarter,strLoc,strlevel2,strlevel3;
+    String[] strLevel4Array = null;
+    String[] strLevel5Array = null;
+    String[] strLevel6Array = null;
+    private String strLegalEntity,strProperty,strMonth,strYear,strQuarter,strLoc,strlevel2,strlevel3,strlevel4,strlevel5,strlevel6;
     private String legalEntityString,propertyString,monthString,yearString,quarterString,locString;
-    private List<String> level2list,level3list;
-    private CardView cardlevel3;
-    private TextInputLayout level3txtlayout;
+    private List<String> level2list,level3list,level4list,level5list,level6list;
+    private CardView cardlevel3,cardlevel4,cardlevel5,cardlevel6;
+    private TextInputLayout level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,10 +91,19 @@ public class UploadFragment extends Fragment {
         txtLoc = (AutoCompleteTextView) view.findViewById(R.id.spinLoc);
         txtL2 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel2);
         txtL3 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel3);
+        txtL4 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel4);
+        txtL5 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel5);
+        txtL6 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel6);
 
         cardlevel3 = (CardView) view.findViewById(R.id.level3cardview);
+        cardlevel4 = (CardView) view.findViewById(R.id.level4cardview);
+        cardlevel5 = (CardView) view.findViewById(R.id.level5cardview);
+        cardlevel6 = (CardView) view.findViewById(R.id.level6cardview);
 
         level3txtlayout = (TextInputLayout)view.findViewById(R.id.level3txtlayout);
+        level4txtlayout = (TextInputLayout)view.findViewById(R.id.level4txtlayout);
+        level5txtlayout = (TextInputLayout)view.findViewById(R.id.level5txtlayout);
+        level6txtlayout = (TextInputLayout)view.findViewById(R.id.level6txtlayout);
 
         fetchLevel2data();
 
@@ -120,12 +131,12 @@ public class UploadFragment extends Fragment {
         //spinLevel2 = (Spinner) view.findViewById(R.id.spinLevel2);
         //txtL3 = (TextView) view.findViewById(R.id.txtLevel3);
        // spinLevel3 =(Spinner) view.findViewById(R.id.spinLevel3);
-        txtL4 = (TextView) view.findViewById(R.id.txtLevel4);
-        spinLevel4 = (Spinner) view.findViewById(R.id.spinLevel4);
-        txtL5 = (TextView) view.findViewById(R.id.txtLevel5);
-        spinLevel5 = (Spinner) view.findViewById(R.id.spinLevel5);
-        txtL6 = (TextView) view.findViewById(R.id.txtLevel6);
-        spinLevel6 = (Spinner) view.findViewById(R.id.spinLevel6);
+       // txtL4 = (TextView) view.findViewById(R.id.txtLevel4);
+        //spinLevel4 = (Spinner) view.findViewById(R.id.spinLevel4);
+        //txtL5 = (TextView) view.findViewById(R.id.txtLevel5);
+        //spinLevel5 = (Spinner) view.findViewById(R.id.spinLevel5);
+        //txtL6 = (TextView) view.findViewById(R.id.txtLevel6);
+        //spinLevel6 = (Spinner) view.findViewById(R.id.spinLevel6);
         listUpload = (ListView) view.findViewById(R.id.listViewUpload);
         uploadModelList = new ArrayList<>();
         uploadModel = new UploadModel();
@@ -451,7 +462,7 @@ public class UploadFragment extends Fragment {
                 }
             });*/
 
-            spinLevel4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+         /*   spinLevel4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     valLevel4 = parent.getItemAtPosition(position).toString();
@@ -697,9 +708,9 @@ public class UploadFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
-            });
+            });*/
 
-            spinLevel5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           /* spinLevel5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -726,7 +737,7 @@ public class UploadFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
-            });
+            });*/
         }
 
 
@@ -735,7 +746,6 @@ public class UploadFragment extends Fragment {
         /////////Details of legal Entity
         if (listLegal.size() > 0) {
             strLegalArray = new String[listLegal.size()];
-            //   strLeadArray[0] = "Select Source Lead";
             for (int i = 0; i < listLegal.size(); i++) {
                 strLegalArray[i] = listLegal.get(i);
             }
@@ -779,8 +789,6 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLegalArray != null && strLegalArray.length > 0) {
                     strLegalEntity = txtlegalEntity.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
-
                     legalEntityString = parent.getItemAtPosition(position).toString();
 
                 }
@@ -791,7 +799,6 @@ public class UploadFragment extends Fragment {
         ///////////////Details of property
         if (listProperty.size() > 0) {
             strPropertyArray = new String[listProperty.size()];
-            //   strLeadArray[0] = "Select Source Lead";
             for (int i = 0; i < listProperty.size(); i++) {
                 strPropertyArray[i] = listProperty.get(i);
             }
@@ -835,8 +842,6 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strPropertyArray != null && strPropertyArray.length > 0) {
                     strProperty = txtProperty.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
-
                     propertyString = parent.getItemAtPosition(position).toString();
 
                 }
@@ -848,7 +853,6 @@ public class UploadFragment extends Fragment {
         ///////////////Details of Month
         if (listMonth.size() > 0) {
             strMonthArray = new String[listMonth.size()];
-            //   strLeadArray[0] = "Select Source Lead";
             for (int i = 0; i < listMonth.size(); i++) {
                 strMonthArray[i] = listMonth.get(i);
             }
@@ -892,8 +896,6 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strMonthArray != null && strMonthArray.length > 0) {
                     strMonth = txtMonth.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
-
                     monthString = parent.getItemAtPosition(position).toString();
 
                 }
@@ -948,8 +950,6 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strYearArray != null && strYearArray.length > 0) {
                     strYear = txtYear.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
-
                     yearString = parent.getItemAtPosition(position).toString();
 
                 }
@@ -960,7 +960,6 @@ public class UploadFragment extends Fragment {
         ///////////////Details of Quarter
         if (listQuarter.size() > 0) {
             strQuarterArray = new String[listQuarter.size()];
-            //   strLeadArray[0] = "Select Source Lead";
             for (int i = 0; i < listQuarter.size(); i++) {
                 strQuarterArray[i] = listQuarter.get(i);
             }
@@ -1004,8 +1003,6 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strQuarterArray != null && strQuarterArray.length > 0) {
                     strQuarter = txtQuarter.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
-
                     quarterString = parent.getItemAtPosition(position).toString();
 
                 }
@@ -1060,8 +1057,6 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLocArray != null && strLocArray.length > 0) {
                     strLoc = txtLoc.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
-
                     locString = parent.getItemAtPosition(position).toString();
 
                 }
@@ -1075,6 +1070,19 @@ public class UploadFragment extends Fragment {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                txtL3.setVisibility(View.GONE);
+                cardlevel3.setVisibility(View.GONE);
+                txtL4.setVisibility(View.GONE);
+                cardlevel4.setVisibility(View.GONE);
+                txtL5.setVisibility(View.GONE);
+                cardlevel5.setVisibility(View.GONE);
+                txtL6.setVisibility(View.GONE);
+                cardlevel6.setVisibility(View.GONE);
+                txtL3.setText("");
+                valLevel3 = "";
+                valLevel4 = "";
+                valLevel5 = "";
+                valLevel6 = "";
                 txtL2.showDropDown();
                 return false;
             }
@@ -1085,36 +1093,31 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLevel2Array != null && strLevel2Array.length > 0) {
                     strlevel2 = txtL2.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
 
                     valLevel2 = parent.getItemAtPosition(position).toString();
 
-                    fetchLevel3data();
+                    if (valLevel2 != null && valLevel2.length() > 0) {
+                        if (valLevel2.equalsIgnoreCase("Direct Taxation")||
+                                valLevel2.equalsIgnoreCase("In-Direct Taxation")||
+                                valLevel2.equalsIgnoreCase("Finance")||
+                                valLevel2.equalsIgnoreCase("Accounts")||
+                                valLevel2.equalsIgnoreCase("Banking")||
+                                valLevel2.equalsIgnoreCase("Audit")) {
+                            fetchLevel3data();
 
-                   // txtL3.setHint(valLevel2);
-                    level3txtlayout.setHint(valLevel2);
-                    txtL3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override public void onFocusChange(View v, boolean hasFocus) {
                             level3txtlayout.setHint(valLevel2);
+                            txtL3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                @Override
+                                public void onFocusChange(View v, boolean hasFocus) {
+                                    level3txtlayout.setHint(valLevel2);
+                                }
+                            });
+                            txtL3.setVisibility(View.VISIBLE);
+                            cardlevel3.setVisibility(View.VISIBLE);
                         }
-                    });
-                    txtL3.setVisibility(View.VISIBLE);
-                    cardlevel3.setVisibility(View.VISIBLE);
-
-//                        if (sourceString.equalsIgnoreCase("Client Reference")) {
-//                            txtcustid.setVisibility(View.VISIBLE);
-//                        } else if (sourceString.equalsIgnoreCase("In- house Leads (Existing)")) {
-//                            txtcustid.setVisibility(View.VISIBLE);
-//
-//                        } else if (sourceString.equalsIgnoreCase("In- house Leads (New)")) {
-//                            txtcustid.setVisibility(View.VISIBLE);
-//                        } else {
-//                            txtcustid.setVisibility(View.GONE);
-//                        }
                     }
 
-
-
+                    }
             }
         });
 
@@ -1125,6 +1128,16 @@ public class UploadFragment extends Fragment {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                txtL4.setVisibility(View.GONE);
+                cardlevel4.setVisibility(View.GONE);
+                txtL5.setVisibility(View.GONE);
+                cardlevel5.setVisibility(View.GONE);
+                txtL6.setVisibility(View.GONE);
+                cardlevel6.setVisibility(View.GONE);
+                txtL4.setText("");
+                valLevel4 = "";
+                valLevel5 = "";
+                valLevel6 = "";
                 txtL3.showDropDown();
                 return false;
             }
@@ -1135,22 +1148,187 @@ public class UploadFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLevel3Array != null && strLevel3Array.length > 0) {
                     strlevel3 = txtL3.getText().toString();
-//                        fetchDistrCodeBranchName(strServiceBranchCode);
                     valLevel3 = parent.getItemAtPosition(position).toString();
 
-                    txtL4.setVisibility(View.VISIBLE);
-                    spinLevel4.setVisibility(View.VISIBLE);
+                    if (valLevel3 != null && valLevel3.length() > 0) {
+                        if( valLevel2.equalsIgnoreCase("Banking")||
+                                valLevel2.equalsIgnoreCase("Audit")) {
+                            if (valLevel3.equalsIgnoreCase("Daily Finance Memo") ||
+                                    valLevel3.equalsIgnoreCase("Monthly CashFlow") ||
+                                    valLevel3.equalsIgnoreCase("Investments")||
+                                    valLevel3.equalsIgnoreCase("Statutory Audit") ||
+                                    valLevel3.equalsIgnoreCase("Internal Audit") ||
+                                    valLevel3.equalsIgnoreCase("Concurrent Audit")) {
 
-//                        if (sourceString.equalsIgnoreCase("Client Reference")) {
-//                            txtcustid.setVisibility(View.VISIBLE);
-//                        } else if (sourceString.equalsIgnoreCase("In- house Leads (Existing)")) {
-//                            txtcustid.setVisibility(View.VISIBLE);
-//
-//                        } else if (sourceString.equalsIgnoreCase("In- house Leads (New)")) {
-//                            txtcustid.setVisibility(View.VISIBLE);
-//                        } else {
-//                            txtcustid.setVisibility(View.GONE);
-//                        }
+                                txtL4.setVisibility(View.GONE);
+                                cardlevel4.setVisibility(View.GONE);
+                            }
+                        }else{
+                            fetchLevel4data();
+
+                            level4txtlayout.setHint(valLevel3);
+                            txtL4.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                @Override
+                                public void onFocusChange(View v, boolean hasFocus) {
+                                    level4txtlayout.setHint(valLevel3);
+                                }
+                            });
+                            txtL4.setVisibility(View.VISIBLE);
+                            cardlevel4.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                }
+            }
+        });
+
+        ///////////////////////////////////////
+
+        //////////////////Level 4 details
+
+        txtL4.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                txtL5.setVisibility(View.GONE);
+                cardlevel5.setVisibility(View.GONE);
+                txtL6.setVisibility(View.GONE);
+                cardlevel6.setVisibility(View.GONE);
+                txtL5.setText("");
+                valLevel5 = "";
+                valLevel6 = "";
+                txtL4.showDropDown();
+                return false;
+            }
+        });
+
+        txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (strLevel4Array != null && strLevel4Array.length > 0) {
+                    strlevel4 = txtL4.getText().toString();
+                    valLevel4 = parent.getItemAtPosition(position).toString();
+
+                    if (valLevel4 != null && valLevel4.length() > 0) {
+                        if (valLevel3.equalsIgnoreCase("Income Tax Return") ||valLevel3.equalsIgnoreCase("Assessment")||
+                                valLevel3.equalsIgnoreCase("E-tds Return (Non-salary)")||valLevel3.equalsIgnoreCase("E-tds Return (Salaries)")||
+                                valLevel3.equalsIgnoreCase("Lender List")||valLevel3.equalsIgnoreCase("ARC List")||
+                                valLevel3.equalsIgnoreCase("Receivable")||valLevel3.equalsIgnoreCase("Payable")||
+                                valLevel3.equalsIgnoreCase("Fixed Assets")) {
+                            if (valLevel4.equalsIgnoreCase("Acknowledgement") ||valLevel4.equalsIgnoreCase("ITR") ||
+                                    valLevel4.equalsIgnoreCase("Advance tax Payment") ||valLevel4.equalsIgnoreCase("Self Assessment Tax Payment") ||
+                                    valLevel4.equalsIgnoreCase("Dividend Tax Payment") ||valLevel4.equalsIgnoreCase("TAN Details") ||
+                                    valLevel4.equalsIgnoreCase("Lower deduction") ||valLevel4.equalsIgnoreCase("TDS Challan payment receipt monthly") ||
+                                    valLevel4.equalsIgnoreCase("Form 16") ||valLevel4.equalsIgnoreCase("Quarterly Return") ||
+                                    valLevel4.equalsIgnoreCase("FVV File") ||valLevel4.equalsIgnoreCase("Revised Return") ||
+                                    valLevel4.equalsIgnoreCase("Notice") ||valLevel4.equalsIgnoreCase("Application / Proposals") ||
+                                    valLevel4.equalsIgnoreCase("Valuations") ||valLevel4.equalsIgnoreCase("Sanction letter") ||
+                                    valLevel4.equalsIgnoreCase("Loan agreements") ||valLevel4.equalsIgnoreCase("Disb requests") ||
+                                    valLevel4.equalsIgnoreCase("security creation") ||valLevel4.equalsIgnoreCase("Registration") ||
+                                    valLevel4.equalsIgnoreCase("Charge creation / satisfaction") ||valLevel4.equalsIgnoreCase("Restructuring") ||
+                                    valLevel4.equalsIgnoreCase("Payments") ||valLevel4.equalsIgnoreCase("Disputes") ||
+                                    valLevel4.equalsIgnoreCase("OTS") ||valLevel4.equalsIgnoreCase("Assignment") ||
+                                    valLevel4.equalsIgnoreCase("Offer") ||valLevel4.equalsIgnoreCase("Settlement") ||
+                                    valLevel4.equalsIgnoreCase("Prepayment") ||valLevel4.equalsIgnoreCase("Rent") ||
+                                    valLevel4.equalsIgnoreCase("Interest") ||valLevel4.equalsIgnoreCase("DSR") ||
+                                    valLevel4.equalsIgnoreCase("Royalty fee") ||valLevel4.equalsIgnoreCase("Franchisee fee") ||
+                                    valLevel4.equalsIgnoreCase("Management fee") ||valLevel4.equalsIgnoreCase("AMC") ||
+                                    valLevel4.equalsIgnoreCase("Dividends") ||valLevel4.equalsIgnoreCase("Others") ||
+                                    valLevel4.equalsIgnoreCase("Contractors") ||valLevel4.equalsIgnoreCase("PO") ||
+                                    valLevel4.equalsIgnoreCase("Retainer") ||valLevel4.equalsIgnoreCase("Paysheet") ||
+                                    valLevel4.equalsIgnoreCase("Interest") ||valLevel4.equalsIgnoreCase("Capex") ||
+                                    valLevel4.equalsIgnoreCase("Purchase bills") ||valLevel4.equalsIgnoreCase("Sale Bills") ||
+                                    valLevel4.equalsIgnoreCase("Depreciation") ||valLevel4.equalsIgnoreCase("Physical Verification")
+                                    ) {
+
+                                txtL5.setVisibility(View.GONE);
+                                cardlevel5.setVisibility(View.GONE);
+                            }
+                        }else{
+                            fetchLevel5data();
+
+                            level5txtlayout.setHint(valLevel4);
+                            txtL5.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                @Override
+                                public void onFocusChange(View v, boolean hasFocus) {
+                                    level5txtlayout.setHint(valLevel4);
+                                }
+                            });
+                            txtL5.setVisibility(View.VISIBLE);
+                            cardlevel5.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                }
+            }
+        });
+
+        ///////////////////////////////////////
+        //////////////////Level 5 details
+
+        txtL5.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                txtL6.setVisibility(View.GONE);
+                cardlevel6.setVisibility(View.GONE);
+                txtL6.setText("");
+                valLevel6 = "";
+                txtL5.showDropDown();
+                return false;
+            }
+        });
+
+        txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (strLevel5Array != null && strLevel5Array.length > 0) {
+                    strlevel5 = txtL5.getText().toString();
+                    valLevel5 = parent.getItemAtPosition(position).toString();
+
+                    if (valLevel5 != null && valLevel5.length() > 0) {
+                        if (valLevel4.equalsIgnoreCase("Customs")&&
+                                valLevel5.equalsIgnoreCase("Licenses")) {
+
+                                fetchLevel6data();
+
+                                level6txtlayout.setHint(valLevel5);
+                                txtL6.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                    @Override
+                                    public void onFocusChange(View v, boolean hasFocus) {
+                                        level6txtlayout.setHint(valLevel5);
+                                    }
+                                });
+                                txtL6.setVisibility(View.VISIBLE);
+                                cardlevel6.setVisibility(View.VISIBLE);
+                            }else{
+                            txtL6.setVisibility(View.GONE);
+                            cardlevel6.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        });
+
+        ///////////////////////////////////////
+
+        //////////////////Level 6 details
+
+        txtL6.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                txtL6.showDropDown();
+                return false;
+            }
+        });
+
+        txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (strLevel6Array != null && strLevel6Array.length > 0) {
+                    strlevel6 = txtL6.getText().toString();
+                    valLevel6 = parent.getItemAtPosition(position).toString();
                 }
             }
         });
@@ -1269,8 +1447,8 @@ public class UploadFragment extends Fragment {
             level3list = new ArrayList<>();
 
             String where = " where level2 like " + "'" + valLevel2 + "'";
-            String Level2 = "level3";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level2,DbHelper.TABLE_FINANCE, where);
+            String Level3 = "level3";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level3,DbHelper.TABLE_FINANCE, where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
@@ -1317,6 +1495,169 @@ public class UploadFragment extends Fragment {
         }
     }
 
+    private void fetchLevel4data() {
+        try {
+
+            level4list = new ArrayList<>();
+
+            String where = " where level3 like " + "'" + valLevel3 + "'";
+            String Level4 = "level4";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_FINANCE, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4list);
+            if (level4list.size() > 0) {
+                strLevel4Array = new String[level4list.size()];
+                for (int i = 0; i < level4list.size(); i++) {
+                    strLevel4Array[i] = level4list.get(i);
+                }
+            }
+            if (level4list != null && level4list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5data() {
+        try {
+
+            level5list = new ArrayList<>();
+
+            String where = " where level4 like " + "'" + valLevel4 + "'";
+            String Level5 = "level5";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_FINANCE, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level5list);
+            if (level5list.size() > 0) {
+                strLevel5Array = new String[level5list.size()];
+                for (int i = 0; i < level5list.size(); i++) {
+                    strLevel5Array[i] = level5list.get(i);
+                }
+            }
+            if (level5list != null && level5list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6data() {
+        try {
+
+            level6list = new ArrayList<>();
+
+            String where = " where level5 like " + "'" + valLevel5 + "'";
+            String Level6 = "level6";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_FINANCE, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    level6list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level6list);
+            if (level6list.size() > 0) {
+                strLevel6Array = new String[level6list.size()];
+                for (int i = 0; i < level6list.size(); i++) {
+                    strLevel6Array[i] = level6list.get(i);
+                }
+            }
+            if (level6list != null && level6list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private List<UploadModel> setUploadModelList() {
         List<UploadModel> uploadModels = new ArrayList<>();
         uploadModel = getUploadModel();
@@ -1326,10 +1667,10 @@ public class UploadFragment extends Fragment {
 
     private UploadModel getUploadModel() {
         uploadModel.setLevel2(valLevel2);
-        uploadModel.setLevel3(spinLevel3.getSelectedItem().toString());
-        uploadModel.setLevel4(spinLevel4.getSelectedItem().toString());
-        uploadModel.setLevel5("No data");
-        uploadModel.setLevel6("No data");
+        uploadModel.setLevel3(valLevel3);
+        uploadModel.setLevel4(valLevel4);
+        uploadModel.setLevel5(valLevel5);
+        uploadModel.setLevel6(valLevel6);
         return uploadModel;
     }
 
