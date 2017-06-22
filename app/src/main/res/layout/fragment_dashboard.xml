@@ -1,14 +1,352 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.admin.kamathotelapp.Fragments.ScanFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.example.admin.kamathotelapp.Fragments.DashboardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Dashboard Fragment"
-        android:textColor="@color/dark_grey"
-        android:textSize="50dp"/>
-</FrameLayout>
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <EditText
+                android:id="@+id/et_role"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Role Name"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <EditText
+                android:id="@+id/et_doc_no"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Document No."
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoLegalEntity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Legal Entity"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoProperty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Property"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoLocation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Location"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoYear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Year"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoQuarter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Quarter"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoMonth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:completionThreshold="1"
+                android:gravity="center_vertical"
+                android:hint="Month"
+                android:imeOptions="actionNext"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:inputType="none"
+                android:textIsSelectable="true"
+                android:maxLength="50"
+                android:nextFocusDown="@+id/spinLevel3"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textColor="@color/app_text_color"
+                android:textSize="15dp"
+                app:customFont="@string/font_lightl" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
