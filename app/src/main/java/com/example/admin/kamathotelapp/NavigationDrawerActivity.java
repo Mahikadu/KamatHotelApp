@@ -71,7 +71,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.frame_content,fragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_scan) {
-            getSupportActionBar().setTitle("Scan");
+            getSupportActionBar().setTitle("Document Scan");
             ScanFragment fragment = new ScanFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_content,fragment);

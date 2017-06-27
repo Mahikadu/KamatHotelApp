@@ -3,15 +3,15 @@
 
     <item
         android:id="@+id/nav_dashboard"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_dashboard"
         android:title="Dashboard" />
     <item
         android:id="@+id/nav_upload"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_upload"
         android:title="Upload" />
     <item
         android:id="@+id/nav_scan"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_scanner"
         android:title="Scan" />
 
 </menu>
