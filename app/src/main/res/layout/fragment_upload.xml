@@ -57,18 +57,6 @@
 
         </android.support.v7.widget.CardView>
 
-   <!-- <TextView
-        android:id="@+id/txtLegalEntity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Spinner
-        android:id="@+id/spinLegalEntity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />-->
-
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -111,17 +99,6 @@
 
         </android.support.v7.widget.CardView>
 
-   <!-- <TextView
-        android:id="@+id/txtProperty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinProperty"
-        android:layout_marginTop="10dp"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -180,17 +157,6 @@
 
             </android.support.v7.widget.CardView>
 
-          <!--  <TextView
-                android:id="@+id/txtYear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinYear"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
 
         <LinearLayout
@@ -242,16 +208,6 @@
 
             </android.support.v7.widget.CardView>
 
-           <!-- <TextView
-                android:id="@+id/txtQuarter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinQuarter"
-                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
 
         <LinearLayout
@@ -303,17 +259,6 @@
 
             </android.support.v7.widget.CardView>
 
-            <!--<TextView
-                android:id="@+id/txtMonth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Spinner
-                android:id="@+id/spinMonth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
     </LinearLayout>
 
@@ -371,17 +316,6 @@
 
             </android.support.v7.widget.CardView>
 
-         <!--   <TextView
-                android:id="@+id/txtLoc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinLoc"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"/>-->
         </LinearLayout>
 
     </LinearLayout>
@@ -431,20 +365,6 @@
         </android.support.v7.widget.CardView>
 
 
-       <!-- <TextView
-        android:id="@+id/txtLevel2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:text="Finance Type" />
-
-    <Spinner
-        android:id="@+id/spinLevel2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="10dp" />-->
-
         <android.support.v7.widget.CardView
             android:id="@+id/level3cardview"
             android:layout_width="match_parent"
@@ -490,20 +410,6 @@
 
         </android.support.v7.widget.CardView>
 
-   <!-- <TextView
-        android:id="@+id/txtLevel3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:text="Finance"
-        android:visibility="gone"/>
-
-    <Spinner
-        android:id="@+id/spinLevel3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"/>-->
 
         <android.support.v7.widget.CardView
             android:id="@+id/level4cardview"
@@ -550,21 +456,6 @@
 
         </android.support.v7.widget.CardView>
 
-   <!-- <TextView
-        android:id="@+id/txtLevel4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:text="Lender List"
-        android:visibility="gone"/>
-
-    <Spinner
-        android:id="@+id/spinLevel4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"/>-->
-
         <android.support.v7.widget.CardView
             android:id="@+id/level5cardview"
             android:layout_width="match_parent"
@@ -610,20 +501,6 @@
 
         </android.support.v7.widget.CardView>
 
-  <!--  <TextView
-        android:id="@+id/txtLevel5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:text="Level5"
-        android:visibility="gone"/>
-
-    <Spinner
-        android:id="@+id/spinLevel5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"/>-->
 
         <android.support.v7.widget.CardView
             android:id="@+id/level6cardview"
@@ -712,20 +589,7 @@
             </android.support.design.widget.TextInputLayout>
 
         </android.support.v7.widget.CardView>
-   <!-- <TextView
-        android:id="@+id/txtLevel6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:text="Level6"
-        android:visibility="gone"/>
 
-    <Spinner
-        android:id="@+id/spinLevel6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"/>-->
 
     <Button
         android:id="@+id/btnScan"
