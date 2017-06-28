@@ -22,6 +22,7 @@ import java.util.List;
 public class DashboardFragment extends Fragment {
 
     private AutoCompleteTextView autoLegal, autoProp, autoLoc, autoYr, autoQuarter, autoMonth;
+    private String strQuarter="";
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
     String[] strMonthArray = null;
@@ -30,6 +31,7 @@ public class DashboardFragment extends Fragment {
     String[] strLocArray = null;
     String[] strLevel2Array = null;
     String[] strLevel3Array = null;
+    List<String> listMonth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,6 @@ public class DashboardFragment extends Fragment {
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
-        List<String> listMonth = Arrays.asList(getResources().getStringArray(R.array.month));
         List<String> listYear = Arrays.asList(getResources().getStringArray(R.array.year));
         List<String> listQuarter = Arrays.asList(getResources().getStringArray(R.array.quarter));
         List<String> listLoc = Arrays.asList(getResources().getStringArray(R.array.location));
@@ -274,48 +275,72 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        if (listMonth.size() > 0) {
-            strMonthArray = new String[listMonth.size()];
-            //   strLeadArray[0] = "Select Source Lead";
-            for (int i = 0; i < listMonth.size(); i++) {
-                strMonthArray[i] = listMonth.get(i);
-            }
-        }
-
-        if (listMonth != null && listMonth.size() > 0) {
-
-            ArrayAdapter<String> adapter6 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strMonthArray) {
-                @Override
-                public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                    View v = null;
-                    // If this is the initial dummy entry, make it hidden
-                    if (position == 0) {
-                        TextView tv = new TextView(getContext());
-                        tv.setHeight(0);
-                        tv.setVisibility(View.GONE);
-                        v = tv;
-                    } else {
-                        // Pass convertView as null to prevent reuse of special case views
-                        v = super.getDropDownView(position, null, parent);
-                    }
-                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
-                    parent.setVerticalScrollBarEnabled(false);
-                    return v;
-                }
-            };
-
-            adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoMonth.setAdapter(adapter6);
-        }
-
-
-        autoMonth.setOnTouchListener(new View.OnTouchListener() {
-
+        autoQuarter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                autoMonth.showDropDown();
-                return false;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (strQuarterArray != null && strQuarterArray.length > 0) {
+
+                    strQuarter = parent.getItemAtPosition(position).toString();
+
+                    if(strQuarter.equalsIgnoreCase("Quarter 1")) {
+                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q1));
+                    } else if(strQuarter.equalsIgnoreCase("Quarter 2")) {
+                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q2));
+                    } else if(strQuarter.equalsIgnoreCase("Quarter 3")) {
+                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q3));
+                    } else if(strQuarter.equalsIgnoreCase("Quarter 4")) {
+                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q4));
+                    }
+
+                    if (listMonth != null) {
+                        if (listMonth.size() > 0) {
+                            strMonthArray = new String[listMonth.size()];
+                            //   strLeadArray[0] = "Select Source Lead";
+                            for (int i = 0; i < listMonth.size(); i++) {
+                                strMonthArray[i] = listMonth.get(i);
+                            }
+                        }
+                    }
+
+                    if (listMonth != null && listMonth.size() > 0) {
+
+                        ArrayAdapter<String> adapter6 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strMonthArray) {
+                            @Override
+                            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                View v = null;
+                                // If this is the initial dummy entry, make it hidden
+                                if (position == 0) {
+                                    TextView tv = new TextView(getContext());
+                                    tv.setHeight(0);
+                                    tv.setVisibility(View.GONE);
+                                    v = tv;
+                                } else {
+                                    // Pass convertView as null to prevent reuse of special case views
+                                    v = super.getDropDownView(position, null, parent);
+                                }
+                                // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                parent.setVerticalScrollBarEnabled(false);
+                                return v;
+                            }
+                        };
+
+                        adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        autoMonth.setAdapter(adapter6);
+                    }
+
+
+                    autoMonth.setOnTouchListener(new View.OnTouchListener() {
+
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            autoMonth.showDropDown();
+                            return false;
+                        }
+                    });
+                }
             }
         });
+
+
     }
 }

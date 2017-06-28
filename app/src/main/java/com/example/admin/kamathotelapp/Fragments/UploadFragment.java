@@ -45,9 +45,10 @@ public class UploadFragment extends Fragment {
     ListView listUpload;
     List<UploadModel> uploadModelList;
     UploadModel uploadModel;
+    List<String> listMonth;
     private UploadAdapter adapter;
-    private String valLevel2, valLevel3, valLevel4, valLevel5, valLevel6;
-    private AutoCompleteTextView txtlegalEntity,txtProperty,txtMonth,txtYear,txtQuarter,txtLoc,txtL2,txtL3,txtL4,txtL5,txtL6;
+    private String valLevel2, valLevel3, valLevel4, valLevel5, valLevel6, valLevel7;
+    private AutoCompleteTextView txtlegalEntity,txtProperty,txtMonth,txtYear,txtQuarter,txtLoc,txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
     String[] strMonthArray = null;
@@ -59,11 +60,34 @@ public class UploadFragment extends Fragment {
     String[] strLevel4Array = null;
     String[] strLevel5Array = null;
     String[] strLevel6Array = null;
-    private String strLegalEntity,strProperty,strMonth,strYear,strQuarter,strLoc,strlevel2,strlevel3,strlevel4,strlevel5,strlevel6;
-    private String legalEntityString,propertyString,monthString,yearString,quarterString,locString;
+    String[] strLevel4ArrayHR = null;
+    String[] strLevel5ArrayHR = null;
+    String[] strLevel6ArrayHR = null;
+    String[] strLevel4ArrayCMD = null;
+    String[] strLevel5ArrayCMD = null;
+    String[] strLevel6ArrayCMD = null;
+    String[] strLevel7ArrayCMD = null;
+    String[] strLevel2ArrayCS = null;
+    String[] strLevel3ArrayCS = null;
+    String[] strLevel4ArrayCS = null;
+    String[] strLevel4ArrayMAR = null;
+    String[] strLevel5ArrayMAR = null;
+    String[] strLevel6ArrayMAR = null;
+    String[] strLevel7ArrayMAR = null;
+    String[] strLevel3ArrayPer = null;
+    String[] strLevel4ArrayPer = null;
+    String[] strLevel5ArrayPer = null;
+    private String strLegalEntity,strProperty,strMonth,strYear,strQuarter,strLoc,strlevel2,strlevel3,strlevel4,strlevel5,strlevel6,strlevel7;
+    private String legalEntityString,propertyString,monthString,yearString,quarterString="",locString;
     private List<String> level2list,level3list,level4list,level5list,level6list;
-    private CardView cardlevel3,cardlevel4,cardlevel5,cardlevel6;
-    private TextInputLayout level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout;
+    private List<String> level4listHR, level5listHR, level6listHR;
+    private List<String> level4listCMD, level5listCMD, level6listCMD, level7listCMD;
+    private List<String> level2listCS,level3listCS,level4listCS;
+    private List<String> level4listMAR, level5listMAR, level6listMAR, level7listMAR;
+    private List<String> level3listPER, level4listPER, level5listPER;
+    String chk = "";
+    private CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7;
+    private TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,18 +118,21 @@ public class UploadFragment extends Fragment {
         txtL4 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel4);
         txtL5 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel5);
         txtL6 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel6);
+        txtL7 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel7);
 
+        cardlevel2 = (CardView) view.findViewById(R.id.level2cardview);
         cardlevel3 = (CardView) view.findViewById(R.id.level3cardview);
         cardlevel4 = (CardView) view.findViewById(R.id.level4cardview);
         cardlevel5 = (CardView) view.findViewById(R.id.level5cardview);
         cardlevel6 = (CardView) view.findViewById(R.id.level6cardview);
+        cardlevel7 = (CardView) view.findViewById(R.id.level7cardview);
 
+        level2txtlayout = (TextInputLayout)view.findViewById(R.id.level2txtlayout); 
         level3txtlayout = (TextInputLayout)view.findViewById(R.id.level3txtlayout);
         level4txtlayout = (TextInputLayout)view.findViewById(R.id.level4txtlayout);
         level5txtlayout = (TextInputLayout)view.findViewById(R.id.level5txtlayout);
         level6txtlayout = (TextInputLayout)view.findViewById(R.id.level6txtlayout);
-
-        fetchLevel2data();
+        level7txtlayout = (TextInputLayout)view.findViewById(R.id.level7txtlayout);
 
 
        // txtLegalEntity = (TextView) view.findViewById(R.id.txtLegalEntity);
@@ -144,604 +171,10 @@ public class UploadFragment extends Fragment {
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
-        List<String> listMonth = Arrays.asList(getResources().getStringArray(R.array.month));
+
         List<String> listYear = Arrays.asList(getResources().getStringArray(R.array.year));
         List<String> listQuarter = Arrays.asList(getResources().getStringArray(R.array.quarter));
         List<String> listLoc = Arrays.asList(getResources().getStringArray(R.array.location));
-
-        if(sharedPref.getLoginId().equalsIgnoreCase("finance") && sharedPref.getPassword().equalsIgnoreCase("password")) {
-          /*  listL2 = Arrays.asList(getResources().getStringArray(R.array.finance_type));
-
-            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                    R.layout.spinner_bg, listL2);
-            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-            spinLevel2.setAdapter(dataAdapter);*/
-
-        /*    spinLevel2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    valLevel2 = parent.getItemAtPosition(position).toString();
-
-                    txtL4.setVisibility(View.GONE);
-                    spinLevel4.setVisibility(View.GONE);
-                    txtL5.setVisibility(View.GONE);
-                    spinLevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
-                    spinLevel6.setVisibility(View.GONE);
-
-                    if(valLevel2.contains("Direct Taxation")) {
-                        txtL3.setVisibility(View.VISIBLE);
-                        spinLevel3.setVisibility(View.VISIBLE);
-
-                        txtL3.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Direct Taxation</font>" + "<font color=\"red\">*</font>\n"));
-
-                        listL3 = Arrays.asList(getResources().getStringArray(R.array.direct_taxation));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL3);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel3.setAdapter(dataAdapter);
-
-                        spinLevel3.setFocusable(true);
-                        spinLevel3.requestFocusFromTouch();
-                    } else if(valLevel2.contains("IDTX")) {
-                        txtL3.setVisibility(View.VISIBLE);
-                        spinLevel3.setVisibility(View.VISIBLE);
-
-                        txtL3.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">In-Direct Taxation</font>" + "<font color=\"red\">*</font>\n"));
-
-                        listL3 = Arrays.asList(getResources().getStringArray(R.array.indirect_taxation));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL3);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel3.setAdapter(dataAdapter);
-
-                        spinLevel3.setFocusable(true);
-                        spinLevel3.requestFocusFromTouch();
-                    } else if(valLevel2.contains("FNC")) {
-                        txtL3.setVisibility(View.VISIBLE);
-                        spinLevel3.setVisibility(View.VISIBLE);
-
-                        txtL3.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Finance</font>" + "<font color=\"red\">*</font>\n"));
-                        listL3 = Arrays.asList(getResources().getStringArray(R.array.finance));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL3);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel3.setAdapter(dataAdapter);
-
-                        spinLevel3.setFocusable(true);
-                        spinLevel3.requestFocusFromTouch();
-                    } else if(valLevel2.contains("ACNTS")) {
-                        txtL3.setVisibility(View.VISIBLE);
-                        spinLevel3.setVisibility(View.VISIBLE);
-
-                        txtL3.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Accounts</font>" + "<font color=\"red\">*</font>\n"));
-                        listL3 = Arrays.asList(getResources().getStringArray(R.array.accounts));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL3);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel3.setAdapter(dataAdapter);
-
-                        spinLevel3.setFocusable(true);
-                        spinLevel3.requestFocusFromTouch();
-                    } else if(valLevel2.contains("BNKG")) {
-                        txtL3.setVisibility(View.VISIBLE);
-                        spinLevel3.setVisibility(View.VISIBLE);
-
-                        txtL3.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Banking</font>" + "<font color=\"red\">*</font>\n"));
-                        listL3 = Arrays.asList(getResources().getStringArray(R.array.banking));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL3);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel3.setAdapter(dataAdapter);
-
-                        spinLevel3.setFocusable(true);
-                        spinLevel3.requestFocusFromTouch();
-                    } else if(valLevel2.contains("AUDIT")) {
-                        txtL3.setVisibility(View.VISIBLE);
-                        spinLevel3.setVisibility(View.VISIBLE);
-
-                        txtL3.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Audit</font>" + "<font color=\"red\">*</font>\n"));
-                        listL3 = Arrays.asList(getResources().getStringArray(R.array.audit));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL3);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel3.setAdapter(dataAdapter);
-
-                        spinLevel3.setFocusable(true);
-                        spinLevel3.requestFocusFromTouch();
-                    }
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-*/
-
-
-         /*   spinLevel3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    valLevel3 = parent.getItemAtPosition(position).toString();
-                    txtL5.setVisibility(View.GONE);
-                    spinLevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
-                    spinLevel6.setVisibility(View.GONE);
-
-
-                    if(txtL3.getText().toString().contains("Direct Taxation") && !txtL3.getText().toString().contains("In-Direct Taxation")) {
-                        if (valLevel3.contains("ITR")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Income Tax Return</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.income_tax_return));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("ASMT")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Assessment</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.assessment));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("APL")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Appeal</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.assessment));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("ETDR(NON)")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">E-tds Return</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.e_tds_non_salaries));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("ETDR(S)")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">E-tds Return</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.e_tds_salaries));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        }
-                    } else if(txtL3.getText().toString().contains("In-Direct Taxation")) {
-                        if (valLevel3.contains("LOPU")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Location/Property/Unit</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.location_pro_unit));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } if (valLevel3.contains("STE")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">State</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.state));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        }
-                    } else if(txtL3.getText().toString().contains("Finance")) {
-                        if (valLevel3.contains("LDL")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Lender List</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.lender_list));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("ARCL")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">ARC List</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.arc_list));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        }
-                    } else if(txtL3.getText().toString().contains("Accounts")) {
-                        if (valLevel3.contains("RCVABL")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Receivable</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.receivable));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("PYBL")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Payable</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.payable));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        } else if (valLevel3.contains("FXASTS")) {
-                            txtL4.setVisibility(View.VISIBLE);
-                            spinLevel4.setVisibility(View.VISIBLE);
-
-                            txtL4.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Fixed Assets</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL4 = Arrays.asList(getResources().getStringArray(R.array.fixed_assets));
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL4);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel4.setAdapter(dataAdapter);
-
-                            spinLevel4.setFocusable(true);
-                            spinLevel4.requestFocusFromTouch();
-                        }
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });*/
-
-         /*   spinLevel4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    valLevel4 = parent.getItemAtPosition(position).toString();
-
-                    txtL6.setVisibility(View.GONE);
-                    spinLevel6.setVisibility(View.GONE);
-
-                    if(txtL4.getText().toString().contains("Assessment")){
-                        if (valLevel4.contains("SRT")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Scrutiny</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.scrutiny));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("CIT-A")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">CIT-A</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.cit_a));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("ITAT")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">ITAT</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.itat));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("HCRT")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">High Court</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.high_court));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("SPRMCT")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Supreme Court</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.supreme_court));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        }
-                    } else if(txtL4.getText().toString().contains("Location/Property/Unit")) {
-                        if (valLevel4.contains("FRMTNC")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Foreign Remittances</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.foreign_remittances));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("EMPTDS")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Employee TDS</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.employee_tds));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("SRTX")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Service Tax</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.service_tax));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        }
-                    } else if(txtL4.getText().toString().contains("State")) {
-                        if (valLevel4.contains("CTREX")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Central Excise</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.central_excise));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("VAT")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">VAT</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.vat));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("LXRTX")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Luxury Tax</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.luxury_tax));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("PFSTX")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Profession Tax</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.profession_tax));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("LCLBDTX")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Local Body Tax</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.local_body_tax));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("GST")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">GST</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.gst));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        } else if (valLevel4.contains("CUTMS")) {
-                            txtL5.setVisibility(View.VISIBLE);
-                            spinLevel5.setVisibility(View.VISIBLE);
-
-                            txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Customs</font>" + "<font color=\"red\">*</font>\n"));
-
-                            listL5 = Arrays.asList(getResources().getStringArray(R.array.customs));
-
-                            dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                    R.layout.spinner_bg, listL5);
-                            dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                            spinLevel5.setAdapter(dataAdapter);
-
-                            spinLevel5.setFocusable(true);
-                            spinLevel5.requestFocusFromTouch();
-                        }
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });*/
-
-           /* spinLevel5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    valLevel5 = parent.getItemAtPosition(position).toString();
-                    if (valLevel5.contains("LISNS")) {
-                        txtL6.setVisibility(View.VISIBLE);
-                        spinLevel6.setVisibility(View.VISIBLE);
-
-                        txtL5.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Licenses</font>" + "<font color=\"red\">*</font>\n"));
-
-                        listL6 = Arrays.asList(getResources().getStringArray(R.array.licenses));
-
-                        dataAdapter = new ArrayAdapter<String>(getActivity(),
-                                R.layout.spinner_bg, listL6);
-                        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-                        spinLevel6.setAdapter(dataAdapter);
-
-                        spinLevel6.setFocusable(true);
-                        spinLevel6.requestFocusFromTouch();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });*/
-        }
-
-
-        /////AutoCompletetextview set values
 
         /////////Details of legal Entity
         if (listLegal.size() > 0) {
@@ -795,7 +228,8 @@ public class UploadFragment extends Fragment {
 
             }
         });
-        //////////////////////////////
+
+
         ///////////////Details of property
         if (listProperty.size() > 0) {
             strPropertyArray = new String[listProperty.size()];
@@ -848,62 +282,7 @@ public class UploadFragment extends Fragment {
 
             }
         });
-        ///////////////////////////////
 
-        ///////////////Details of Month
-        if (listMonth.size() > 0) {
-            strMonthArray = new String[listMonth.size()];
-            for (int i = 0; i < listMonth.size(); i++) {
-                strMonthArray[i] = listMonth.get(i);
-            }
-        }
-        if (listMonth != null && listMonth.size() > 0) {
-            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strMonthArray) {
-                @Override
-                public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                    View v = null;
-                    // If this is the initial dummy entry, make it hidden
-                    if (position == 0) {
-                        TextView tv = new TextView(getContext());
-                        tv.setHeight(0);
-                        tv.setVisibility(View.GONE);
-                        v = tv;
-                    } else {
-                        // Pass convertView as null to prevent reuse of special case views
-                        v = super.getDropDownView(position, null, parent);
-                    }
-                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
-                    parent.setVerticalScrollBarEnabled(false);
-                    return v;
-                }
-            };
-
-            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            txtMonth.setAdapter(adapter1);
-        }
-
-        txtMonth.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                txtMonth.showDropDown();
-                return false;
-            }
-        });
-
-        txtMonth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strMonthArray != null && strMonthArray.length > 0) {
-                    strMonth = txtMonth.getText().toString();
-                    monthString = parent.getItemAtPosition(position).toString();
-
-                }
-
-            }
-        });
-        ///////////////////////////////
-        ///////////////Details of Year
         if (listYear.size() > 0) {
             strYearArray = new String[listYear.size()];
             //   strLeadArray[0] = "Select Source Lead";
@@ -951,9 +330,7 @@ public class UploadFragment extends Fragment {
                 if (strYearArray != null && strYearArray.length > 0) {
                     strYear = txtYear.getText().toString();
                     yearString = parent.getItemAtPosition(position).toString();
-
                 }
-
             }
         });
         ///////////////////////////////
@@ -1004,8 +381,71 @@ public class UploadFragment extends Fragment {
                 if (strQuarterArray != null && strQuarterArray.length > 0) {
                     strQuarter = txtQuarter.getText().toString();
                     quarterString = parent.getItemAtPosition(position).toString();
-
                 }
+
+                if(quarterString.equalsIgnoreCase("Quarter 1")) {
+                    listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q1));
+                } else if(quarterString.equalsIgnoreCase("Quarter 2")) {
+                    listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q2));
+                } else if(quarterString.equalsIgnoreCase("Quarter 3")) {
+                    listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q3));
+                } else if(quarterString.equalsIgnoreCase("Quarter 4")) {
+                    listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q4));
+                }
+
+                if (listMonth != null) {
+                    if (listMonth.size() > 0) {
+                        strMonthArray = new String[listMonth.size()];
+                        for (int i = 0; i < listMonth.size(); i++) {
+                            strMonthArray[i] = listMonth.get(i);
+                        }
+                    }
+                }
+                if (listMonth != null && listMonth.size() > 0) {
+                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strMonthArray) {
+                        @Override
+                        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                            View v = null;
+                            // If this is the initial dummy entry, make it hidden
+                            if (position == 0) {
+                                TextView tv = new TextView(getContext());
+                                tv.setHeight(0);
+                                tv.setVisibility(View.GONE);
+                                v = tv;
+                            } else {
+                                // Pass convertView as null to prevent reuse of special case views
+                                v = super.getDropDownView(position, null, parent);
+                            }
+                            // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                            parent.setVerticalScrollBarEnabled(false);
+                            return v;
+                        }
+                    };
+
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    txtMonth.setAdapter(adapter1);
+                }
+
+                txtMonth.setOnTouchListener(new View.OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        txtMonth.showDropDown();
+                        return false;
+                    }
+                });
+
+                txtMonth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (strMonthArray != null && strMonthArray.length > 0) {
+                            strMonth = txtMonth.getText().toString();
+                            monthString = parent.getItemAtPosition(position).toString();
+
+                        }
+
+                    }
+                });
 
             }
         });
@@ -1063,312 +503,759 @@ public class UploadFragment extends Fragment {
 
             }
         });
-        ///////////////////////////////
-        //////////////////Level 2 details
 
-        txtL2.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                txtL3.setVisibility(View.GONE);
-                cardlevel3.setVisibility(View.GONE);
-                txtL4.setVisibility(View.GONE);
-                cardlevel4.setVisibility(View.GONE);
-                txtL5.setVisibility(View.GONE);
-                cardlevel5.setVisibility(View.GONE);
-                txtL6.setVisibility(View.GONE);
-                cardlevel6.setVisibility(View.GONE);
-                txtL3.setText("");
-                valLevel3 = "";
-                valLevel4 = "";
-                valLevel5 = "";
-                valLevel6 = "";
-                txtL2.showDropDown();
-                return false;
-            }
-        });
 
-        txtL2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strLevel2Array != null && strLevel2Array.length > 0) {
-                    strlevel2 = txtL2.getText().toString();
+        if(sharedPref.getLoginId().equalsIgnoreCase("finance") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+            fetchLevel2dataFin();
+            txtL2.setHint("Financial Type");
 
-                    valLevel2 = parent.getItemAtPosition(position).toString();
+            txtL2.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL4.setVisibility(View.GONE);
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL3.setText("");
+                    valLevel3 = "";
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    txtL2.showDropDown();
+                    return false;
+                }
+            });
 
-                    if (valLevel2 != null && valLevel2.length() > 0) {
-                        if (valLevel2.equalsIgnoreCase("Direct Taxation")||
-                                valLevel2.equalsIgnoreCase("In-Direct Taxation")||
-                                valLevel2.equalsIgnoreCase("Finance")||
-                                valLevel2.equalsIgnoreCase("Accounts")||
-                                valLevel2.equalsIgnoreCase("Banking")||
-                                valLevel2.equalsIgnoreCase("Audit")) {
-                            fetchLevel3data();
+            txtL2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level2txtlayout.setHint("Financial Type");
+                    if (strLevel2Array != null && strLevel2Array.length > 0) {
+                        strlevel2 = txtL2.getText().toString();
 
+                        valLevel2 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel2 != null && valLevel2.length() > 0) {
+                            fetchLevel3dataFin();
                             level3txtlayout.setHint(valLevel2);
-                            txtL3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                @Override
-                                public void onFocusChange(View v, boolean hasFocus) {
-                                    level3txtlayout.setHint(valLevel2);
-                                }
-                            });
                             txtL3.setVisibility(View.VISIBLE);
                             cardlevel3.setVisibility(View.VISIBLE);
                         }
                     }
+                }
+            });
 
-                    }
-            }
-        });
+            ///////////////////////////////////////
+            //////////////////Level 3 details
 
-        ///////////////////////////////////////
-        //////////////////Level 3 details
+            txtL3.setOnTouchListener(new View.OnTouchListener() {
 
-        txtL3.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL4.setVisibility(View.GONE);
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    txtL3.showDropDown();
+                    return false;
+                }
+            });
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                txtL4.setVisibility(View.GONE);
-                cardlevel4.setVisibility(View.GONE);
-                txtL5.setVisibility(View.GONE);
-                cardlevel5.setVisibility(View.GONE);
-                txtL6.setVisibility(View.GONE);
-                cardlevel6.setVisibility(View.GONE);
-                txtL4.setText("");
-                valLevel4 = "";
-                valLevel5 = "";
-                valLevel6 = "";
-                txtL3.showDropDown();
-                return false;
-            }
-        });
+            txtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel3Array != null && strLevel3Array.length > 0) {
+                        strlevel3 = txtL3.getText().toString();
+                        valLevel3 = parent.getItemAtPosition(position).toString();
 
-        txtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strLevel3Array != null && strLevel3Array.length > 0) {
-                    strlevel3 = txtL3.getText().toString();
-                    valLevel3 = parent.getItemAtPosition(position).toString();
-
-                    if (valLevel3 != null && valLevel3.length() > 0) {
-                        if( valLevel2.equalsIgnoreCase("Banking")||
-                                valLevel2.equalsIgnoreCase("Audit")) {
-                            if (valLevel3.equalsIgnoreCase("Daily Finance Memo") ||
-                                    valLevel3.equalsIgnoreCase("Monthly CashFlow") ||
-                                    valLevel3.equalsIgnoreCase("Investments")||
-                                    valLevel3.equalsIgnoreCase("Statutory Audit") ||
-                                    valLevel3.equalsIgnoreCase("Internal Audit") ||
-                                    valLevel3.equalsIgnoreCase("Concurrent Audit")) {
-
+                        if (valLevel3 != null && valLevel3.length() > 0) {
+                            fetchLevel4data();
+                            if(chk.equals("no")) {
                                 txtL4.setVisibility(View.GONE);
                                 cardlevel4.setVisibility(View.GONE);
+                            } else {
+                                txtL4.setVisibility(View.VISIBLE);
+                                cardlevel4.setVisibility(View.VISIBLE);
+                                level4txtlayout.setHint(valLevel3);
                             }
-                        }else{
-                            fetchLevel4data();
-
-                            level4txtlayout.setHint(valLevel3);
-                            txtL4.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                @Override
-                                public void onFocusChange(View v, boolean hasFocus) {
-                                    level4txtlayout.setHint(valLevel3);
-                                }
-                            });
-                            txtL4.setVisibility(View.VISIBLE);
-                            cardlevel4.setVisibility(View.VISIBLE);
                         }
                     }
-
                 }
-            }
-        });
+            });
 
-        ///////////////////////////////////////
+            ///////////////////////////////////////
 
-        //////////////////Level 4 details
+            //////////////////Level 4 details
 
-        txtL4.setOnTouchListener(new View.OnTouchListener() {
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                txtL5.setVisibility(View.GONE);
-                cardlevel5.setVisibility(View.GONE);
-                txtL6.setVisibility(View.GONE);
-                cardlevel6.setVisibility(View.GONE);
-                txtL5.setText("");
-                valLevel5 = "";
-                valLevel6 = "";
-                txtL4.showDropDown();
-                return false;
-            }
-        });
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
 
-        txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strLevel4Array != null && strLevel4Array.length > 0) {
-                    strlevel4 = txtL4.getText().toString();
-                    valLevel4 = parent.getItemAtPosition(position).toString();
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel4Array != null && strLevel4Array.length > 0) {
+                        strlevel4 = txtL4.getText().toString();
+                        valLevel4 = parent.getItemAtPosition(position).toString();
 
-                    if (valLevel4 != null && valLevel4.length() > 0) {
-                        if (valLevel3.equalsIgnoreCase("Income Tax Return") ||valLevel3.equalsIgnoreCase("Assessment")||
-                                valLevel3.equalsIgnoreCase("E-tds Return (Non-salary)")||valLevel3.equalsIgnoreCase("E-tds Return (Salaries)")||
-                                valLevel3.equalsIgnoreCase("Lender List")||valLevel3.equalsIgnoreCase("ARC List")||
-                                valLevel3.equalsIgnoreCase("Receivable")||valLevel3.equalsIgnoreCase("Payable")||
-                                valLevel3.equalsIgnoreCase("Fixed Assets")) {
-                            if (valLevel4.equalsIgnoreCase("Acknowledgement") ||valLevel4.equalsIgnoreCase("ITR") ||
-                                    valLevel4.equalsIgnoreCase("Advance tax Payment") ||valLevel4.equalsIgnoreCase("Self Assessment Tax Payment") ||
-                                    valLevel4.equalsIgnoreCase("Dividend Tax Payment") ||valLevel4.equalsIgnoreCase("TAN Details") ||
-                                    valLevel4.equalsIgnoreCase("Lower deduction") ||valLevel4.equalsIgnoreCase("TDS Challan payment receipt monthly") ||
-                                    valLevel4.equalsIgnoreCase("Form 16") ||valLevel4.equalsIgnoreCase("Quarterly Return") ||
-                                    valLevel4.equalsIgnoreCase("FVV File") ||valLevel4.equalsIgnoreCase("Revised Return") ||
-                                    valLevel4.equalsIgnoreCase("Notice") ||valLevel4.equalsIgnoreCase("Application / Proposals") ||
-                                    valLevel4.equalsIgnoreCase("Valuations") ||valLevel4.equalsIgnoreCase("Sanction letter") ||
-                                    valLevel4.equalsIgnoreCase("Loan agreements") ||valLevel4.equalsIgnoreCase("Disb requests") ||
-                                    valLevel4.equalsIgnoreCase("security creation") ||valLevel4.equalsIgnoreCase("Registration") ||
-                                    valLevel4.equalsIgnoreCase("Charge creation / satisfaction") ||valLevel4.equalsIgnoreCase("Restructuring") ||
-                                    valLevel4.equalsIgnoreCase("Payments") ||valLevel4.equalsIgnoreCase("Disputes") ||
-                                    valLevel4.equalsIgnoreCase("OTS") ||valLevel4.equalsIgnoreCase("Assignment") ||
-                                    valLevel4.equalsIgnoreCase("Offer") ||valLevel4.equalsIgnoreCase("Settlement") ||
-                                    valLevel4.equalsIgnoreCase("Prepayment") ||valLevel4.equalsIgnoreCase("Rent") ||
-                                    valLevel4.equalsIgnoreCase("Interest") ||valLevel4.equalsIgnoreCase("DSR") ||
-                                    valLevel4.equalsIgnoreCase("Royalty fee") ||valLevel4.equalsIgnoreCase("Franchisee fee") ||
-                                    valLevel4.equalsIgnoreCase("Management fee") ||valLevel4.equalsIgnoreCase("AMC") ||
-                                    valLevel4.equalsIgnoreCase("Dividends") ||valLevel4.equalsIgnoreCase("Others") ||
-                                    valLevel4.equalsIgnoreCase("Contractors") ||valLevel4.equalsIgnoreCase("PO") ||
-                                    valLevel4.equalsIgnoreCase("Retainer") ||valLevel4.equalsIgnoreCase("Paysheet") ||
-                                    valLevel4.equalsIgnoreCase("Interest") ||valLevel4.equalsIgnoreCase("Capex") ||
-                                    valLevel4.equalsIgnoreCase("Purchase bills") ||valLevel4.equalsIgnoreCase("Sale Bills") ||
-                                    valLevel4.equalsIgnoreCase("Depreciation") ||valLevel4.equalsIgnoreCase("Physical Verification")
-                                    ) {
-
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5data();
+                            if(chk.equals("no")) {
                                 txtL5.setVisibility(View.GONE);
                                 cardlevel5.setVisibility(View.GONE);
+                            } else if(chk.equals("yes")) {
+                                level5txtlayout.setHint(valLevel4);
+                                txtL5.setVisibility(View.VISIBLE);
+                                cardlevel5.setVisibility(View.VISIBLE);
                             }
-                        }else{
-                            fetchLevel5data();
+                        }
 
+                    }
+                }
+            });
+
+            ///////////////////////////////////////
+            //////////////////Level 5 details
+
+            txtL5.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    valLevel6 = "";
+                    txtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5Array != null && strLevel5Array.length > 0) {
+                        strlevel5 = txtL5.getText().toString();
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6data();
+                            if(chk.equals("yes")) {
+                                level6txtlayout.setHint(valLevel5);
+                                txtL6.setVisibility(View.VISIBLE);
+                                cardlevel6.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                txtL6.setVisibility(View.GONE);
+                                cardlevel6.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            ///////////////////////////////////////
+
+            //////////////////Level 6 details
+
+            txtL6.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    txtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6Array != null && strLevel6Array.length > 0) {
+                        strlevel6 = txtL6.getText().toString();
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+                    }
+                }
+            });
+        } else if(sharedPref.getLoginId().equalsIgnoreCase("hr") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+            txtL2.setVisibility(View.GONE);
+            cardlevel2.setVisibility(View.GONE);
+            txtL3.setVisibility(View.GONE);
+            cardlevel3.setVisibility(View.GONE);
+
+            txtL4.setVisibility(View.VISIBLE);
+            cardlevel4.setVisibility(View.VISIBLE);
+            txtL4.setHint("HR");
+
+            fetchLevel4dataHR();
+
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level4txtlayout.setHint("HR");
+                    if (strLevel4ArrayHR != null && strLevel4ArrayHR.length > 0) {
+                        strlevel4 = txtL4.getText().toString();
+
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataHR();
                             level5txtlayout.setHint(valLevel4);
-                            txtL5.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                @Override
-                                public void onFocusChange(View v, boolean hasFocus) {
-                                    level5txtlayout.setHint(valLevel4);
-                                }
-                            });
                             txtL5.setVisibility(View.VISIBLE);
                             cardlevel5.setVisibility(View.VISIBLE);
                         }
                     }
-
                 }
-            }
-        });
+            });
 
-        ///////////////////////////////////////
-        //////////////////Level 5 details
+            txtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL5.showDropDown();
+                    return false;
+                }
+            });
 
-        txtL5.setOnTouchListener(new View.OnTouchListener() {
+            txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayHR != null && strLevel5ArrayHR.length > 0) {
+                        strlevel5 = txtL5.getText().toString();
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                txtL6.setVisibility(View.GONE);
-                cardlevel6.setVisibility(View.GONE);
-                txtL6.setText("");
-                valLevel6 = "";
-                txtL5.showDropDown();
-                return false;
-            }
-        });
+                        valLevel5 = parent.getItemAtPosition(position).toString();
 
-        txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strLevel5Array != null && strLevel5Array.length > 0) {
-                    strlevel5 = txtL5.getText().toString();
-                    valLevel5 = parent.getItemAtPosition(position).toString();
 
-                    if (valLevel5 != null && valLevel5.length() > 0) {
-                        if (valLevel4.equalsIgnoreCase("Customs")&&
-                                valLevel5.equalsIgnoreCase("Licenses")) {
-
-                                fetchLevel6data();
-
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataHR();
+                            if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
-                                txtL6.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                    @Override
-                                    public void onFocusChange(View v, boolean hasFocus) {
-                                        level6txtlayout.setHint(valLevel5);
-                                    }
-                                });
                                 txtL6.setVisibility(View.VISIBLE);
                                 cardlevel6.setVisibility(View.VISIBLE);
-                            }else{
-                            txtL6.setVisibility(View.GONE);
-                            cardlevel6.setVisibility(View.GONE);
+                            } else if(chk.equals("no")) {
+                                txtL6.setVisibility(View.GONE);
+                                cardlevel6.setVisibility(View.GONE);
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        ///////////////////////////////////////
-
-        //////////////////Level 6 details
-
-        txtL6.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                txtL6.showDropDown();
-                return false;
-            }
-        });
-
-        txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strLevel6Array != null && strLevel6Array.length > 0) {
-                    strlevel6 = txtL6.getText().toString();
-                    valLevel6 = parent.getItemAtPosition(position).toString();
+            txtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    txtL6.showDropDown();
+                    return false;
                 }
-            }
-        });
+            });
+        } else if(sharedPref.getLoginId().equalsIgnoreCase("cmd") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+            txtL2.setVisibility(View.GONE);
+            cardlevel2.setVisibility(View.GONE);
+            txtL3.setVisibility(View.GONE);
+            cardlevel3.setVisibility(View.GONE);
 
+            txtL4.setVisibility(View.VISIBLE);
+            cardlevel4.setVisibility(View.VISIBLE);
+            txtL4.setHint("Type");
+
+            fetchLevel4dataCMD();
+
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level4txtlayout.setHint("CMD");
+                    if (strLevel4ArrayCMD != null && strLevel4ArrayCMD.length > 0) {
+                        strlevel4 = txtL4.getText().toString();
+
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataCMD();
+                            level5txtlayout.setHint(valLevel4);
+                            txtL5.setVisibility(View.VISIBLE);
+                            cardlevel5.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+
+            txtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayCMD != null && strLevel5ArrayCMD.length > 0) {
+                        strlevel5 = txtL5.getText().toString();
+
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+
+
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataCMD();
+                            if(chk.equals("yes")) {
+                                level6txtlayout.setHint(valLevel5);
+                                txtL6.setVisibility(View.VISIBLE);
+                                cardlevel6.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                txtL6.setVisibility(View.GONE);
+                                cardlevel6.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    txtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayCMD != null && strLevel6ArrayCMD.length > 0) {
+                        strlevel6 = txtL6.getText().toString();
+
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel6 != null && valLevel6.length() > 0) {
+                            fetchLevel7dataCMD();
+                            if(chk.equals("yes")) {
+                                level7txtlayout.setHint(valLevel5);
+                                txtL7.setVisibility(View.VISIBLE);
+                                cardlevel7.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                txtL7.setVisibility(View.GONE);
+                                cardlevel7.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL7.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.showDropDown();
+                    return false;
+                }
+            });
+        } else if(sharedPref.getLoginId().equalsIgnoreCase("cs") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+            fetchLevel2dataCS();
+            txtL2.setHint("Type");
+
+            txtL2.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL3.setVisibility(View.GONE);
+                    cardlevel3.setVisibility(View.GONE);
+                    txtL4.setVisibility(View.GONE);
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL3.setText("");
+                    valLevel3 = "";
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    txtL2.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level2txtlayout.setHint("Type");
+                    if (strLevel2ArrayCS != null && strLevel2ArrayCS.length > 0) {
+                        strlevel2 = txtL2.getText().toString();
+
+                        valLevel2 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel2 != null && valLevel2.length() > 0) {
+                            fetchLevel3dataCS();
+                            level3txtlayout.setHint(valLevel2);
+                            txtL3.setVisibility(View.VISIBLE);
+                            cardlevel3.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+
+            txtL3.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL4.setVisibility(View.GONE);
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    txtL3.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel3ArrayCS != null && strLevel3ArrayCS.length > 0) {
+                        strlevel3 = txtL3.getText().toString();
+                        valLevel3 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel3 != null && valLevel3.length() > 0) {
+                            fetchLevel4dataCS();
+                            if(chk.equals("no")) {
+                                txtL4.setVisibility(View.GONE);
+                                cardlevel4.setVisibility(View.GONE);
+                            } else {
+                                txtL4.setVisibility(View.VISIBLE);
+                                cardlevel4.setVisibility(View.VISIBLE);
+                                level4txtlayout.setHint(valLevel3);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
+        } else if(sharedPref.getLoginId().equalsIgnoreCase("marketing") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+            txtL2.setVisibility(View.GONE);
+            cardlevel2.setVisibility(View.GONE);
+            txtL3.setVisibility(View.GONE);
+            cardlevel3.setVisibility(View.GONE);
+
+            txtL4.setVisibility(View.VISIBLE);
+            cardlevel4.setVisibility(View.VISIBLE);
+            txtL4.setHint("Occupancy");
+            fetchLevel4dataMAR();
+
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level4txtlayout.setHint("Occupancy");
+                    if (strLevel4ArrayMAR != null && strLevel4ArrayMAR.length > 0) {
+                        strlevel4 = txtL4.getText().toString();
+
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataMAR();
+                            level5txtlayout.setHint(valLevel4);
+                            txtL5.setVisibility(View.VISIBLE);
+                            cardlevel5.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+
+            txtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayMAR != null && strLevel5ArrayMAR.length > 0) {
+                        strlevel5 = txtL5.getText().toString();
+
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataMAR();
+                            if(chk.equals("yes")) {
+                                level6txtlayout.setHint(valLevel5);
+                                txtL6.setVisibility(View.VISIBLE);
+                                cardlevel6.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                txtL6.setVisibility(View.GONE);
+                                cardlevel6.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    txtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayMAR != null && strLevel6ArrayMAR.length > 0) {
+                        strlevel6 = txtL6.getText().toString();
+
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel6 != null && valLevel6.length() > 0) {
+                            fetchLevel7dataMAR();
+                            if(chk.equals("yes")) {
+                                level7txtlayout.setHint(valLevel6);
+                                txtL7.setVisibility(View.VISIBLE);
+                                cardlevel7.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                txtL7.setVisibility(View.GONE);
+                                cardlevel7.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL7.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.showDropDown();
+                    return false;
+                }
+            });
+
+        } else if(sharedPref.getLoginId().equalsIgnoreCase("Personal") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+            txtL2.setVisibility(View.GONE);
+            cardlevel2.setVisibility(View.GONE);
+
+            txtL3.setVisibility(View.VISIBLE);
+            cardlevel3.setVisibility(View.VISIBLE);
+            txtL3.setHint("Type");
+
+            fetchLevel3dataPER();
+
+            txtL3.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL4.setVisibility(View.GONE);
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    txtL3.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level3txtlayout.setHint("Type");
+                    if (strLevel3ArrayPer != null && strLevel3ArrayPer.length > 0) {
+                        strlevel3 = txtL3.getText().toString();
+                        valLevel3 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel3 != null && valLevel3.length() > 0) {
+                            fetchLevel4dataPER();
+                            if(chk.equals("no")) {
+                                txtL4.setVisibility(View.GONE);
+                                cardlevel4.setVisibility(View.GONE);
+                            } else {
+                                txtL4.setVisibility(View.VISIBLE);
+                                cardlevel4.setVisibility(View.VISIBLE);
+                                level4txtlayout.setHint(valLevel3);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL5.setVisibility(View.GONE);
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel4ArrayPer != null && strLevel4ArrayPer.length > 0) {
+                        strlevel4 = txtL4.getText().toString();
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataPER();
+                            if(chk.equals("no")) {
+                                txtL5.setVisibility(View.GONE);
+                                cardlevel5.setVisibility(View.GONE);
+                            } else if(chk.equals("yes")) {
+                                level5txtlayout.setHint(valLevel4);
+                                txtL5.setVisibility(View.VISIBLE);
+                                cardlevel5.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    }
+                }
+            });
+
+            txtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL6.setVisibility(View.GONE);
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL7.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL5.showDropDown();
+                    return false;
+                }
+            });
+        }
         ///////////////////////////////////////
-
-
-      /*  dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_bg, listLegal);
-        //android.R.layout.simple_spinner_dropdown_item
-        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-        spinLegalEntity.setAdapter(dataAdapter);*/
-
-       /* dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_bg, listProperty);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-        spinProperty.setAdapter(dataAdapter);*/
-
-        /*dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_bg, listMonth);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-        spinMonth.setAdapter(dataAdapter);*/
-
-       /* dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_bg, listYear);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-        spinYear.setAdapter(dataAdapter);*/
-
-       /* dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_bg, listQuarter);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-        spinQuarter.setAdapter(dataAdapter);*/
-
-       /* dataAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_bg, listLoc);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_bg);
-        spinLocation.setAdapter(dataAdapter);*/
-
-
-
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1384,13 +1271,10 @@ public class UploadFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
-    private void fetchLevel2data() {
+    private void fetchLevel2dataFin() {
         try {
-
             level2list = new ArrayList<>();
 
             String Level2 = "level2";
@@ -1441,7 +1325,7 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel3data() {
+    private void fetchLevel3dataFin() {
         try {
 
             level3list = new ArrayList<>();
@@ -1497,23 +1381,31 @@ public class UploadFragment extends Fragment {
 
     private void fetchLevel4data() {
         try {
-
             level4list = new ArrayList<>();
 
             String where = " where level3 like " + "'" + valLevel3 + "'";
             String Level4 = "level4";
+            String branch = "";
             Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_FINANCE, where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    String branch = "";
                     branch = cursor1.getString(cursor1.getColumnIndex("level4"));
                     level4list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+
             Collections.sort(level4list);
             if (level4list.size() > 0) {
+                chk = "yes";
                 strLevel4Array = new String[level4list.size()];
                 for (int i = 0; i < level4list.size(); i++) {
                     strLevel4Array[i] = level4list.get(i);
@@ -1556,15 +1448,22 @@ public class UploadFragment extends Fragment {
 
             String where = " where level4 like " + "'" + valLevel4 + "'";
             String Level5 = "level5";
+            String branch = "";
             Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_FINANCE, where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    String branch = "";
                     branch = cursor1.getString(cursor1.getColumnIndex("level5"));
                     level5list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
             }
             Collections.sort(level5list);
             if (level5list.size() > 0) {
@@ -1607,18 +1506,24 @@ public class UploadFragment extends Fragment {
         try {
 
             level6list = new ArrayList<>();
-
+            String branch = "";
             String where = " where level5 like " + "'" + valLevel5 + "'";
             String Level6 = "level6";
             Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_FINANCE, where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    String branch = "";
                     branch = cursor1.getString(cursor1.getColumnIndex("level6"));
                     level6list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
             }
             Collections.sort(level6list);
             if (level6list.size() > 0) {
@@ -1657,6 +1562,968 @@ public class UploadFragment extends Fragment {
         }
     }
 
+    private void fetchLevel4dataHR() {
+        try {
+            level4listHR = new ArrayList<>();
+
+            String Level4 = "level4";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_HR);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String hr = "";
+                    hr = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4listHR.add(hr);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listHR);
+            if (level4listHR.size() > 0) {
+                strLevel4ArrayHR = new String[level4listHR.size()];
+                for (int i = 0; i < level4listHR.size(); i++) {
+                    strLevel4ArrayHR[i] = level4listHR.get(i);
+                }
+            }
+            if (level4listHR != null && level4listHR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayHR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataHR() {
+        try {
+
+            level5listHR = new ArrayList<>();
+
+            String where = " where level4 like " + "'" + valLevel4 + "'";
+            String Level5 = "level5";
+            String level5 = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_HR, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5listHR.add(level5);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listHR);
+            if (level5listHR.size() > 0) {
+                strLevel5ArrayHR = new String[level5listHR.size()];
+                for (int i = 0; i < level5listHR.size(); i++) {
+                    strLevel5ArrayHR[i] = level5listHR.get(i);
+                }
+            }
+            if (level5listHR != null && level5listHR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayHR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataHR() {
+        try {
+
+            level6listHR = new ArrayList<>();
+            String branch = "";
+            String where = " where level5 like " + "'" + valLevel5 + "'";
+            String Level6 = "level6";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_HR, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    level6listHR.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level6listHR);
+            if (level6listHR.size() > 0) {
+                strLevel6ArrayHR = new String[level6listHR.size()];
+                for (int i = 0; i < level6listHR.size(); i++) {
+                    strLevel6ArrayHR[i] = level6listHR.get(i);
+                }
+            }
+            if (level6listHR != null && level6listHR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayHR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataCMD() {
+        try {
+            level4listCMD = new ArrayList<>();
+
+            String Level4 = "level4";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_CMD);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String cmd = "";
+                    cmd = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4listCMD.add(cmd);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listCMD);
+            if (level4listCMD.size() > 0) {
+                strLevel4ArrayCMD = new String[level4listCMD.size()];
+                for (int i = 0; i < level4listCMD.size(); i++) {
+                    strLevel4ArrayCMD[i] = level4listCMD.get(i);
+                }
+            }
+            if (level4listCMD != null && level4listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataCMD() {
+        try {
+
+            level5listCMD = new ArrayList<>();
+
+            String where = " where level4 like " + "'" + valLevel4 + "'";
+            String Level5 = "level5";
+            String level5 = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_CMD, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5listCMD.add(level5);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listCMD);
+            if (level5listCMD.size() > 0) {
+                strLevel5ArrayCMD = new String[level5listCMD.size()];
+                for (int i = 0; i < level5listCMD.size(); i++) {
+                    strLevel5ArrayCMD[i] = level5listCMD.get(i);
+                }
+            }
+            if (level5listCMD != null && level5listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataCMD() {
+        try {
+
+            level6listCMD = new ArrayList<>();
+            String branch = "";
+            String where = " where level5 like " + "'" + valLevel5 + "'";
+            String Level6 = "level6";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_CMD, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    level6listCMD.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level6listCMD);
+            if (level6listCMD.size() > 0) {
+                strLevel6ArrayCMD = new String[level6listCMD.size()];
+                for (int i = 0; i < level6listCMD.size(); i++) {
+                    strLevel6ArrayCMD[i] = level6listCMD.get(i);
+                }
+            }
+            if (level6listCMD != null && level6listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel7dataCMD() {
+        try {
+
+            level7listCMD = new ArrayList<>();
+            String branch = "";
+            String where = " where level6 like " + "'" + valLevel6 + "'";
+            String Level7 = "level7";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level7,DbHelper.TABLE_CMD, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level7"));
+                    level7listCMD.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level7listCMD);
+            if (level7listCMD.size() > 0) {
+                strLevel7ArrayCMD = new String[level7listCMD.size()];
+                for (int i = 0; i < level7listCMD.size(); i++) {
+                    strLevel7ArrayCMD[i] = level7listCMD.get(i);
+                }
+            }
+            if (level7listCMD != null && level7listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel7ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL7.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel2dataCS() {
+        try {
+            level2listCS = new ArrayList<>();
+
+            String Level2 = "level2";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level2,DbHelper.TABLE_CS);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("level2"));
+                    level2listCS.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level2listCS);
+            if (level2listCS.size() > 0) {
+                strLevel2ArrayCS = new String[level2listCS.size()];
+                for (int i = 0; i < level2listCS.size(); i++) {
+                    strLevel2ArrayCS[i] = level2listCS.get(i);
+                }
+            }
+            if (level2listCS != null && level2listCS.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel2ArrayCS) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL2.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel3dataCS() {
+        try {
+
+            level3listCS = new ArrayList<>();
+
+            String where = " where level2 like " + "'" + valLevel2 + "'";
+            String Level3 = "level3";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level3,DbHelper.TABLE_CS, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("level3"));
+                    level3listCS.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level3listCS);
+            if (level3listCS.size() > 0) {
+                strLevel3ArrayCS = new String[level3listCS.size()];
+                for (int i = 0; i < level3listCS.size(); i++) {
+                    strLevel3ArrayCS[i] = level3listCS.get(i);
+                }
+            }
+            if (level3listCS != null && level3listCS.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel3ArrayCS) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL3.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataCS() {
+        try {
+            level4listCS = new ArrayList<>();
+
+            String where = " where level3 like " + "'" + valLevel3 + "'";
+            String Level4 = "level4";
+            String branch = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_CS, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4listCS.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+
+            Collections.sort(level4listCS);
+            if (level4listCS.size() > 0) {
+                chk = "yes";
+                strLevel4ArrayCS = new String[level4listCS.size()];
+                for (int i = 0; i < level4listCS.size(); i++) {
+                    strLevel4ArrayCS[i] = level4listCS.get(i);
+                }
+            }
+            if (level4listCS != null && level4listCS.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayCS) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataMAR() {
+        try {
+            level4listMAR = new ArrayList<>();
+
+            String Level4 = "level4";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_MAR);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String mar = "";
+                    mar = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4listMAR.add(mar);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listMAR);
+            if (level4listMAR.size() > 0) {
+                strLevel4ArrayMAR = new String[level4listMAR.size()];
+                for (int i = 0; i < level4listMAR.size(); i++) {
+                    strLevel4ArrayMAR[i] = level4listMAR.get(i);
+                }
+            }
+            if (level4listMAR != null && level4listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataMAR() {
+        try {
+
+            level5listMAR = new ArrayList<>();
+
+            String where = " where level4 like " + "'" + valLevel4 + "'";
+            String Level5 = "level5";
+            String level5 = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_MAR, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5listMAR.add(level5);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listMAR);
+            if (level5listMAR.size() > 0) {
+                strLevel5ArrayMAR= new String[level5listMAR.size()];
+                for (int i = 0; i < level5listMAR.size(); i++) {
+                    strLevel5ArrayMAR[i] = level5listMAR.get(i);
+                }
+            }
+            if (level5listMAR != null && level5listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataMAR() {
+        try {
+            level6listMAR = new ArrayList<>();
+            String branch = "";
+            String where = " where level5 like " + "'" + valLevel5 + "'";
+            String Level6 = "level6";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_MAR, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    level6listMAR.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level6listMAR);
+            if (level6listMAR.size() > 0) {
+                strLevel6ArrayMAR = new String[level6listMAR.size()];
+                for (int i = 0; i < level6listMAR.size(); i++) {
+                    strLevel6ArrayMAR[i] = level6listMAR.get(i);
+                }
+            }
+            if (level6listMAR != null && level6listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel7dataMAR() {
+        try {
+
+            level7listMAR = new ArrayList<>();
+            String branch = "";
+            String where = " where level6 like " + "'" + valLevel6 + "'";
+            String Level7 = "level7";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level7,DbHelper.TABLE_MAR, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level7"));
+                    level7listMAR.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level7listMAR);
+            if (level7listMAR.size() > 0) {
+                strLevel7ArrayMAR = new String[level7listMAR.size()];
+                for (int i = 0; i < level7listMAR.size(); i++) {
+                    strLevel7ArrayMAR[i] = level7listMAR.get(i);
+                }
+            }
+            if (level7listMAR != null && level7listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel7ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL7.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel3dataPER() {
+        try {
+            level3listPER = new ArrayList<>();
+
+            String Level3 = "level3";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level3,DbHelper.TABLE_PER);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("level3"));
+                    level3listPER.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level3listPER);
+            if (level3listPER.size() > 0) {
+                strLevel3ArrayPer = new String[level3listPER.size()];
+                for (int i = 0; i < level3listPER.size(); i++) {
+                    strLevel3ArrayPer[i] = level3listPER.get(i);
+                }
+            }
+            if (level3listPER != null && level3listPER.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel3ArrayPer) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL3.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataPER() {
+        try {
+            level4listPER = new ArrayList<>();
+
+            String where = " where level3 like " + "'" + valLevel3 + "'";
+            String Level4 = "level4";
+            String branch = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_PER, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4listPER.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+
+            Collections.sort(level4listPER);
+            if (level4listPER.size() > 0) {
+                chk = "yes";
+                strLevel4ArrayPer = new String[level4listPER.size()];
+                for (int i = 0; i < level4listPER.size(); i++) {
+                    strLevel4ArrayPer[i] = level4listPER.get(i);
+                }
+            }
+            if (level4listPER != null && level4listPER.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayPer) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataPER() {
+        try {
+
+            level5listPER = new ArrayList<>();
+
+            String where = " where level4 like " + "'" + valLevel4 + "'";
+            String Level5 = "level5";
+            String branch = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_PER, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5listPER.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level5listPER);
+            if (level5listPER.size() > 0) {
+                strLevel5ArrayPer = new String[level5listPER.size()];
+                for (int i = 0; i < level5listPER.size(); i++) {
+                    strLevel5ArrayPer[i] = level5listPER.get(i);
+                }
+            }
+            if (level5listPER != null && level5listPER.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayPer) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private List<UploadModel> setUploadModelList() {
         List<UploadModel> uploadModels = new ArrayList<>();

@@ -21,15 +21,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "KHIL.sqlite";
 
     public static final String TABLE_FINANCE = "table_finance";
-//    public static final String TABLE_M_PARAMETER = "table_M_Parameter";
-//    public static final String TABLE_DIRECT_LEAD_CATEGORY_DTLS = "tabel_direct_lead_category_dtls";
-//    public static final String TABLE_DIRECT_LEAD = "table_Direct_lead";
-//    public static final String TABLE_M_CATEGORY = "table_M_Category";
-//    public static final String TABLE_DIRECT_LEAD_ST_DTLS = "table_direct_lead_st_dtls";
-//    public static final String TABLE_M_PINCODE_TABLE = "pincode";
-//    public static final String TABLE_CLIENT_DETAILS = "table_get_All_Client";
-//    public static final String TABLE_NOTIFICATION = "table_Notification";
-//    public static final String TABLE_ACCESS_HISTORY = "table_access_history";
+    public static final String TABLE_HR = "table_hr";
+    public static final String TABLE_CMD = "table_cmd";
+    public static final String TABLE_CS = "table_cs";
+    public static final String TABLE_MAR = "table_marketing";
+    public static final String TABLE_PER = "table_personal";
 
     public static final int DATABASE_VERSION = 1;
     private static DbHelper dbInstance = null;

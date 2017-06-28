@@ -16,7 +16,6 @@
     <string name="font_normal">fonts/montserrat_regular.ttf</string>
 
     <string-array name="legal_entity">
-        <item>Select Legal Entity</item>
         <item>Entity 1</item>
         <item>Entity 2</item>
         <item>Entity 3</item>
@@ -27,7 +26,6 @@
     </string-array>
 
     <string-array name="property">
-        <item>Select Property</item>
         <item>Property 1</item>
         <item>Property 2</item>
         <item>Property 3</item>
@@ -37,24 +35,31 @@
         <item>Property 7</item>
     </string-array>
 
-    <string-array name="month">
-        <item>Select Month</item>
+    <string-array name="month_q1">
         <item>January</item>
         <item>February</item>
         <item>March</item>
+    </string-array>
+
+    <string-array name="month_q2">
         <item>April</item>
         <item>May</item>
         <item>June</item>
+    </string-array>
+
+    <string-array name="month_q3">
         <item>July</item>
         <item>August</item>
         <item>September</item>
+    </string-array>
+
+    <string-array name="month_q4">
         <item>October</item>
         <item>November</item>
         <item>December</item>
     </string-array>
 
     <string-array name="year">
-        <item>Select Year</item>
         <item>2011</item>
         <item>2012</item>
         <item>2013</item>
@@ -68,7 +73,6 @@
     </string-array>
 
     <string-array name="quarter">
-        <item>Select Quarter</item>
         <item>Quarter 1</item>
         <item>Quarter 2</item>
         <item>Quarter 3</item>
@@ -76,7 +80,6 @@
     </string-array>
 
     <string-array name="location">
-        <item>Select Location</item>
         <item>L-1</item>
         <item>L-2</item>
         <item>L-3</item>
@@ -84,7 +87,6 @@
     </string-array>
 
     <string-array name="type">
-        <item>Select Type</item>
         <item>T-1</item>
         <item>T-2</item>
         <item>T-3</item>

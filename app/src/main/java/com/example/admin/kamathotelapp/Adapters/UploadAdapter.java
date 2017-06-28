@@ -13,6 +13,8 @@ import com.example.admin.kamathotelapp.R;
 
 import java.util.List;
 
+import me.grantland.widget.AutofitHelper;
+
 /**
  * Created by Admin on 6/17/2017.
  */
@@ -57,11 +59,17 @@ public class UploadAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
 
             viewHolder.txtSrNo = (TextView) convertView.findViewById(R.id.txtSrNo);
+            AutofitHelper.create(viewHolder.txtSrNo);
             viewHolder.txtLevel2 = (TextView) convertView.findViewById(R.id.txtLevel2);
+            AutofitHelper.create(viewHolder.txtLevel2);
             viewHolder.txtLevel3 = (TextView) convertView.findViewById(R.id.txtLevel3);
+            AutofitHelper.create(viewHolder.txtLevel3);
             viewHolder.txtLevel4 = (TextView) convertView.findViewById(R.id.txtLevel4);
+            AutofitHelper.create(viewHolder.txtLevel4);
             viewHolder.txtLevel5 = (TextView) convertView.findViewById(R.id.txtLevel5);
+            AutofitHelper.create(viewHolder.txtLevel5);
             viewHolder.txtLevel6 = (TextView) convertView.findViewById(R.id.txtLevel6);
+            AutofitHelper.create(viewHolder.txtLevel6);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
