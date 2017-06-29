@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.admin.kamathotelapp.R;
+import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
@@ -44,6 +45,8 @@ public class ScanFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //////////Crash Report
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scan, container, false);
         init(view);

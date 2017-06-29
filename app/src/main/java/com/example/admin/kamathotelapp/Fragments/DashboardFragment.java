@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.admin.kamathotelapp.R;
+import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +42,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //////////Crash Report
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         initView(view);

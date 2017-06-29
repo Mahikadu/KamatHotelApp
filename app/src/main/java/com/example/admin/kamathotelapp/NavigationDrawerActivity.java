@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.example.admin.kamathotelapp.Fragments.DashboardFragment;
 import com.example.admin.kamathotelapp.Fragments.ScanFragment;
 import com.example.admin.kamathotelapp.Fragments.UploadFragment;
+import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +28,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //////////Crash Report
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

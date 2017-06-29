@@ -25,6 +25,7 @@ import com.example.admin.kamathotelapp.Adapters.UploadAdapter;
 import com.example.admin.kamathotelapp.KHIL;
 import com.example.admin.kamathotelapp.Model.UploadModel;
 import com.example.admin.kamathotelapp.R;
+import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 
@@ -97,6 +98,8 @@ public class UploadFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //////////Crash Report
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
         initView(view);

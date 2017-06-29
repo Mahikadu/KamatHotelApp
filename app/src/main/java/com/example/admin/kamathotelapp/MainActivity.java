@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DatabaseCopy;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        //////////Crash Report
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         sharedPref = new SharedPref(MainActivity.this);
 
