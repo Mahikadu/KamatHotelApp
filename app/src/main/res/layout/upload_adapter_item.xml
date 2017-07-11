@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/upAdapter1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="67">
+            >
 
             <TextView
                 android:id="@+id/txtSrNo"
@@ -88,6 +89,17 @@
                 android:text="Level 6"/>
 
             <TextView
+                android:id="@+id/txtLevel7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3sp"
+                android:layout_marginRight="3sp"
+                android:layout_weight="9"
+                android:maxLines="2"
+                android:textSize="15sp"
+                android:text="Level 7"/>
+
+            <TextView
                 android:id="@+id/txtFilenName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -95,19 +107,32 @@
                 android:layout_marginRight="3sp"
                 android:layout_weight="9"
                 android:maxLines="2"
-                android:textSize="15sp"
-                android:text="File Name"/>
+                android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/txtAction"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="9"
-                android:layout_marginLeft="3sp"
-                android:layout_marginRight="3sp"
-                android:maxLines="2"
-                android:textSize="15sp"
-                android:text="Action"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3sp"
+                    android:layout_marginRight="3sp"
+                    android:textSize="15sp"
+                    android:text="Edit"/>
+
+                <TextView
+                    android:id="@+id/txtDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3sp"
+                    android:layout_marginRight="3sp"
+                    android:text="Delete"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

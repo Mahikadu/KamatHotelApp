@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/layout_upload_1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -18,10 +20,10 @@
             android:orientation="horizontal"
             android:background="@color/black"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="67">
+            android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/srNo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
@@ -33,6 +35,7 @@
                 android:text="SrNo"/>
 
             <TextView
+                android:id="@+id/level2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
@@ -40,10 +43,10 @@
                 android:maxLines="2"
                 android:layout_marginLeft="3sp"
                 android:layout_marginRight="3sp"
-                android:textColor="@color/white"
-                android:text="Type (Level 2)"/>
+                android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/level3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
@@ -51,13 +54,12 @@
                 android:maxLines="2"
                 android:layout_marginLeft="3sp"
                 android:layout_marginRight="3sp"
-                android:textColor="@color/white"
-                android:text="TypeDesc (Level 3)"/>
+                android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/level4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Level 4"
                 android:layout_weight="9"
                 android:maxLines="2"
                 android:layout_marginLeft="3sp"
@@ -66,6 +68,7 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/level5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3sp"
@@ -73,10 +76,10 @@
                 android:layout_weight="9"
                 android:maxLines="2"
                 android:textSize="15sp"
-                android:textColor="@color/white"
-                android:text="Level 5"/>
+                android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/level6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3sp"
@@ -84,10 +87,21 @@
                 android:layout_weight="9"
                 android:maxLines="2"
                 android:textSize="15sp"
-                android:textColor="@color/white"
-                android:text="Level 6"/>
+                android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/level7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3sp"
+                android:layout_marginRight="3sp"
+                android:layout_weight="9"
+                android:maxLines="2"
+                android:textSize="15sp"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/fileName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3sp"
@@ -99,6 +113,7 @@
                 android:text="File Name"/>
 
             <TextView
+                android:id="@+id/action"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="9"

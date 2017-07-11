@@ -40,6 +40,7 @@ public class SharedPref {
     public void clearPref() {
         try {
             editor.remove(KEY_LoginId);
+            editor.remove(KEY_PWD);
             editor.clear();
             editor.commit();
         } catch (Exception e) {

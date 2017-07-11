@@ -4,7 +4,15 @@ package com.example.admin.kamathotelapp.Model;
  * Created by Admin on 6/17/2017.
  */
 public class UploadModel {
-    String level2, level3, level4, level5, level6, fileName;
+    String id, level2, level3, level4, level5, level6, level7, fileName;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getLevel2() {
         return level2;
@@ -44,6 +52,14 @@ public class UploadModel {
 
     public void setLevel6(String level6) {
         this.level6 = level6;
+    }
+
+    public String getLevel7() {
+        return level7;
+    }
+
+    public void setLevel7(String level7) {
+        this.level7 = level7;
     }
 
     public String getFileName() {

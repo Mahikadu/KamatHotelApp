@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.example.admin.kamathotelapp.KHIL;
 import com.example.admin.kamathotelapp.R;
 
 
@@ -26,6 +27,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_CS = "table_cs";
     public static final String TABLE_MAR = "table_marketing";
     public static final String TABLE_PER = "table_personal";
+    public static final String TABLE_LEGAL = "table_legal";
+    public static final String TABLE_UPLOAD = "table_upload";
 
     public static final int DATABASE_VERSION = 1;
     private static DbHelper dbInstance = null;
@@ -122,7 +125,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-  /*  private ContentValues createContentValues(String values[], String names[]) {
+    private ContentValues createContentValues(String values[], String names[]) {
         ContentValues values1 = null;
         try {
             values1 = new ContentValues();
@@ -132,7 +135,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             for (int i = 0; i < names.length; i++) {
                 try {
-                    if ((names[i].equalsIgnoreCase(_ctxt.getString(R.string.column_masterdetails_id)))) {
+                    if ((names[i].equalsIgnoreCase("id"))) {
                         try {
                             int value = Integer.parseInt(values[i]);
                             values1.put(names[i], value);
@@ -152,10 +155,10 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return values1;
-    }*/
+    }
 
     private ContentValues createContentValues1(String[] values, String names[]) {
-        Log.e("prachi", "inside create content values");
+        Log.e("", "inside create content values");
         ContentValues values1 = null;
         try {
             values1 = new ContentValues();
@@ -166,11 +169,11 @@ public class DbHelper extends SQLiteOpenHelper {
             for (int i = 0; i < names.length; i++) {
 
                 String valueArray = values[i];
-                Log.e("Prachi", "$$-->" + valueArray);
+                Log.e("", "$$-->" + valueArray);
               /*  String nameArray1=names[i];
-                Log.e("Prachi","inserted names"+nameArray1);*/
+                Log.e("","inserted names"+nameArray1);*/
                 values1.put(names[i], values[i]);
-                Log.v("prachi", "value inserted");
+                Log.v("", "value inserted");
 
 
             }
@@ -186,19 +189,19 @@ public class DbHelper extends SQLiteOpenHelper {
             open();
         for (int i = 0; i < values.length; i++) {
             String values1 = values[i];
-            Log.e("Prachi", "-->" + values1);
+            Log.e("", "-->" + values1);
         }
 
         for (int i = 0; i < names.length; i++) {
             String names1 = names[i];
-            Log.e("Prachi", "values" + names1);
+            Log.e("", "values" + names1);
         }
 
         ContentValues initialValues = createContentValues1(values, names);
         long inserted = 0;
         try {
             inserted = db.insert(tbl, null, initialValues);
-            Log.e("prachi", "values inserted" + inserted);
+            Log.e("", "values inserted" + inserted);
         } catch (Exception e) {
         }
         return inserted;
@@ -293,6 +296,21 @@ public class DbHelper extends SQLiteOpenHelper {
         return isDeleted;
     }
 
+    public void updateIds(String id) {
+        if (db != null && !db.isOpen())
+            open();
+        
+        int count = KHIL.dbCon.getCountOfRows(DbHelper.TABLE_UPLOAD);
+        int startId = Integer.parseInt(id)+1;
+        int endId = count + 1;
+        try {
+            String query = "update table_upload set id=id-1 where id between " + startId + " and " + endId;
+            db.execSQL(query);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
   /*  boolean update(String where, String values[], String names[], String tbl, String args[]) {
 
         if (db != null && !db.isOpen())
@@ -329,7 +347,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-   /* boolean updateBulk(String where, String values[], String names[], String tbl, String args[]) {
+    boolean updateBulk(String where, String values[], String names[], String tbl, String args[]) {
 
         if (db != null && !db.isOpen())
             open();
@@ -353,7 +371,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return isUpdated;
-    }*/
+    }
 
     public SQLiteStatement beginDBTransaction(String tableName, String names[]) {
         SQLiteStatement statement = null;

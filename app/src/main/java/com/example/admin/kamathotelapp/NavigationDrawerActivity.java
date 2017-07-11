@@ -1,9 +1,11 @@
 package com.example.admin.kamathotelapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,14 +15,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.admin.kamathotelapp.Fragments.DashboardFragment;
 import com.example.admin.kamathotelapp.Fragments.ScanFragment;
 import com.example.admin.kamathotelapp.Fragments.UploadFragment;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
+import com.example.admin.kamathotelapp.Utils.SharedPref;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int PICKFILE_RESULT_CODE = 1;
+    SharedPref sharedPref;
+    ImageView logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +38,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        sharedPref = new SharedPref(this);
+        logout = (ImageView) findViewById(R.id.imgLogout);
         //////////Crash Report
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
@@ -44,6 +55,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPref.clearPref();
+                Intent intent = new Intent(NavigationDrawerActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -80,10 +100,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_content,fragment);
             fragmentTransaction.commit();
+        } else if(id == R.id.logout2) {
+            sharedPref.clearPref();
+            Intent intent = new Intent(NavigationDrawerActivity.this, MainActivity.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void selectFragmentAsDefault() {

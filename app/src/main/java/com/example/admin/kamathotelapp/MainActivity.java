@@ -12,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
     private String uname, pwd;
     private SharedPref sharedPref;
+
     private static final int RECORD_REQUEST_CODE = 101;
 
 
@@ -91,32 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
 
-        etUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                  /*  if (TextUtils.isEmpty(username.getText().toString())){
-                        t_username.setVisibility(View.GONE);
-                    }*/
-                /*if (!TextUtils.isEmpty(et1_username.getText().toString())) {
-                    tv1_username_msg.setVisibility(View.GONE);
-                }*/
-            }
-        });
-
         etUserName.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 etUserName.setFocusableInTouchMode(true);
+                etUserName.setCursorVisible(true);
                 return false;
             }
         });
@@ -125,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 etPassword.setFocusableInTouchMode(true);
+                etPassword.setCursorVisible(true);
                 return false;
             }
         });

@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.example.admin.kamathotelapp.KHIL;
+
 /**
  * Created by Admin on 27-10-2016.
  */
@@ -200,17 +202,22 @@ public class DataBaseCon {
         return cursor;
     }
 
+
     public boolean delete(String tbl, String where, String args[]) {
         return dbHelper.delete(tbl, where, args);
+    }
+
+    public void updateIds(String id) {
+        dbHelper.updateIds(id);
     }
 
     /*public boolean update(String tbl, String where, String values[], String names[], String args[]) {
         return dbHelper.update(where, values, names, tbl, args);
     }*/
 
-   /* public boolean updateBulk(String tbl, String where, String values[], String names[], String args[]) {
+    public boolean updateBulk(String tbl, String where, String values[], String names[], String args[]) {
         return dbHelper.updateBulk(where, values, names, tbl, args);
-    }*/
+    }
 
     public boolean alterTable(String tbl) {
         return dbHelper.alterTable(tbl);

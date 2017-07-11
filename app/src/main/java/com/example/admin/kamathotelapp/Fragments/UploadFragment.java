@@ -1,6 +1,7 @@
 package com.example.admin.kamathotelapp.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -27,8 +30,11 @@ import com.example.admin.kamathotelapp.Model.UploadModel;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
+import com.example.admin.kamathotelapp.Utils.Utils;
+import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,20 +42,23 @@ import java.util.List;
 
 public class UploadFragment extends Fragment {
 
-    //private TextView txtLegalEntity, txtLocation;
+    //private TextView autoLegalEntity, autoLocation;
     //private Spinner spinLegalEntity, spinProperty, spinMonth, spinYear, spinQuarter, spinLocation;
     private Spinner spinLevel3, spinLevel4, spinLevel5, spinLevel6;
     ArrayAdapter<String> dataAdapter;
     private SharedPref sharedPref;
     List<String> listL2, listL3, listL4, listL5, listL6;
-    Button btnUpload;
-    ListView listUpload;
+    public static Button btnUpload;
+    Button  btnAttach, btnUpdate, btnCancel;
+    public static ListView listUpload;
+    private String loginId, password;
     List<UploadModel> uploadModelList;
     UploadModel uploadModel;
     List<String> listMonth;
     private UploadAdapter adapter;
-    private String valLevel2, valLevel3, valLevel4, valLevel5, valLevel6, valLevel7;
-    private AutoCompleteTextView txtlegalEntity,txtProperty,txtMonth,txtYear,txtQuarter,txtLoc,txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
+    private String valLevel2="", valLevel3="", valLevel4="", valLevel5="", valLevel6="", valLevel7="";
+    private AutoCompleteTextView autoLegalEntity,autoProperty,autoMonth,autoYear,autoQuarter,autoLoc;
+    public static AutoCompleteTextView txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
     String[] strMonthArray = null;
@@ -78,7 +87,11 @@ public class UploadFragment extends Fragment {
     String[] strLevel3ArrayPer = null;
     String[] strLevel4ArrayPer = null;
     String[] strLevel5ArrayPer = null;
-    private String strLegalEntity,strProperty,strMonth,strYear,strQuarter,strLoc,strlevel2,strlevel3,strlevel4,strlevel5,strlevel6,strlevel7;
+    String[] strLevel4ArrayLEGAL = null;
+    String[] strLevel5ArrayLEGAL = null;
+    String[] strLevel6ArrayLEGAL = null;
+    String[] strLevel7ArrayLEGAL = null;
+    private String strLegalEntity,strProperty,strMonth,strYear,strQuarter,strLoc;
     private String legalEntityString,propertyString,monthString,yearString,quarterString="",locString;
     private List<String> level2list,level3list,level4list,level5list,level6list;
     private List<String> level4listHR, level5listHR, level6listHR;
@@ -86,9 +99,18 @@ public class UploadFragment extends Fragment {
     private List<String> level2listCS,level3listCS,level4listCS;
     private List<String> level4listMAR, level5listMAR, level6listMAR, level7listMAR;
     private List<String> level3listPER, level4listPER, level5listPER;
+    private List<String> level4listLEGAL, level5listLEGAL, level6listLEGAL, level7listLEGAL;
     String chk = "";
-    private CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7;
-    private TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
+    public static CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7;
+    public static TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
+    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7, txtNoFile;
+    public static TextView no_files;
+    private static final int PICKFILE_RESULT_CODE = 1;
+    public String fileName;
+    private Utils utils;
+    private String legalEntity, property, year, quarter, month, location, level2="", level3="", level4="", level5="", level6="", level7="";
+    public static LinearLayout layout_edit;
+    public static int ID = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,26 +124,34 @@ public class UploadFragment extends Fragment {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
+
+        layout_edit = (LinearLayout) view.findViewById(R.id.layout_edit);
+        btnUpload = (Button) view.findViewById(R.id.btnUpload);
+        btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         initView(view);
         return view;
     }
 
     void initView(View view) {
         sharedPref = new SharedPref(getContext());
-
+        utils = new Utils(getActivity());
+        loginId = sharedPref.getLoginId();
+        password = sharedPref.getPassword();
         //................Auto Complete Text View......
-        txtlegalEntity = (AutoCompleteTextView) view.findViewById(R.id.spinLegalEntity);
-        txtProperty = (AutoCompleteTextView) view.findViewById(R.id.spinProperty);
-        txtMonth = (AutoCompleteTextView) view.findViewById(R.id.spinMonth);
-        txtYear = (AutoCompleteTextView) view.findViewById(R.id.spinYear);
-        txtQuarter = (AutoCompleteTextView) view.findViewById(R.id.spinQuarter);
-        txtLoc = (AutoCompleteTextView) view.findViewById(R.id.spinLoc);
+        autoLegalEntity = (AutoCompleteTextView) view.findViewById(R.id.spinLegalEntity);
+        autoProperty = (AutoCompleteTextView) view.findViewById(R.id.spinProperty);
+        autoMonth = (AutoCompleteTextView) view.findViewById(R.id.spinMonth);
+        autoYear = (AutoCompleteTextView) view.findViewById(R.id.spinYear);
+        autoQuarter = (AutoCompleteTextView) view.findViewById(R.id.spinQuarter);
+        autoLoc = (AutoCompleteTextView) view.findViewById(R.id.spinLoc);
         txtL2 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel2);
         txtL3 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel3);
         txtL4 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel4);
         txtL5 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel5);
         txtL6 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel6);
         txtL7 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel7);
+        txtNoFile = (TextView) view.findViewById(R.id.txtNofile);
+        no_files = (TextView) view.findViewById(R.id.no_files);
 
         cardlevel2 = (CardView) view.findViewById(R.id.level2cardview);
         cardlevel3 = (CardView) view.findViewById(R.id.level3cardview);
@@ -137,24 +167,33 @@ public class UploadFragment extends Fragment {
         level6txtlayout = (TextInputLayout)view.findViewById(R.id.level6txtlayout);
         level7txtlayout = (TextInputLayout)view.findViewById(R.id.level7txtlayout);
 
+        headLev2 = (TextView) view.findViewById(R.id.level2);
+        headLev3 = (TextView) view.findViewById(R.id.level3);
+        headLev4 = (TextView) view.findViewById(R.id.level4);
+        headLev5 = (TextView) view.findViewById(R.id.level5);
+        headLev6 = (TextView) view.findViewById(R.id.level6);
+        headLev7 = (TextView) view.findViewById(R.id.level7);
 
-       // txtLegalEntity = (TextView) view.findViewById(R.id.txtLegalEntity);
-        //txtLegalEntity.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Legal Entity</font>" + "<font color=\"red\">*</font>\n"));
+        listUpload = (ListView) view.findViewById(R.id.listViewUpload);
+
+
+       // autoLegalEntity = (TextView) view.findViewById(R.id.autoLegalEntity);
+        //autoLegalEntity.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Legal Entity</font>" + "<font color=\"red\">*</font>\n"));
        // spinLegalEntity = (Spinner) view.findViewById(R.id.spinLegalEntity);
-        //txtProperty = (TextView) view.findViewById(R.id.txtProperty);
-       // txtProperty.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Property</font>" + "<font color=\"red\">*</font>\n"));
+        //autoProperty = (TextView) view.findViewById(R.id.autoProperty);
+       // autoProperty.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Property</font>" + "<font color=\"red\">*</font>\n"));
        // spinProperty = (Spinner) view.findViewById(R.id.spinProperty);
-       // txtMonth = (TextView) view.findViewById(R.id.txtMonth);
-        //txtMonth.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Month</font>" + "<font color=\"red\">*</font>\n"));
+       // autoMonth = (TextView) view.findViewById(R.id.autoMonth);
+        //autoMonth.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Month</font>" + "<font color=\"red\">*</font>\n"));
         //spinMonth = (Spinner) view.findViewById(R.id.spinMonth);
-        //txtYear = (TextView) view.findViewById(R.id.txtYear);
-        //txtYear.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Year</font>" + "<font color=\"red\">*</font>\n"));
+        //autoYear = (TextView) view.findViewById(R.id.autoYear);
+        //autoYear.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Year</font>" + "<font color=\"red\">*</font>\n"));
         //spinYear = (Spinner) view.findViewById(R.id.spinYear);
-        //txtQuarter = (TextView) view.findViewById(R.id.txtQuarter);
-        //txtQuarter.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Quarter</font>" + "<font color=\"red\">*</font>\n"));
+        //autoQuarter = (TextView) view.findViewById(R.id.autoQuarter);
+        //autoQuarter.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Quarter</font>" + "<font color=\"red\">*</font>\n"));
         //spinQuarter = (Spinner) view.findViewById(R.id.spinQuarter);
-        //txtLocation = (TextView) view.findViewById(R.id.txtLoc);
-        //txtLocation.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Location</font>" + "<font color=\"red\">*</font>\n"));
+        //autoLocation = (TextView) view.findViewById(R.id.autoLoc);
+        //autoLocation.setText(Html.fromHtml("<font color=\"@color/colorPrimaryDark\">Location</font>" + "<font color=\"red\">*</font>\n"));
         //spinLocation = (Spinner) view.findViewById(R.id.spinLoc);
 
        // txtL2 = (TextView) view.findViewById(R.id.txtLevel2);
@@ -167,10 +206,12 @@ public class UploadFragment extends Fragment {
         //spinLevel5 = (Spinner) view.findViewById(R.id.spinLevel5);
         //txtL6 = (TextView) view.findViewById(R.id.txtLevel6);
         //spinLevel6 = (Spinner) view.findViewById(R.id.spinLevel6);
-        listUpload = (ListView) view.findViewById(R.id.listViewUpload);
+
+        btnCancel = (Button) view.findViewById(R.id.btnCancel);
         uploadModelList = new ArrayList<>();
         uploadModel = new UploadModel();
-        btnUpload = (Button) view.findViewById(R.id.btnUpload);
+        btnAttach = (Button) view.findViewById(R.id.btnFile);
+
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
@@ -208,30 +249,27 @@ public class UploadFragment extends Fragment {
             };
 
             adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            txtlegalEntity.setAdapter(adapter1);
+            autoLegalEntity.setAdapter(adapter1);
         }
 
-        txtlegalEntity.setOnTouchListener(new View.OnTouchListener() {
+        autoLegalEntity.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txtlegalEntity.showDropDown();
+                autoLegalEntity.showDropDown();
                 return false;
             }
         });
 
-        txtlegalEntity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoLegalEntity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLegalArray != null && strLegalArray.length > 0) {
-                    strLegalEntity = txtlegalEntity.getText().toString();
+                    strLegalEntity = autoLegalEntity.getText().toString();
                     legalEntityString = parent.getItemAtPosition(position).toString();
-
                 }
-
             }
         });
-
 
         ///////////////Details of property
         if (listProperty.size() > 0) {
@@ -262,27 +300,25 @@ public class UploadFragment extends Fragment {
             };
 
             adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            txtProperty.setAdapter(adapter1);
+            autoProperty.setAdapter(adapter1);
         }
 
-        txtProperty.setOnTouchListener(new View.OnTouchListener() {
+        autoProperty.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txtProperty.showDropDown();
+                autoProperty.showDropDown();
                 return false;
             }
         });
 
-        txtProperty.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoProperty.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strPropertyArray != null && strPropertyArray.length > 0) {
-                    strProperty = txtProperty.getText().toString();
-                    propertyString = parent.getItemAtPosition(position).toString();
-
-                }
-
+            if (strPropertyArray != null && strPropertyArray.length > 0) {
+                strProperty = autoProperty.getText().toString();
+                propertyString = parent.getItemAtPosition(position).toString();
+            }
             }
         });
 
@@ -315,23 +351,26 @@ public class UploadFragment extends Fragment {
             };
 
             adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            txtYear.setAdapter(adapter1);
+            autoYear.setAdapter(adapter1);
         }
 
-        txtYear.setOnTouchListener(new View.OnTouchListener() {
+        autoYear.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txtYear.showDropDown();
+                autoYear.showDropDown();
                 return false;
             }
         });
 
-        txtYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                autoQuarter.setText("");
+                autoMonth.setText("");
                 if (strYearArray != null && strYearArray.length > 0) {
-                    strYear = txtYear.getText().toString();
+                    strYear = autoYear.getText().toString();
                     yearString = parent.getItemAtPosition(position).toString();
                 }
             }
@@ -366,23 +405,24 @@ public class UploadFragment extends Fragment {
             };
 
             adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            txtQuarter.setAdapter(adapter1);
+            autoQuarter.setAdapter(adapter1);
         }
 
-        txtQuarter.setOnTouchListener(new View.OnTouchListener() {
+        autoQuarter.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txtQuarter.showDropDown();
+                autoQuarter.showDropDown();
                 return false;
             }
         });
 
-        txtQuarter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoQuarter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                autoMonth.setText("");
                 if (strQuarterArray != null && strQuarterArray.length > 0) {
-                    strQuarter = txtQuarter.getText().toString();
+                    strQuarter = autoQuarter.getText().toString();
                     quarterString = parent.getItemAtPosition(position).toString();
                 }
 
@@ -426,23 +466,23 @@ public class UploadFragment extends Fragment {
                     };
 
                     adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    txtMonth.setAdapter(adapter1);
+                    autoMonth.setAdapter(adapter1);
                 }
 
-                txtMonth.setOnTouchListener(new View.OnTouchListener() {
+                autoMonth.setOnTouchListener(new View.OnTouchListener() {
 
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        txtMonth.showDropDown();
+                        autoMonth.showDropDown();
                         return false;
                     }
                 });
 
-                txtMonth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                autoMonth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (strMonthArray != null && strMonthArray.length > 0) {
-                            strMonth = txtMonth.getText().toString();
+                            strMonth = autoMonth.getText().toString();
                             monthString = parent.getItemAtPosition(position).toString();
 
                         }
@@ -483,48 +523,65 @@ public class UploadFragment extends Fragment {
             };
 
             adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            txtLoc.setAdapter(adapter1);
+            autoLoc.setAdapter(adapter1);
         }
 
-        txtLoc.setOnTouchListener(new View.OnTouchListener() {
+        autoLoc.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                txtLoc.showDropDown();
+                autoLoc.showDropDown();
                 return false;
             }
         });
 
-        txtLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLocArray != null && strLocArray.length > 0) {
-                    strLoc = txtLoc.getText().toString();
+                    strLoc = autoLoc.getText().toString();
                     locString = parent.getItemAtPosition(position).toString();
-
                 }
+            }
+        });
+
+        btnAttach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                startActivityForResult(intent, PICKFILE_RESULT_CODE);
 
             }
         });
 
+        if(loginId.equalsIgnoreCase("finance") && password.equalsIgnoreCase("password")) {
 
+            headLev2.setText("Type (Level 2)");
+            headLev3.setText("TypeDesc (Level 3)");
+            headLev4.setText("Level 4");
+            headLev5.setText("Level 5");
+            headLev6.setText("Level 6");
+            headLev7.setVisibility(View.GONE);
 
-        if(sharedPref.getLoginId().equalsIgnoreCase("finance") && sharedPref.getPassword().equalsIgnoreCase("password")) {
-            fetchLevel2dataFin();
             txtL2.setHint("Financial Type");
+            fetchLevel2dataFin();
 
             txtL2.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL4.setVisibility(View.GONE);
+                    cardlevel3.setVisibility(View.GONE);
                     cardlevel4.setVisibility(View.GONE);
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
+
+                    txtL3.setHint("");
                     txtL3.setText("");
+                    txtL4.setText("");
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel3 = "";
                     valLevel4 = "";
                     valLevel5 = "";
@@ -539,15 +596,14 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level2txtlayout.setHint("Financial Type");
                     if (strLevel2Array != null && strLevel2Array.length > 0) {
-                        strlevel2 = txtL2.getText().toString();
 
                         valLevel2 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel2 != null && valLevel2.length() > 0) {
                             fetchLevel3dataFin();
                             level3txtlayout.setHint(valLevel2);
-                            txtL3.setVisibility(View.VISIBLE);
                             cardlevel3.setVisibility(View.VISIBLE);
+                            txtL3.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -560,18 +616,18 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL4.setVisibility(View.GONE);
                     cardlevel4.setVisibility(View.GONE);
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL4.setText("");
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel4 = "";
                     valLevel5 = "";
                     valLevel6 = "";
+                    valLevel7 = "";
                     txtL3.showDropDown();
                     return false;
                 }
@@ -581,16 +637,13 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel3Array != null && strLevel3Array.length > 0) {
-                        strlevel3 = txtL3.getText().toString();
                         valLevel3 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel3 != null && valLevel3.length() > 0) {
                             fetchLevel4data();
                             if(chk.equals("no")) {
-                                txtL4.setVisibility(View.GONE);
                                 cardlevel4.setVisibility(View.GONE);
                             } else {
-                                txtL4.setVisibility(View.VISIBLE);
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
                             }
@@ -607,13 +660,12 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel5 = "";
                     valLevel6 = "";
                     txtL4.showDropDown();
@@ -625,17 +677,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel4Array != null && strLevel4Array.length > 0) {
-                        strlevel4 = txtL4.getText().toString();
                         valLevel4 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5data();
                             if(chk.equals("no")) {
-                                txtL5.setVisibility(View.GONE);
                                 cardlevel5.setVisibility(View.GONE);
                             } else if(chk.equals("yes")) {
                                 level5txtlayout.setHint(valLevel4);
-                                txtL5.setVisibility(View.VISIBLE);
                                 cardlevel5.setVisibility(View.VISIBLE);
                             }
                         }
@@ -651,12 +700,12 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL6.setText("");
+                    txtL7.setText("");
                     valLevel6 = "";
+                    valLevel7 = "";
                     txtL5.showDropDown();
                     return false;
                 }
@@ -666,17 +715,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5Array != null && strLevel5Array.length > 0) {
-                        strlevel5 = txtL5.getText().toString();
                         valLevel5 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6data();
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
-                                txtL6.setVisibility(View.VISIBLE);
                                 cardlevel6.setVisibility(View.VISIBLE);
                             } else if(chk.equals("no")) {
-                                txtL6.setVisibility(View.GONE);
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -692,9 +738,9 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL7.setText("");
+                    valLevel7 = "";
                     txtL6.showDropDown();
                     return false;
                 }
@@ -704,18 +750,21 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6Array != null && strLevel6Array.length > 0) {
-                        strlevel6 = txtL6.getText().toString();
                         valLevel6 = parent.getItemAtPosition(position).toString();
                     }
                 }
             });
-        } else if(sharedPref.getLoginId().equalsIgnoreCase("hr") && sharedPref.getPassword().equalsIgnoreCase("password")) {
-            txtL2.setVisibility(View.GONE);
-            cardlevel2.setVisibility(View.GONE);
-            txtL3.setVisibility(View.GONE);
-            cardlevel3.setVisibility(View.GONE);
+        } else if(loginId.equalsIgnoreCase("hr") && password.equalsIgnoreCase("password")) {
 
-            txtL4.setVisibility(View.VISIBLE);
+            headLev2.setVisibility(View.GONE);
+            headLev3.setVisibility(View.GONE);
+            headLev4.setText("Type (Level 4)");
+            headLev5.setText("TypeDesc (Level 5)");
+            headLev6.setText("Level 6");
+            headLev7.setVisibility(View.GONE);
+
+            cardlevel2.setVisibility(View.GONE);
+            cardlevel3.setVisibility(View.GONE);
             cardlevel4.setVisibility(View.VISIBLE);
             txtL4.setHint("HR");
 
@@ -724,12 +773,14 @@ public class UploadFragment extends Fragment {
             txtL4.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
                     txtL5.setText("");
-                    txtL6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL7.setText("");
+                    valLevel5="";
+                    valLevel6="";
+                    valLevel7="";
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL4.showDropDown();
                     return false;
@@ -741,15 +792,11 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("HR");
                     if (strLevel4ArrayHR != null && strLevel4ArrayHR.length > 0) {
-                        strlevel4 = txtL4.getText().toString();
-
                         valLevel4 = parent.getItemAtPosition(position).toString();
-
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataHR();
                             level5txtlayout.setHint(valLevel4);
-                            txtL5.setVisibility(View.VISIBLE);
                             cardlevel5.setVisibility(View.VISIBLE);
                         }
                     }
@@ -759,10 +806,11 @@ public class UploadFragment extends Fragment {
             txtL5.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
                     txtL6.setText("");
-                    txtL7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    valLevel6="";
+                    valLevel7="";
                     cardlevel7.setVisibility(View.GONE);
                     txtL5.showDropDown();
                     return false;
@@ -773,19 +821,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayHR != null && strLevel5ArrayHR.length > 0) {
-                        strlevel5 = txtL5.getText().toString();
-
                         valLevel5 = parent.getItemAtPosition(position).toString();
-
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataHR();
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
-                                txtL6.setVisibility(View.VISIBLE);
                                 cardlevel6.setVisibility(View.VISIBLE);
                             } else if(chk.equals("no")) {
-                                txtL6.setVisibility(View.GONE);
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -796,20 +839,34 @@ public class UploadFragment extends Fragment {
             txtL6.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL7.setText("");
+                    valLevel7="";
                     txtL6.showDropDown();
                     return false;
                 }
             });
-        } else if(sharedPref.getLoginId().equalsIgnoreCase("cmd") && sharedPref.getPassword().equalsIgnoreCase("password")) {
-            txtL2.setVisibility(View.GONE);
+
+            txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayHR != null && strLevel6ArrayHR.length > 0) {
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+                    }
+                }
+            });
+        } else if(loginId.equalsIgnoreCase("cmd") && password.equalsIgnoreCase("password")) {
+
+            headLev2.setVisibility(View.GONE);
+            headLev3.setVisibility(View.GONE);
+            headLev4.setText("Type (Level 4)");
+            headLev5.setText("TypeDesc (Level 5)");
+            headLev6.setText("Level 6");
+            headLev7.setText("Level 7");
+
             cardlevel2.setVisibility(View.GONE);
-            txtL3.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
 
-            txtL4.setVisibility(View.VISIBLE);
             cardlevel4.setVisibility(View.VISIBLE);
             txtL4.setHint("Type");
 
@@ -818,12 +875,14 @@ public class UploadFragment extends Fragment {
             txtL4.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
                     txtL5.setText("");
-                    txtL6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL7.setText("");
+                    valLevel5="";
+                    valLevel6="";
+                    valLevel7="";
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL4.showDropDown();
                     return false;
@@ -835,15 +894,19 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("CMD");
                     if (strLevel4ArrayCMD != null && strLevel4ArrayCMD.length > 0) {
-                        strlevel4 = txtL4.getText().toString();
 
                         valLevel4 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataCMD();
-                            level5txtlayout.setHint(valLevel4);
-                            txtL5.setVisibility(View.VISIBLE);
-                            cardlevel5.setVisibility(View.VISIBLE);
+
+                            if(chk.equals("yes")) {
+                                level5txtlayout.setHint(valLevel4);
+                                cardlevel5.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                cardlevel5.setVisibility(View.GONE);
+                            }
+
                         }
                     }
                 }
@@ -852,10 +915,11 @@ public class UploadFragment extends Fragment {
             txtL5.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
                     txtL6.setText("");
-                    txtL7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    valLevel6="";
+                    valLevel7="";
                     cardlevel7.setVisibility(View.GONE);
                     txtL5.showDropDown();
                     return false;
@@ -866,19 +930,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayCMD != null && strLevel5ArrayCMD.length > 0) {
-                        strlevel5 = txtL5.getText().toString();
-
                         valLevel5 = parent.getItemAtPosition(position).toString();
-
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataCMD();
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
-                                txtL6.setVisibility(View.VISIBLE);
                                 cardlevel6.setVisibility(View.VISIBLE);
                             } else if(chk.equals("no")) {
-                                txtL6.setVisibility(View.GONE);
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -889,9 +948,9 @@ public class UploadFragment extends Fragment {
             txtL6.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL7.setText("");
+                    valLevel7="";
                     txtL6.showDropDown();
                     return false;
                 }
@@ -901,18 +960,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6ArrayCMD != null && strLevel6ArrayCMD.length > 0) {
-                        strlevel6 = txtL6.getText().toString();
-
                         valLevel6 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
                             fetchLevel7dataCMD();
                             if(chk.equals("yes")) {
                                 level7txtlayout.setHint(valLevel5);
-                                txtL7.setVisibility(View.VISIBLE);
                                 cardlevel7.setVisibility(View.VISIBLE);
                             } else if(chk.equals("no")) {
-                                txtL7.setVisibility(View.GONE);
                                 cardlevel7.setVisibility(View.GONE);
                             }
                         }
@@ -927,24 +982,40 @@ public class UploadFragment extends Fragment {
                     return false;
                 }
             });
-        } else if(sharedPref.getLoginId().equalsIgnoreCase("cs") && sharedPref.getPassword().equalsIgnoreCase("password")) {
+
+            txtL7.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel7ArrayCMD != null && strLevel7ArrayCMD.length > 0) {
+                        valLevel7 = parent.getItemAtPosition(position).toString();
+                    }
+                }
+            });
+        } else if(loginId.equalsIgnoreCase("cs") && password.equalsIgnoreCase("password")) {
+
+            headLev2.setText("Type (Level 2)");
+            headLev3.setText("TypeDesc (Level 3)");
+            headLev4.setText("Level 4");
+            headLev5.setVisibility(View.GONE);
+            headLev6.setVisibility(View.GONE);
+            headLev7.setVisibility(View.GONE);
+
             fetchLevel2dataCS();
             txtL2.setHint("Type");
 
             txtL2.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL3.setVisibility(View.GONE);
                     cardlevel3.setVisibility(View.GONE);
-                    txtL4.setVisibility(View.GONE);
                     cardlevel4.setVisibility(View.GONE);
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL3.setText("");
+                    txtL4.setText("");
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel3 = "";
                     valLevel4 = "";
                     valLevel5 = "";
@@ -960,14 +1031,11 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level2txtlayout.setHint("Type");
                     if (strLevel2ArrayCS != null && strLevel2ArrayCS.length > 0) {
-                        strlevel2 = txtL2.getText().toString();
-
                         valLevel2 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel2 != null && valLevel2.length() > 0) {
                             fetchLevel3dataCS();
                             level3txtlayout.setHint(valLevel2);
-                            txtL3.setVisibility(View.VISIBLE);
                             cardlevel3.setVisibility(View.VISIBLE);
                         }
                     }
@@ -978,15 +1046,14 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL4.setVisibility(View.GONE);
                     cardlevel4.setVisibility(View.GONE);
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL4.setText("");
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel4 = "";
                     valLevel5 = "";
                     valLevel6 = "";
@@ -1000,16 +1067,13 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel3ArrayCS != null && strLevel3ArrayCS.length > 0) {
-                        strlevel3 = txtL3.getText().toString();
                         valLevel3 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel3 != null && valLevel3.length() > 0) {
                             fetchLevel4dataCS();
                             if(chk.equals("no")) {
-                                txtL4.setVisibility(View.GONE);
                                 cardlevel4.setVisibility(View.GONE);
                             } else {
-                                txtL4.setVisibility(View.VISIBLE);
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
                             }
@@ -1022,16 +1086,36 @@ public class UploadFragment extends Fragment {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     txtL4.showDropDown();
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
                     return false;
                 }
             });
-        } else if(sharedPref.getLoginId().equalsIgnoreCase("marketing") && sharedPref.getPassword().equalsIgnoreCase("password")) {
-            txtL2.setVisibility(View.GONE);
+
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel4ArrayCS != null && strLevel4ArrayCS.length > 0) {
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                    }
+                }
+            });
+        } else if(loginId.equalsIgnoreCase("marketing") && password.equalsIgnoreCase("password")) {
+
+            headLev2.setVisibility(View.GONE);
+            headLev3.setVisibility(View.GONE);
+            headLev4.setText("Type (Level 4)");
+            headLev5.setText("TypeDesc (Level 5)");
+            headLev6.setText("Level 6");
+            headLev7.setText("Level 7");
+
             cardlevel2.setVisibility(View.GONE);
-            txtL3.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
 
-            txtL4.setVisibility(View.VISIBLE);
             cardlevel4.setVisibility(View.VISIBLE);
             txtL4.setHint("Occupancy");
             fetchLevel4dataMAR();
@@ -1039,12 +1123,14 @@ public class UploadFragment extends Fragment {
             txtL4.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
                     txtL5.setText("");
-                    txtL6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL4.showDropDown();
                     return false;
@@ -1056,15 +1142,17 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("Occupancy");
                     if (strLevel4ArrayMAR != null && strLevel4ArrayMAR.length > 0) {
-                        strlevel4 = txtL4.getText().toString();
-
                         valLevel4 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataMAR();
-                            level5txtlayout.setHint(valLevel4);
-                            txtL5.setVisibility(View.VISIBLE);
-                            cardlevel5.setVisibility(View.VISIBLE);
+                            if(chk.equals("yes")) {
+                                level5txtlayout.setHint(valLevel4);
+                                cardlevel5.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                cardlevel5.setVisibility(View.GONE);
+                            }
+
                         }
                     }
                 }
@@ -1073,11 +1161,12 @@ public class UploadFragment extends Fragment {
             txtL5.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL6.setText("");
+                    txtL7.setText("");
+                    valLevel6 = "";
+                    valLevel7 = "";
                     txtL5.showDropDown();
                     return false;
                 }
@@ -1087,18 +1176,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayMAR != null && strLevel5ArrayMAR.length > 0) {
-                        strlevel5 = txtL5.getText().toString();
-
                         valLevel5 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataMAR();
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
-                                txtL6.setVisibility(View.VISIBLE);
                                 cardlevel6.setVisibility(View.VISIBLE);
                             } else if(chk.equals("no")) {
-                                txtL6.setVisibility(View.GONE);
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -1109,9 +1194,9 @@ public class UploadFragment extends Fragment {
             txtL6.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL7.setText("");
+                    valLevel7 = "";
                     txtL6.showDropDown();
                     return false;
                 }
@@ -1121,18 +1206,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6ArrayMAR != null && strLevel6ArrayMAR.length > 0) {
-                        strlevel6 = txtL6.getText().toString();
-
                         valLevel6 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
                             fetchLevel7dataMAR();
                             if(chk.equals("yes")) {
                                 level7txtlayout.setHint(valLevel6);
-                                txtL7.setVisibility(View.VISIBLE);
                                 cardlevel7.setVisibility(View.VISIBLE);
                             } else if(chk.equals("no")) {
-                                txtL7.setVisibility(View.GONE);
                                 cardlevel7.setVisibility(View.GONE);
                             }
                         }
@@ -1148,11 +1229,24 @@ public class UploadFragment extends Fragment {
                 }
             });
 
-        } else if(sharedPref.getLoginId().equalsIgnoreCase("Personal") && sharedPref.getPassword().equalsIgnoreCase("password")) {
-            txtL2.setVisibility(View.GONE);
-            cardlevel2.setVisibility(View.GONE);
+            txtL7.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel7ArrayMAR != null && strLevel7ArrayMAR.length > 0) {
+                        valLevel7 = parent.getItemAtPosition(position).toString();
+                    }
+                }
+            });
 
-            txtL3.setVisibility(View.VISIBLE);
+        } else if(loginId.equalsIgnoreCase("Personal") && password.equalsIgnoreCase("password")) {
+            headLev2.setVisibility(View.GONE);
+            headLev3.setText("Type (Level 3)");
+            headLev4.setText("TypeDesc (Level 4)");
+            headLev5.setText("Level 5");
+            headLev6.setVisibility(View.GONE);
+            headLev7.setVisibility(View.GONE);
+
+            cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.VISIBLE);
             txtL3.setHint("Type");
 
@@ -1162,15 +1256,14 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL4.setVisibility(View.GONE);
                     cardlevel4.setVisibility(View.GONE);
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL4.setText("");
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel4 = "";
                     valLevel5 = "";
                     valLevel6 = "";
@@ -1185,16 +1278,13 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level3txtlayout.setHint("Type");
                     if (strLevel3ArrayPer != null && strLevel3ArrayPer.length > 0) {
-                        strlevel3 = txtL3.getText().toString();
                         valLevel3 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel3 != null && valLevel3.length() > 0) {
                             fetchLevel4dataPER();
                             if(chk.equals("no")) {
-                                txtL4.setVisibility(View.GONE);
                                 cardlevel4.setVisibility(View.GONE);
                             } else {
-                                txtL4.setVisibility(View.VISIBLE);
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
                             }
@@ -1207,13 +1297,12 @@ public class UploadFragment extends Fragment {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL5.setVisibility(View.GONE);
                     cardlevel5.setVisibility(View.GONE);
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
                     valLevel5 = "";
                     valLevel6 = "";
                     valLevel7 = "";
@@ -1226,17 +1315,14 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel4ArrayPer != null && strLevel4ArrayPer.length > 0) {
-                        strlevel4 = txtL4.getText().toString();
                         valLevel4 = parent.getItemAtPosition(position).toString();
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataPER();
                             if(chk.equals("no")) {
-                                txtL5.setVisibility(View.GONE);
                                 cardlevel5.setVisibility(View.GONE);
                             } else if(chk.equals("yes")) {
                                 level5txtlayout.setHint(valLevel4);
-                                txtL5.setVisibility(View.VISIBLE);
                                 cardlevel5.setVisibility(View.VISIBLE);
                             }
                         }
@@ -1248,13 +1334,144 @@ public class UploadFragment extends Fragment {
             txtL5.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    txtL6.setVisibility(View.GONE);
                     cardlevel6.setVisibility(View.GONE);
-                    txtL7.setVisibility(View.GONE);
                     cardlevel7.setVisibility(View.GONE);
                     txtL6.setText("");
+                    txtL7.setText("");
                     txtL5.showDropDown();
                     return false;
+                }
+            });
+
+            txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayPer != null && strLevel5ArrayPer.length > 0) {
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+                    }
+                }
+            });
+        } else if(loginId.equalsIgnoreCase("legal") && password.equalsIgnoreCase("password")) {
+            headLev2.setVisibility(View.GONE);
+            headLev3.setVisibility(View.GONE);
+            headLev4.setText("Type (Level 4)");
+            headLev5.setText("TypeDesc (Level 5)");
+            headLev6.setText("Level 6");
+            headLev7.setText("Level 7");
+
+            cardlevel2.setVisibility(View.GONE);
+            cardlevel3.setVisibility(View.GONE);
+
+            cardlevel4.setVisibility(View.VISIBLE);
+
+            txtL4.setHint("Legal");
+            fetchLevel4dataLEGAL();
+
+            txtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    txtL6.setText("");
+                    txtL7.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    level4txtlayout.setHint("Legal");
+                    if (strLevel4ArrayLEGAL != null && strLevel4ArrayLEGAL.length > 0) {
+
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataLEGAL();
+                            level5txtlayout.setHint(valLevel4);
+                            cardlevel5.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+
+            txtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    cardlevel6.setVisibility(View.GONE);
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    txtL7.setText("");
+                    txtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayLEGAL!= null && strLevel5ArrayLEGAL.length > 0) {
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataLEGAL();
+                            if(chk.equals("yes")) {
+                                level6txtlayout.setHint(valLevel5);
+                                cardlevel6.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                cardlevel6.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                    txtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayLEGAL!= null && strLevel6ArrayLEGAL.length > 0) {
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        if (valLevel6 != null && valLevel6.length() > 0) {
+                            fetchLevel7dataLEGAL();
+                            if(chk.equals("yes")) {
+                                level7txtlayout.setHint(valLevel6);
+                                cardlevel7.setVisibility(View.VISIBLE);
+                            } else if(chk.equals("no")) {
+                                cardlevel7.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+            });
+
+            txtL7.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    txtL7.showDropDown();
+                    return false;
+                }
+            });
+
+            txtL7.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel7ArrayLEGAL != null && strLevel7ArrayLEGAL.length > 0) {
+                        valLevel7 = parent.getItemAtPosition(position).toString();
+                    }
                 }
             });
         }
@@ -1263,23 +1480,265 @@ public class UploadFragment extends Fragment {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    uploadModelList = setUploadModelList();
-                    adapter = new UploadAdapter(getActivity(), uploadModelList);
-                    listUpload.setAdapter(adapter);
-                    setListViewHeightBasedOnItems(listUpload);
-                    adapter.notifyDataSetChanged();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                txtNoFile.setText("No file chosen");
+                no_files.setVisibility(View.GONE);
+                listUpload.setVisibility(View.VISIBLE);
+                
+                legalEntity = autoLegalEntity.getText().toString();
+                property = autoProperty.getText().toString();
+                year = autoYear.getText().toString();
+                quarter = autoQuarter.getText().toString();
+                month = autoMonth.getText().toString();
+                location = autoLoc.getText().toString();
+                level2 = txtL2.getText().toString();
+                level3 = txtL3.getText().toString();
+                level4 = txtL4.getText().toString();
+                level5 = txtL5.getText().toString();
+                level6 = txtL6.getText().toString();
+                level7 = txtL7.getText().toString();
+
+                insertIntoUploadDb(1);
+
+                if(loginId.equalsIgnoreCase("cmd") || loginId.equalsIgnoreCase("hr") ||
+                        loginId.equalsIgnoreCase("legal") || loginId.equalsIgnoreCase("marketing")) {
+                    txtL4.setText("");
+                    txtL4.setHint("");
+
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                } else if(loginId.equalsIgnoreCase("cs") || loginId.equalsIgnoreCase("finance")) {
+                    txtL2.setText("");
+                    txtL2.setHint("");
+
+                    cardlevel3.setVisibility(View.GONE);
+                    txtL3.setText("");
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                }  else if(loginId.equalsIgnoreCase("Personal")) {
+                    txtL3.setText("");
+                    txtL3.setHint("");
+
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                }
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layout_edit.setVisibility(View.GONE);
+                btnUpload.setVisibility(View.VISIBLE);
+
+                legalEntity = autoLegalEntity.getText().toString();
+                property = autoProperty.getText().toString();
+                year = autoYear.getText().toString();
+                quarter = autoQuarter.getText().toString();
+                month = autoMonth.getText().toString();
+                location = autoLoc.getText().toString();
+                level2 = txtL2.getText().toString();
+                level3 = txtL3.getText().toString();
+                level4 = txtL4.getText().toString();
+                level5 = txtL5.getText().toString();
+                level6 = txtL6.getText().toString();
+                level7 = txtL7.getText().toString();
+
+                insertIntoUploadDb(2);
+
+                if(loginId.equalsIgnoreCase("cmd") || loginId.equalsIgnoreCase("hr") ||
+                        loginId.equalsIgnoreCase("legal") || loginId.equalsIgnoreCase("marketing")) {
+                    txtL4.setText("");
+                    txtL4.setHint("");
+
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                } else if(loginId.equalsIgnoreCase("cs") || loginId.equalsIgnoreCase("finance")) {
+                    txtL2.setText("");
+                    txtL2.setHint("");
+
+                    cardlevel3.setVisibility(View.GONE);
+                    txtL3.setText("");
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                }  else if(loginId.equalsIgnoreCase("Personal")) {
+                    txtL3.setText("");
+                    txtL3.setHint("");
+
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnUpload.setVisibility(View.VISIBLE);
+                layout_edit.setVisibility(View.GONE);
+
+                if(loginId.equalsIgnoreCase("cmd") || loginId.equalsIgnoreCase("hr") ||
+                        loginId.equalsIgnoreCase("legal") || loginId.equalsIgnoreCase("marketing")) {
+                    txtL4.setText("");
+                    txtL4.setHint("");
+
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                } else if(loginId.equalsIgnoreCase("cs") || loginId.equalsIgnoreCase("finance")) {
+                    txtL2.setText("");
+                    txtL2.setHint("");
+
+                    cardlevel3.setVisibility(View.GONE);
+                    txtL3.setText("");
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
+                }  else if(loginId.equalsIgnoreCase("Personal")) {
+                    txtL3.setText("");
+                    txtL3.setHint("");
+
+                    cardlevel4.setVisibility(View.GONE);
+                    txtL4.setText("");
+                    cardlevel5.setVisibility(View.GONE);
+                    txtL5.setText("");
+                    cardlevel6.setVisibility(View.GONE);
+                    txtL6.setText("");
+                    cardlevel7.setVisibility(View.GONE);
+                    txtL7.setText("");
                 }
             }
         });
     }
 
-    private void fetchLevel2dataFin() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case PICKFILE_RESULT_CODE:
+                if(resultCode == getActivity().RESULT_OK) {
+                    String filePath = data.getData().getPath();
+                    fileName = filePath.substring(filePath.lastIndexOf("/")+1);
+                    txtNoFile.setText(fileName);
+                }
+                break;
+        }
+    }
+
+    private void insertIntoUploadDb(int flag) {
+        String selection = "id = ?";
+        String id = "";
+
+        if(flag == 1) {
+            String[] args = {loginId};
+            ID = KHIL.dbCon.getCountOfRows(DbHelper.TABLE_UPLOAD," user_id = ?", args) + 1;
+        }
+        id = String.valueOf(ID);
+        String[] selectionArgs = {id};
+
+        String valuesArray[] = {id, loginId, legalEntity, property, year, quarter, month, location, fileName, level2, level3, level4, level5, level6, level7};
+
+        boolean result = KHIL.dbCon.updateBulk(DbHelper.TABLE_UPLOAD, selection, valuesArray, utils.columnNamesUpload, selectionArgs);
+
+        if (result) {
+            System.out.println("Upload details are added");
+            getUploadData();
+        } else {
+            System.out.println("FAILURE..!!");
+        }
+    }
+
+    public void getUploadData() {
+        Cursor cursor = null;
+        uploadModelList.clear();
+        uploadModel = new UploadModel();
+
+        String where = " where user_id = '" + loginId + "'";
+        cursor = KHIL.dbCon.fetchFromSelect(DbHelper.TABLE_UPLOAD, where);
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                uploadModel = createUploadModel(cursor);
+                uploadModelList.add(uploadModel);
+                setValues(uploadModelList);
+            } while(cursor.moveToNext());
+            cursor.close();
+        }
+
+    }
+
+    private UploadModel createUploadModel(Cursor cursor) {
+        uploadModel = new UploadModel();
+        try {
+            uploadModel.setId(cursor.getString(cursor.getColumnIndex("id")));
+            uploadModel.setFileName(cursor.getString(cursor.getColumnIndex("fileName")));
+            uploadModel.setLevel2(cursor.getString(cursor.getColumnIndex("level2")));
+            uploadModel.setLevel3(cursor.getString(cursor.getColumnIndex("level3")));
+            uploadModel.setLevel4(cursor.getString(cursor.getColumnIndex("level4")));
+            uploadModel.setLevel5(cursor.getString(cursor.getColumnIndex("level5")));
+            uploadModel.setLevel6(cursor.getString(cursor.getColumnIndex("level6")));
+            uploadModel.setLevel7(cursor.getString(cursor.getColumnIndex("level7")));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return uploadModel;
+    }
+
+    private void setValues(List<UploadModel> uploadModelList) {
+        if(uploadModelList != null && uploadModelList.size() > 0) {
+            try {
+                adapter = new UploadAdapter(getActivity(), uploadModelList);
+                listUpload.setAdapter(adapter);
+                setListViewHeightBasedOnItems(listUpload);
+                adapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+     public void fetchLevel2dataFin() {
         try {
             level2list = new ArrayList<>();
-
             String Level2 = "level2";
             Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level2,DbHelper.TABLE_FINANCE);
             if (cursor1 != null && cursor1.getCount() > 0) {
@@ -1786,7 +2245,6 @@ public class UploadFragment extends Fragment {
 
     private void fetchLevel5dataCMD() {
         try {
-
             level5listCMD = new ArrayList<>();
 
             String where = " where level4 like " + "'" + valLevel4 + "'";
@@ -1800,6 +2258,13 @@ public class UploadFragment extends Fragment {
                     level5listCMD.add(level5);
                 } while (cursor1.moveToNext());
                 cursor1.close();
+            }
+
+            if(level5.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
             }
 
             Collections.sort(level5listCMD);
@@ -2013,7 +2478,6 @@ public class UploadFragment extends Fragment {
 
     private void fetchLevel3dataCS() {
         try {
-
             level3listCS = new ArrayList<>();
 
             String where = " where level2 like " + "'" + valLevel2 + "'";
@@ -2195,6 +2659,13 @@ public class UploadFragment extends Fragment {
                     level5listMAR.add(level5);
                 } while (cursor1.moveToNext());
                 cursor1.close();
+            }
+
+            if(level5.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
             }
 
             Collections.sort(level5listMAR);
@@ -2469,7 +2940,6 @@ public class UploadFragment extends Fragment {
 
     private void fetchLevel5dataPER() {
         try {
-
             level5listPER = new ArrayList<>();
 
             String where = " where level4 like " + "'" + valLevel4 + "'";
@@ -2528,7 +2998,232 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private List<UploadModel> setUploadModelList() {
+    private void fetchLevel4dataLEGAL() {
+        try {
+            level4listLEGAL = new ArrayList<>();
+
+            String Level4 = "level4";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_LEGAL);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String legal = "";
+                    legal = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    level4listLEGAL.add(legal);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listLEGAL);
+            if (level4listLEGAL.size() > 0) {
+                strLevel4ArrayLEGAL = new String[level4listLEGAL.size()];
+                for (int i = 0; i < level4listLEGAL.size(); i++) {
+                    strLevel4ArrayLEGAL[i] = level4listLEGAL.get(i);
+                }
+            }
+            if (level4listLEGAL != null && level4listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataLEGAL() {
+        try {
+
+            level5listLEGAL = new ArrayList<>();
+
+            String where = " where level4 like " + "'" + valLevel4 + "'";
+            String Level5 = "level5";
+            String level5 = "";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_LEGAL, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5listLEGAL.add(level5);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listLEGAL);
+            if (level5listLEGAL.size() > 0) {
+                strLevel5ArrayLEGAL= new String[level5listLEGAL.size()];
+                for (int i = 0; i < level5listLEGAL.size(); i++) {
+                    strLevel5ArrayLEGAL[i] = level5listLEGAL.get(i);
+                }
+            }
+            if (level5listLEGAL != null && level5listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataLEGAL() {
+        try {
+            level6listLEGAL = new ArrayList<>();
+            String branch = "";
+            String where = " where level5 like " + "'" + valLevel5 + "'";
+            String Level6 = "level6";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_LEGAL, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    level6listLEGAL.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level6listLEGAL);
+            if (level6listLEGAL.size() > 0) {
+                strLevel6ArrayLEGAL = new String[level6listLEGAL.size()];
+                for (int i = 0; i < level6listLEGAL.size(); i++) {
+                    strLevel6ArrayLEGAL[i] = level6listLEGAL.get(i);
+                }
+            }
+            if (level6listLEGAL != null && level6listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel7dataLEGAL() {
+        try {
+            level7listLEGAL = new ArrayList<>();
+            String branch = "";
+            String where = " where level6 like " + "'" + valLevel6 + "'";
+            String Level7 = "level7";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level7,DbHelper.TABLE_LEGAL, where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("level7"));
+                    level7listLEGAL.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            if(branch.equals("null")) {
+                chk = "no";
+                return;
+            } else {
+                chk = "yes";
+            }
+            Collections.sort(level7listLEGAL);
+            if (level7listLEGAL.size() > 0) {
+                strLevel7ArrayLEGAL = new String[level7listLEGAL.size()];
+                for (int i = 0; i < level7listLEGAL.size(); i++) {
+                    strLevel7ArrayLEGAL[i] = level7listLEGAL.get(i);
+                }
+            }
+            if (level7listLEGAL != null && level7listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel7ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                txtL7.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*private List<UploadModel> setUploadModelList() {
         List<UploadModel> uploadModels = new ArrayList<>();
         uploadModel = getUploadModel();
         uploadModels.add(uploadModel);
@@ -2536,13 +3231,21 @@ public class UploadFragment extends Fragment {
     }
 
     private UploadModel getUploadModel() {
-        uploadModel.setLevel2(valLevel2);
-        uploadModel.setLevel3(valLevel3);
-        uploadModel.setLevel4(valLevel4);
-        uploadModel.setLevel5(valLevel5);
-        uploadModel.setLevel6(valLevel6);
+        uploadModel.setLevel2(txtL2.getText().toString());
+        uploadModel.setLevel3(txtL3.getText().toString());
+        uploadModel.setLevel4(txtL4.getText().toString());
+        uploadModel.setLevel5(txtL5.getText().toString());
+        uploadModel.setLevel6(txtL6.getText().toString());
+        uploadModel.setLevel7(txtL7.getText().toString());
+        uploadModel.setFileName(fileName);
+        valLevel2 = "";
+        valLevel3 = "";
+        valLevel4 = "";
+        valLevel5 = "";
+        valLevel6 = "";
+        valLevel7 = "";
         return uploadModel;
-    }
+    }*/
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 

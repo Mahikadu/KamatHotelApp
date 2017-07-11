@@ -16,23 +16,60 @@
     <string name="font_normal">fonts/montserrat_regular.ttf</string>
 
     <string-array name="legal_entity">
-        <item>Entity 1</item>
-        <item>Entity 2</item>
-        <item>Entity 3</item>
-        <item>Entity 4</item>
-        <item>Entity 5</item>
-        <item>Entity 6</item>
-        <item>Entity 7</item>
+        <item>Kamats Club Pvt Ltd</item>
+        <item>Kamat Hospitality &amp; Consultancy Pvt Ltd</item>
+        <item>Kamats Development Pvt Ltd</item>
+        <item>Kamat Hotels Pvt Ltd</item>
+        <item>Kamats Eateriers Pvt Ltd</item>
+        <item>Kamats Super Snacks Pvt Ltd</item>
+        <item>Kamburger Foods Pvt Ltd</item>
+        <item>Kamfotel Hotels Pvt Ltd</item>
+        <item>Karaoke Amusements Pvt Ltd</item>
+        <item>Nagpur Ecotel Pvt Ltd</item>
+        <item>Organ Harvest Foundation</item>
+        <item>Placewell Jobs Pvt Ltd</item>
+        <item>Plaza Hotels Pvt Ltd</item>
+        <item>Ramchandra Infrastructure Pvt Ltd</item>
+        <item>Sputnik Agro &amp; Resorts Pvt Ltd</item>
+        <item>Supplyco Foods (India) Limited</item>
+        <item>Farmala Agro Pvt Ltd (formerly SNW Foods Private Limited)</item>
+        <item>Talent Hotels Pvt Ltd</item>
+        <item>Treeo Resorts Pvt Ltd</item>
+        <item>Sangli Rubber Agro Resorts Pvt Ltd  (formerly known as Venketesh Hotels Private Limited)</item>
+        <item>Vishal Amusements Limtied</item>
+        <item>Vits Hotels (Bhubaneswar) Pvt Ltd</item>
+        <item>Woodlink Developers &amp; Resorts Pvt Ltd</item>
     </string-array>
 
     <string-array name="property">
-        <item>Property 1</item>
-        <item>Property 2</item>
-        <item>Property 3</item>
-        <item>Property 4</item>
-        <item>Property 5</item>
-        <item>Property 6</item>
-        <item>Property 7</item>
+        <item>Hotel Property (The Orchid)</item>
+        <item>Hotel Property (Orchid Expanion)</item>
+        <item>Hotel Property (VITS  Hotel)</item>
+        <item>BLDG. Property (KHIL House)</item>
+        <item>Flat Property (Anil Chembers)</item>
+        <item>8- Shop\'s (ShivKrupa Society)</item>
+        <item>1-Shop (Nilkanth Society)</item>
+        <item>Resort Property (Tree -O- Resort)</item>
+        <item>Land Property (Kalothi Raythi)</item>
+        <item>Land Property (Roha )</item>
+        <item>Land Property (Sangeli)</item>
+        <item>Land Property (Pathergaon)</item>
+        <item>Land Property (Dhamandevi)</item>
+        <item>Land Property (Nivli)</item>
+        <item>Land Property (Ukthad)</item>
+        <item>Land Property (Pinguli)</item>
+        <item>Windmill Property (Aarl)</item>
+        <item>Land Property (Met-Tal)</item>
+        <item>Land Property (Dabholi)</item>
+        <item>Land Property (Lighthouse)</item>
+        <item>Shantada Aprt (Flat)</item>
+        <item>Land Property (Aronda)</item>
+        <item>BLDG.(Structure)Property-Bhoge</item>
+        <item>Flat Property (Shantikunj)-401</item>
+        <item>Flat Property (Shantikunj)-04</item>
+        <item>Land Property (Gawasi)</item>
+        <item>Plot Property (Pernem)</item>
+        <item>Land Property (Virdi)</item>
     </string-array>
 
     <string-array name="month_q1">
@@ -80,10 +117,34 @@
     </string-array>
 
     <string-array name="location">
-        <item>L-1</item>
-        <item>L-2</item>
-        <item>L-3</item>
-        <item>L-4</item>
+        <item>Vile Parle (E) Mumbai</item>
+        <item>Vile Parle (E) Mumbai</item>
+        <item>Andheri (E) Mumbai</item>
+        <item>Vile Parle (E) Mumbai</item>
+        <item>Marin Drave, Mumbai</item>
+        <item>Kharghar, Navi Mumbai</item>
+        <item>Kharghar, Navi Mumbai</item>
+        <item>Saya, Manor - Palghar</item>
+        <item>Khalapur - Raigad</item>
+        <item>Roha - Raigad</item>
+        <item>Sawantwadi Sindhudurg</item>
+        <item>Maval - Pune</item>
+        <item>Khed - Ratnagiri</item>
+        <item>Chiplun - Ratnagiri</item>
+        <item>Chiplun - Ratnagiri</item>
+        <item>Kudal - Sindhudurg</item>
+        <item>Patan Satara</item>
+        <item>Mahableswar Satara</item>
+        <item>Vengurla - Sindhudurg</item>
+        <item>Vengurla - Sindhudurg</item>
+        <item>Sawantwadi - Sindhudurg</item>
+        <item>Sawantwadi Sindhudurg</item>
+        <item>Chinchbhuvan Nagpur</item>
+        <item>Chinchbhuwan - Nagpur</item>
+        <item>Chinchbhuwan - Nagpur</item>
+        <item>Gavasi Manapur Nagpur</item>
+        <item>Pernem Goa</item>
+        <item>Dodamarg - Sindhudurg</item>
     </string-array>
 
     <string-array name="type">
