@@ -146,6 +146,10 @@ public class UploadAdapter extends BaseAdapter {
                     uploadModel = uploadModelList.get(position);
                     UploadFragment.ID = Integer.parseInt(uploadModel.getId());
 
+                    if(!uploadModel.getFileName().equalsIgnoreCase("")) {
+                        UploadFragment.txtNoFile.setText(uploadModel.getFileName());
+                    }
+
                     if(sharedPref.getLoginId().equalsIgnoreCase("finance")) {
                         UploadFragment.txtL2.setText(uploadModel.getLevel2());
                         fetchLevel2dataFin();

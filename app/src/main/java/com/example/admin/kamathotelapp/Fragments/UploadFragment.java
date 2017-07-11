@@ -103,10 +103,11 @@ public class UploadFragment extends Fragment {
     String chk = "";
     public static CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7;
     public static TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
-    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7, txtNoFile;
+    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7;
+    public static TextView txtNoFile;
     public static TextView no_files;
     private static final int PICKFILE_RESULT_CODE = 1;
-    public String fileName;
+    public String fileName="";
     private Utils utils;
     private String legalEntity, property, year, quarter, month, location, level2="", level3="", level4="", level5="", level6="", level7="";
     public static LinearLayout layout_edit;
@@ -549,7 +550,8 @@ public class UploadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
+                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(intent, PICKFILE_RESULT_CODE);
 
             }

@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int RECORD_REQUEST_CODE = 101;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
