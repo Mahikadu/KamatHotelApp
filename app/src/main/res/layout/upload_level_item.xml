@@ -8,7 +8,7 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
-        android:layout_height="50sp"
+        android:layout_height="55sp"
         android:layout_width="match_parent"
         android:elevation="4dp"
         android:background="@color/black"
@@ -20,7 +20,8 @@
             android:orientation="horizontal"
             android:background="@color/black"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/srNo"
@@ -43,7 +44,8 @@
                 android:maxLines="2"
                 android:layout_marginLeft="3sp"
                 android:layout_marginRight="3sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                />
 
             <TextView
                 android:id="@+id/level3"

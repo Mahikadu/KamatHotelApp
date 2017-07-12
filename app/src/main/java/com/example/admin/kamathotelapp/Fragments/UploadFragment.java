@@ -1,6 +1,8 @@
 package com.example.admin.kamathotelapp.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
@@ -110,7 +112,7 @@ public class UploadFragment extends Fragment {
     private static final int PICKFILE_RESULT_CODE = 1;
     public String fileName="";
     private Utils utils;
-    private String legalEntity, property, year, quarter, month, location, level2="", level3="", level4="", level5="", level6="", level7="";
+    private String legalEntity, property, year, quarter, month, location, file="", level2="", level3="", level4="", level5="", level6="", level7="";
     public static LinearLayout layout_edit;
     public static int ID = 0;
 
@@ -567,8 +569,8 @@ public class UploadFragment extends Fragment {
             headLev4.setText("Level 4");
             headLev5.setText("Level 5");
             headLev6.setText("Level 6");
-            headLev7.setVisibility(View.GONE);
-
+//            headLev7.setVisibility(View.GONE);
+            headLev7.setText("Level 7");
             txtL2.setHint("Financial Type");
             fetchLevel2dataFin();
 
@@ -761,13 +763,15 @@ public class UploadFragment extends Fragment {
             });
         } else if(loginId.equalsIgnoreCase("hr") && password.equalsIgnoreCase("password")) {
 
-            headLev2.setVisibility(View.GONE);
-            headLev3.setVisibility(View.GONE);
+//            headLev2.setVisibility(View.GONE);
+//            headLev3.setVisibility(View.GONE);
+            headLev2.setText("Level 2");
+            headLev3.setText("Level 3");
             headLev4.setText("Type (Level 4)");
             headLev5.setText("TypeDesc (Level 5)");
             headLev6.setText("Level 6");
-            headLev7.setVisibility(View.GONE);
-
+            headLev7.setText("Level7");
+//            headLev7.setVisibility(View.GONE);
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
             cardlevel4.setVisibility(View.VISIBLE);
@@ -862,8 +866,10 @@ public class UploadFragment extends Fragment {
             });
         } else if(loginId.equalsIgnoreCase("cmd") && password.equalsIgnoreCase("password")) {
 
-            headLev2.setVisibility(View.GONE);
-            headLev3.setVisibility(View.GONE);
+//            headLev2.setVisibility(View.GONE);
+//            headLev3.setVisibility(View.GONE);
+            headLev2.setText("Level 2");
+            headLev3.setText("Level 3");
             headLev4.setText("Type (Level 4)");
             headLev5.setText("TypeDesc (Level 5)");
             headLev6.setText("Level 6");
@@ -1001,9 +1007,13 @@ public class UploadFragment extends Fragment {
             headLev2.setText("Type (Level 2)");
             headLev3.setText("TypeDesc (Level 3)");
             headLev4.setText("Level 4");
-            headLev5.setVisibility(View.GONE);
-            headLev6.setVisibility(View.GONE);
-            headLev7.setVisibility(View.GONE);
+
+//            headLev5.setVisibility(View.GONE);
+//            headLev6.setVisibility(View.GONE);
+//            headLev7.setVisibility(View.GONE);
+            headLev5.setText("Level 5");
+            headLev6.setText("Level 6");
+            headLev7.setText("Level 7");
 
             fetchLevel2dataCS();
             txtL2.setHint("Type");
@@ -1111,13 +1121,14 @@ public class UploadFragment extends Fragment {
             });
         } else if(loginId.equalsIgnoreCase("marketing") && password.equalsIgnoreCase("password")) {
 
-            headLev2.setVisibility(View.GONE);
-            headLev3.setVisibility(View.GONE);
+            headLev2.setText("Level 2");
+            headLev3.setText("Level 3");
+//            headLev2.setVisibility(View.GONE);
+//            headLev3.setVisibility(View.GONE);
             headLev4.setText("Type (Level 4)");
             headLev5.setText("TypeDesc (Level 5)");
             headLev6.setText("Level 6");
             headLev7.setText("Level 7");
-
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
 
@@ -1244,12 +1255,15 @@ public class UploadFragment extends Fragment {
             });
 
         } else if(loginId.equalsIgnoreCase("Personal") && password.equalsIgnoreCase("password")) {
-            headLev2.setVisibility(View.GONE);
+            headLev2.setText("Level 2");
+//            headLev2.setVisibility(View.GONE);
             headLev3.setText("Type (Level 3)");
             headLev4.setText("TypeDesc (Level 4)");
             headLev5.setText("Level 5");
-            headLev6.setVisibility(View.GONE);
-            headLev7.setVisibility(View.GONE);
+            headLev6.setText("Level 6");
+            headLev7.setText("Level 7");
+            /*headLev6.setVisibility(View.GONE);
+            headLev7.setVisibility(View.GONE);*/
 
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.VISIBLE);
@@ -1357,8 +1371,10 @@ public class UploadFragment extends Fragment {
                 }
             });
         } else if(loginId.equalsIgnoreCase("legal") && password.equalsIgnoreCase("password")) {
-            headLev2.setVisibility(View.GONE);
-            headLev3.setVisibility(View.GONE);
+            headLev2.setText("Level 2");
+            headLev3.setText("Level 3");
+//            headLev2.setVisibility(View.GONE);
+//            headLev3.setVisibility(View.GONE);
             headLev4.setText("Type (Level 4)");
             headLev5.setText("TypeDesc (Level 5)");
             headLev6.setText("Level 6");
@@ -1485,6 +1501,33 @@ public class UploadFragment extends Fragment {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(txtNoFile.getText().toString().equalsIgnoreCase("No file chosen")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(
+                            getActivity()).create();
+
+                    // Setting Dialog Title
+                    alertDialog.setTitle(loginId);
+
+                    // Setting Dialog Message
+                    alertDialog.setMessage("Please attach the file");
+
+                    // Setting Icon to Dialog
+//                    alertDialog.setIcon(R.drawable.tick);
+
+                    // Setting OK Button
+                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to execute after dialog closed
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    // Showing Alert Message
+                    alertDialog.show();
+                    return;
+                } else {
+                    file = txtNoFile.getText().toString();
+                }
                 txtNoFile.setText("No file chosen");
                 no_files.setVisibility(View.GONE);
                 listUpload.setVisibility(View.VISIBLE);
@@ -1548,6 +1591,8 @@ public class UploadFragment extends Fragment {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                file = txtNoFile.getText().toString();
+                txtNoFile.setText("No file chosen");
                 layout_edit.setVisibility(View.GONE);
                 btnUpload.setVisibility(View.VISIBLE);
 
@@ -1610,6 +1655,7 @@ public class UploadFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtNoFile.setText("No file chosen");
                 btnUpload.setVisibility(View.VISIBLE);
                 layout_edit.setVisibility(View.GONE);
 
@@ -1680,7 +1726,7 @@ public class UploadFragment extends Fragment {
         id = String.valueOf(ID);
         String[] selectionArgs = {id};
 
-        String valuesArray[] = {id, loginId, legalEntity, property, year, quarter, month, location, fileName, level2, level3, level4, level5, level6, level7};
+        String valuesArray[] = {id, loginId, legalEntity, property, year, quarter, month, location, file, level2, level3, level4, level5, level6, level7};
 
         boolean result = KHIL.dbCon.updateBulk(DbHelper.TABLE_UPLOAD, selection, valuesArray, utils.columnNamesUpload, selectionArgs);
 
