@@ -3,6 +3,7 @@ package com.example.admin.kamathotelapp.Fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ public class ScanFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getActivity().setTitle("Document Scan");
         //////////Crash Report
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment

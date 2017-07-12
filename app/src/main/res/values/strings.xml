@@ -15,6 +15,9 @@
     <string name="font_lightl">fonts/montserrat_light.ttf</string>
     <string name="font_normal">fonts/montserrat_regular.ttf</string>
 
+    <string name="text_footer">Powered By Sudesi Infotech © 2017</string>
+    <string name="text_footer1">UAT v1.0</string>
+
     <string-array name="legal_entity">
         <item>Kamats Club Pvt Ltd</item>
         <item>Kamat Hospitality &amp; Consultancy Pvt Ltd</item>

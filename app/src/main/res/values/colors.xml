@@ -9,6 +9,7 @@
     <color name="colorPrimary">#919191</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#303F9F</color>
+    <color name="colorRed">#FF0000</color>
 
     <!--
         <color name="head_blue">#0261CF</color>

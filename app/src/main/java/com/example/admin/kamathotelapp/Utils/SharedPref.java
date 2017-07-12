@@ -14,6 +14,8 @@ public class SharedPref {
 
     private static final String KEY_LoginId = "key_loginid";
     private static final String KEY_PWD = "key_password";
+    private static final String KEY_Result = "key_result";
+    private static final String KEY_NODATA = "key_nodata";
 
     public SharedPref(Context _ctx) {
         context = _ctx;
@@ -35,6 +37,14 @@ public class SharedPref {
     public String getPassword() {
         String pass = sharedPref.getString(KEY_PWD, "");
         return pass;
+    }
+    public String getLoginResult() {
+        return sharedPref.getString(KEY_Result, "false");
+    }
+
+    public void setKeyNodata(boolean isData) {
+        editor.putBoolean(KEY_NODATA, isData);
+        editor.commit();
     }
 
     public void clearPref() {

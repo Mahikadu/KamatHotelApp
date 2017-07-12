@@ -1,6 +1,7 @@
 package com.example.admin.kamathotelapp.Fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,6 +26,8 @@ import java.util.List;
 public class DashboardFragment extends Fragment {
 
     private AutoCompleteTextView autoLegal, autoProp, autoLoc, autoYr, autoQuarter, autoMonth;
+    private LinearLayout detailsLayout;
+    private Button search,loadRecord;
     private String strQuarter="";
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
@@ -37,11 +42,14 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        getActivity().setTitle("Dashboard");
         //////////Crash Report
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
@@ -51,6 +59,9 @@ public class DashboardFragment extends Fragment {
     }
 
     void initView(View view) {
+        detailsLayout = (LinearLayout)view.findViewById(R.id.detailsLayout);
+        search = (Button)view.findViewById(R.id.btnSearch);
+        loadRecord = (Button)view.findViewById(R.id.btnLoad);
         autoLegal = (AutoCompleteTextView)view.findViewById(R.id.autoLegalEntity);
         autoProp = (AutoCompleteTextView)view.findViewById(R.id.autoProperty);
         autoLoc = (AutoCompleteTextView)view.findViewById(R.id.autoLocation);
@@ -63,6 +74,22 @@ public class DashboardFragment extends Fragment {
         List<String> listYear = Arrays.asList(getResources().getStringArray(R.array.year));
         List<String> listQuarter = Arrays.asList(getResources().getStringArray(R.array.quarter));
         List<String> listLoc = Arrays.asList(getResources().getStringArray(R.array.location));
+
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                detailsLayout.setVisibility(View.VISIBLE);
+                search.setVisibility(View.GONE);
+            }
+        });
+        loadRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                detailsLayout.setVisibility(View.GONE);
+                search.setVisibility(View.VISIBLE);
+            }
+        });
 
         if (listLegal.size() > 0) {
             strLegalArray = new String[listLegal.size()];
