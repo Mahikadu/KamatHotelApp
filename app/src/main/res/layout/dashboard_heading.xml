@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/tvLeadId"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Role"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvCustName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Doc No"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvMobile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="File Name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+
+    <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Created By"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvPincode"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Created Date"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvLastMeet_date"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Year"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvLastMeet_update"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Quarter"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvLeadStatus"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Month"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvNextMeet"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Status"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvCloseLead"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Action"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+</LinearLayout>
