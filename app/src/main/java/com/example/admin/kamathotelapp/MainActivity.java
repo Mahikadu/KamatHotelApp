@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin;
     private String uname, pwd;
     private SharedPref sharedPref;
-
+    View focusView = null;
     private static final int RECORD_REQUEST_CODE = 101;
 
     @Override
@@ -118,10 +118,26 @@ public class MainActivity extends AppCompatActivity {
                 uname = etUserName.getText().toString();
                 pwd = etPassword.getText().toString();
 
-                sharedPref.setLoginInfo(uname, pwd);
+                if((uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
+                        uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
+                        uname.equalsIgnoreCase("personal")) && pwd.equals("password")) {
+                    sharedPref.setLoginInfo(uname, pwd);
+                    Intent intent = new Intent(MainActivity.this, NavigationDrawerActivity.class);
+                    startActivity(intent);
+                } else if(!(uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
+                        uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
+                        uname.equalsIgnoreCase("personal"))) {
+                    etUserName.setError("Wrong Username");
+                    focusView=etUserName;
+                    focusView.requestFocus();
+                    return;
+                } else if(!pwd.equals("password")) {
+                    etPassword.setError("Wrong Password");
+                    focusView = etPassword;
+                    focusView.requestFocus();
+                    return;
+                }
 
-                Intent intent = new Intent(MainActivity.this, NavigationDrawerActivity.class);
-                startActivity(intent);
             }
         });
     }

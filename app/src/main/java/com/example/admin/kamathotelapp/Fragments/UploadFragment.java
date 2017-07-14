@@ -1272,7 +1272,6 @@ public class UploadFragment extends Fragment {
             fetchLevel3dataPER();
 
             txtL3.setOnTouchListener(new View.OnTouchListener() {
-
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     cardlevel4.setVisibility(View.GONE);

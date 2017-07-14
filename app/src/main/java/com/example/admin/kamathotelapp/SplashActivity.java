@@ -41,7 +41,6 @@ public class SplashActivity extends AbstractActivity implements Runnable {
         SharedPref sharedPref = new SharedPref(mContext);
         String result = sharedPref.getLoginResult();
         if (result.equalsIgnoreCase("FALSE")) {
-
             pushActivity(SplashActivity.this, MainActivity.class, null, true);
         } else {
             sharedPref.setKeyNodata(true);
