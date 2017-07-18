@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/tvFooter"
         android:layout_below="@+id/btnSearch"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="15dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -459,7 +459,7 @@
                 <LinearLayout
                     android:id="@+id/dash_header"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp">
 
@@ -467,7 +467,7 @@
                         android:id="@+id/layout_header"
                         layout="@layout/dashboard_heading"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp">
+                        android:layout_height="60dp">
 
                     </include>
                 </LinearLayout>

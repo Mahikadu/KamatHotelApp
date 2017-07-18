@@ -1,5 +1,6 @@
 package com.example.admin.kamathotelapp.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -97,6 +98,7 @@ public class UploadAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -138,6 +140,7 @@ public class UploadAdapter extends BaseAdapter {
 
             viewHolder.txtEdit = (TextView)convertView.findViewById(R.id.txtEdit);
             viewHolder.txtEdit.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("WrongConstant")
                 @Override
                 public void onClick(View v) {
                     UploadFragment.btnUpload.setVisibility(View.GONE);
@@ -520,6 +523,7 @@ public class UploadAdapter extends BaseAdapter {
             }
             if (level2list != null && level2list.size() > 0) {
                 ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, strLevel2Array) {
+                    @SuppressLint("WrongConstant")
                     @Override
                     public View getDropDownView(int position, View convertView, ViewGroup parent) {
                         View v = null;

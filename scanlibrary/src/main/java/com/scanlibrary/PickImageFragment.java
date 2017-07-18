@@ -123,22 +123,11 @@ public class PickImageFragment extends Fragment {
                     "com.scanlibrary.provider", // As defined in Manifest
                     file);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
-//            cameraIntent.putExtra("crop", "true");
-//            cameraIntent.putExtra("aspectX", 0);
-//            cameraIntent.putExtra("aspectY", 0);
-//            cameraIntent.putExtra("outputX", 200);
-//            cameraIntent.putExtra("outputY", 150);
         } else {
             Uri tempFileUri = Uri.fromFile(file);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
-//            cameraIntent.putExtra("crop", "true");
-//            cameraIntent.putExtra("aspectX", 0);
-//            cameraIntent.putExtra("aspectY", 0);
-//            cameraIntent.putExtra("outputX", 200);
-//            cameraIntent.putExtra("outputY", 150);
         }
         try {
-//            cameraIntent.putExtra("return-data", true);
             startActivityForResult(cameraIntent, ScanConstants.START_CAMERA_REQUEST_CODE);
         }catch (Exception e){
 

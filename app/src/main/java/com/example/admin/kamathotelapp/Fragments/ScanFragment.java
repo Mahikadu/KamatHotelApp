@@ -1,15 +1,23 @@
 package com.example.admin.kamathotelapp.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,25 +25,38 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+
+import com.example.admin.kamathotelapp.Adapters.GridDataAdapter;
+
+import com.example.admin.kamathotelapp.MyRecyclerItemClickListener;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+
 
 
 public class ScanFragment extends Fragment {
 
     private static final int REQUEST_CODE = 99;
-    private Button cameraButton;
-    private Button mediaButton;
-    private ImageView scannedImageView;
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,camera,gallary;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+    private GridView gridView;
+    private GridDataAdapter adapter;
+    private RecyclerView recyclerView;
+    private ProgressBar mProgressBar;
+
+    private ArrayList<String> imageItems;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +64,7 @@ public class ScanFragment extends Fragment {
 
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,12 +78,31 @@ public class ScanFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("WrongConstant")
     private void init(View view) {
-//        cameraButton = (Button) view.findViewById(R.id.cameraButton);
-//        cameraButton.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_CAMERA));
-//        mediaButton = (Button) view.findViewById(R.id.mediaButton);
-//        mediaButton.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_MEDIA));
-        scannedImageView = (ImageView) view.findViewById(R.id.scannedImage);
+        /////Recycle Gridview
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        new LoadImage().execute();
+
+        recyclerView = (RecyclerView)view.findViewById(R.id.card_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(),3);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
+        recyclerView.addOnItemTouchListener(
+                new MyRecyclerItemClickListener(getActivity(), new MyRecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        showCustomDialog(view,position);
+                    }
+                })
+        );
+
 
         fab = (FloatingActionButton)view.findViewById(R.id.fab);
         camera = (FloatingActionButton)view.findViewById(R.id.camera);
@@ -79,6 +120,73 @@ public class ScanFragment extends Fragment {
         });
         camera.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_CAMERA));
         gallary.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_MEDIA));
+    }
+
+
+    private void showCustomDialog(View v, int position) {
+
+        final AlertDialog.Builder DialogMaster = new AlertDialog.Builder(getActivity());
+
+        @SuppressLint("WrongConstant")
+        LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogViewMaster = li.inflate(R.layout.image_dailog, null);
+        DialogMaster.setView(dialogViewMaster);
+
+        final AlertDialog showMaster = DialogMaster.show();
+
+        Button btnDismissMaster = (Button) showMaster.findViewById(R.id.buttonClose);
+        ImageView image = (ImageView) showMaster.findViewById(R.id.imageviewDialog);
+
+        try {
+            v.setDrawingCacheEnabled(true);
+            v.buildDrawingCache();
+            Bitmap bitmap = v.getDrawingCache();
+            image.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        btnDismissMaster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMaster.dismiss();
+            }
+        });
+        showMaster.setCancelable(false);
+
+    }
+
+    public class LoadImage extends AsyncTask<Object,Void,Object>{
+
+        @Override
+        protected Object doInBackground(Object... params) {
+
+            String ExternalStorageDirectoryPath = Environment
+                    .getExternalStorageDirectory()
+                    .getAbsolutePath();
+
+            String targetPath = ExternalStorageDirectoryPath + "/scanCrop/";
+            File targetDirector = new File(targetPath);
+
+            File[] files = targetDirector.listFiles();
+            imageItems = new ArrayList<>();
+            for (File file : files) {
+                imageItems.add(file.getAbsolutePath());
+            }
+
+            return imageItems;
+        }
+
+        @SuppressLint("WrongConstant")
+        @Override
+        protected void onPostExecute(Object o) {
+            if(imageItems.size()>0){
+                mProgressBar.setVisibility(View.GONE);
+
+                adapter = new GridDataAdapter(getActivity(),imageItems);
+                recyclerView.setAdapter(adapter);
+            }
+        }
     }
 
     public void animateFAB(){
@@ -147,12 +255,41 @@ public class ScanFragment extends Fragment {
                     Log.d("Raj", "close");
 
                 }
+                String pathToImage = getRealPathFromURI(uri);;
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
                 getActivity().getContentResolver().delete(uri, null, null);
-                scannedImageView.setImageBitmap(bitmap);
+
+                ////set image on gridview
+                String ExternalStorageDirectoryPath = Environment
+                        .getExternalStorageDirectory()
+                        .getAbsolutePath();
+
+                String targetPath = ExternalStorageDirectoryPath + "/scanCrop/";
+                File targetDirector = new File(targetPath);
+
+                File[] files = targetDirector.listFiles();
+                imageItems = new ArrayList<>();
+                for (File file : files) {
+                    imageItems.add(file.getAbsolutePath());
+                }
+
+                adapter = new GridDataAdapter(getActivity(),imageItems);
+                recyclerView.setAdapter(adapter);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getRealPathFromURI (Uri contentUri) {
+        String path = null;
+        String[] proj = { MediaStore.MediaColumns.DATA };
+        Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            path = cursor.getString(column_index);
+        }
+        cursor.close();
+        return path;
     }
 }
