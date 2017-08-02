@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.admin.kamathotelapp.Fragments.DashboardFragment;
+import com.example.admin.kamathotelapp.Fragments.QC1;
 import com.example.admin.kamathotelapp.Fragments.ScanFragment;
 import com.example.admin.kamathotelapp.Fragments.UploadFragment;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
@@ -97,6 +98,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_scan) {
             getSupportActionBar().setTitle("Document Scan");
             ScanFragment fragment = new ScanFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment);
+            fragmentTransaction.commit();
+        } else if (id == R.id.qc1) {
+            getSupportActionBar().setTitle("QC1");
+            QC1 fragment = new QC1();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_content,fragment);
             fragmentTransaction.commit();

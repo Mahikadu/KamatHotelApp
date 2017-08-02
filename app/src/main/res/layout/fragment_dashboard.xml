@@ -459,9 +459,10 @@
                 <LinearLayout
                     android:id="@+id/dash_header"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp">
+                    android:layout_marginRight="5dp"
+                    android:orientation="vertical">
 
                     <include
                         android:id="@+id/layout_header"
@@ -470,6 +471,12 @@
                         android:layout_height="60dp">
 
                     </include>
+
+                    <ListView
+                        android:id="@+id/listDashboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -487,7 +494,8 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:shrinkColumns="*"
-                            android:stretchColumns="*"></TableLayout>
+                            android:stretchColumns="*">
+                        </TableLayout>
                     </ScrollView>
                 </LinearLayout>
             </LinearLayout>

@@ -14,12 +14,18 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.admin.kamathotelapp.Adapters.DashboardAdapter;
+import com.example.admin.kamathotelapp.Model.DashboardModel;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +33,11 @@ public class DashboardFragment extends Fragment {
 
     private AutoCompleteTextView autoLegal, autoProp, autoLoc, autoYr, autoQuarter, autoMonth;
     private LinearLayout detailsLayout;
+    DashboardModel dashboardModel;
+    List<DashboardModel> dashboardModelList;
+    DashboardAdapter dashboardAdapter;
     private Button search,loadRecord;
+    private TableLayout tableLayout;
     private String strQuarter="";
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
@@ -38,6 +48,7 @@ public class DashboardFragment extends Fragment {
     String[] strLevel2Array = null;
     String[] strLevel3Array = null;
     List<String> listMonth;
+    ListView listDashboard;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,7 @@ public class DashboardFragment extends Fragment {
     }
 
     void initView(View view) {
+        tableLayout = (TableLayout) view.findViewById(R.id.tableLaout_lead);
         detailsLayout = (LinearLayout)view.findViewById(R.id.detailsLayout);
         search = (Button)view.findViewById(R.id.btnSearch);
         loadRecord = (Button)view.findViewById(R.id.btnLoad);
@@ -68,13 +80,27 @@ public class DashboardFragment extends Fragment {
         autoYr = (AutoCompleteTextView)view.findViewById(R.id.autoYear);
         autoQuarter = (AutoCompleteTextView)view.findViewById(R.id.autoQuarter);
         autoMonth = (AutoCompleteTextView)view.findViewById(R.id.autoMonth);
+        listDashboard = (ListView) view.findViewById(R.id.listDashboard);
+
+        dashboardModel  = new DashboardModel();
+        dashboardModelList = new ArrayList<>();
+        dashboardModel.setRole("HR");
+        dashboardModel.setDocNo("5_6/1/2017 1:59:43 PM_366d6bb9-b186-43ce-9b2c-682e5deb81bd");
+        dashboardModel.setFileName("cd7524eb-4929-42e9-8706-34c2433e84f2_Penguins.jpg");
+        dashboardModel.setCreatedBy("hr");
+        dashboardModel.setCreatedDate("2017-06-02");
+        dashboardModel.setYear("2017");
+        dashboardModel.setMonth("June");
+        dashboardModel.setStatus("Approved");
+        dashboardModelList.add(dashboardModel);
+        dashboardAdapter = new DashboardAdapter(getContext(), dashboardModelList);
+        listDashboard.setAdapter(dashboardAdapter);
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
         List<String> listYear = Arrays.asList(getResources().getStringArray(R.array.year));
         List<String> listQuarter = Arrays.asList(getResources().getStringArray(R.array.quarter));
         List<String> listLoc = Arrays.asList(getResources().getStringArray(R.array.location));
-
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override

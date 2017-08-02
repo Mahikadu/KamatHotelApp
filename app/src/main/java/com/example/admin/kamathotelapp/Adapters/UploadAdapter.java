@@ -73,7 +73,7 @@ public class UploadAdapter extends BaseAdapter {
     private List<String> level4listMAR, level5listMAR, level6listMAR, level7listMAR;
     private List<String> level3listPER, level4listPER, level5listPER;
     private List<String> level4listLEGAL, level5listLEGAL, level6listLEGAL, level7listLEGAL;
-    
+
     private static LayoutInflater inflater = null;
     UploadAdapter adapter;
 

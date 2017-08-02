@@ -607,10 +607,7 @@
                         android:id="@+id/btnFile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/rounded_corner_orrange_bg"
                         android:padding="15dp"
-                        android:textSize="16dp"
                         android:textColor="@android:color/white"
                         android:text="Choose Files" />
 
@@ -620,6 +617,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5sp"
                         android:text="No file chosen" />
+
+                    <TextView
+                        android:id="@+id/txtViewFile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5sp"
+                        android:visibility="gone"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:autoLink="web"
+                        android:text="view" />
                 </LinearLayout>
 
                 <Button

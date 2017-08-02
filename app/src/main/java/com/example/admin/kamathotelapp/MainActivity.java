@@ -35,10 +35,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etUserName, etPassword;
-    private Button btnLogin;
+    @InjectView(R.id.etUserName)
+    EditText etUserName;
+    @InjectView(R.id.etPassword)
+    EditText etPassword;
+    @InjectView(R.id.btnLogin)
+    Button btnLogin;
     private String uname, pwd;
     private SharedPref sharedPref;
     View focusView = null;
@@ -49,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        ButterKnife.inject(this);
         //////////Crash Report
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         sharedPref = new SharedPref(MainActivity.this);
 
@@ -87,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
         KHIL.dbCon = DataBaseCon.getInstance(getApplicationContext());
 
         exportDB();
-
-        etUserName = (EditText) findViewById(R.id.etUserName);
-        etPassword = (EditText) findViewById(R.id.etPassword);
-
-        btnLogin = (Button) findViewById(R.id.btnLogin);
 
         etUserName.setOnTouchListener(new View.OnTouchListener() {
             @Override

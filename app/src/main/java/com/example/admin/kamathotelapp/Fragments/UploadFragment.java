@@ -1,13 +1,19 @@
 package com.example.admin.kamathotelapp.Fragments;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -21,11 +27,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.kamathotelapp.Adapters.UploadAdapter;
 import com.example.admin.kamathotelapp.KHIL;
@@ -37,11 +45,18 @@ import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class UploadFragment extends Fragment {
 
@@ -52,7 +67,12 @@ public class UploadFragment extends Fragment {
     private SharedPref sharedPref;
     List<String> listL2, listL3, listL4, listL5, listL6;
     public static Button btnUpload;
-    Button  btnAttach, btnUpdate, btnCancel;
+    @InjectView(R.id.btnFile)
+    Button  btnAttach;
+    @InjectView(R.id.btnUpdate)
+    Button btnUpdate;
+    @InjectView(R.id.btnCancel)
+    Button btnCancel;
     public static ListView listUpload;
     private String loginId, password;
     List<UploadModel> uploadModelList;
@@ -60,7 +80,18 @@ public class UploadFragment extends Fragment {
     List<String> listMonth;
     private UploadAdapter adapter;
     private String valLevel2="", valLevel3="", valLevel4="", valLevel5="", valLevel6="", valLevel7="";
-    private AutoCompleteTextView autoLegalEntity,autoProperty,autoMonth,autoYear,autoQuarter,autoLoc;
+    @InjectView(R.id.spinLegalEntity)
+    AutoCompleteTextView autoLegalEntity;
+    @InjectView(R.id.spinProperty)
+    AutoCompleteTextView autoProperty;
+    @InjectView(R.id.spinMonth)
+    AutoCompleteTextView autoMonth;
+    @InjectView(R.id.spinYear)
+    AutoCompleteTextView autoYear;
+    @InjectView(R.id.spinQuarter)
+    AutoCompleteTextView autoQuarter;
+    @InjectView(R.id.spinLoc)
+    AutoCompleteTextView autoLoc;
     public static AutoCompleteTextView txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
@@ -104,9 +135,11 @@ public class UploadFragment extends Fragment {
     private List<String> level3listPER, level4listPER, level5listPER;
     private List<String> level4listLEGAL, level5listLEGAL, level6listLEGAL, level7listLEGAL;
     String chk = "";
+    String manufactures = android.os.Build.MANUFACTURER;
+    String filePath;
     public static CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7;
     public static TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
-    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7;
+    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7, viewFile;
     public static TextView txtNoFile;
     public static TextView no_files;
     private static final int PICKFILE_RESULT_CODE = 1;
@@ -127,13 +160,12 @@ public class UploadFragment extends Fragment {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getActivity().setTitle("Upload");
         //////////Crash Report
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
-
+        ButterKnife.inject(this, view);
         layout_edit = (LinearLayout) view.findViewById(R.id.layout_edit);
         btnUpload = (Button) view.findViewById(R.id.btnUpload);
-        btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         initView(view);
         return view;
     }
@@ -144,12 +176,6 @@ public class UploadFragment extends Fragment {
         loginId = sharedPref.getLoginId();
         password = sharedPref.getPassword();
         //................Auto Complete Text View......
-        autoLegalEntity = (AutoCompleteTextView) view.findViewById(R.id.spinLegalEntity);
-        autoProperty = (AutoCompleteTextView) view.findViewById(R.id.spinProperty);
-        autoMonth = (AutoCompleteTextView) view.findViewById(R.id.spinMonth);
-        autoYear = (AutoCompleteTextView) view.findViewById(R.id.spinYear);
-        autoQuarter = (AutoCompleteTextView) view.findViewById(R.id.spinQuarter);
-        autoLoc = (AutoCompleteTextView) view.findViewById(R.id.spinLoc);
         txtL2 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel2);
         txtL3 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel3);
         txtL4 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel4);
@@ -179,6 +205,7 @@ public class UploadFragment extends Fragment {
         headLev5 = (TextView) view.findViewById(R.id.level5);
         headLev6 = (TextView) view.findViewById(R.id.level6);
         headLev7 = (TextView) view.findViewById(R.id.level7);
+        viewFile = (TextView) view.findViewById(R.id.txtViewFile);
 
         listUpload = (ListView) view.findViewById(R.id.listViewUpload);
 
@@ -212,12 +239,8 @@ public class UploadFragment extends Fragment {
         //spinLevel5 = (Spinner) view.findViewById(R.id.spinLevel5);
         //txtL6 = (TextView) view.findViewById(R.id.txtLevel6);
         //spinLevel6 = (Spinner) view.findViewById(R.id.spinLevel6);
-
-        btnCancel = (Button) view.findViewById(R.id.btnCancel);
         uploadModelList = new ArrayList<>();
         uploadModel = new UploadModel();
-        btnAttach = (Button) view.findViewById(R.id.btnFile);
-
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
@@ -490,9 +513,7 @@ public class UploadFragment extends Fragment {
                         if (strMonthArray != null && strMonthArray.length > 0) {
                             strMonth = autoMonth.getText().toString();
                             monthString = parent.getItemAtPosition(position).toString();
-
                         }
-
                     }
                 });
 
@@ -533,7 +554,6 @@ public class UploadFragment extends Fragment {
         }
 
         autoLoc.setOnTouchListener(new View.OnTouchListener() {
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 autoLoc.showDropDown();
@@ -554,11 +574,16 @@ public class UploadFragment extends Fragment {
         btnAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                Intent intent;
+                if(manufactures.equalsIgnoreCase("samsung")) {
+                    intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+                    intent.putExtra("CONTENT_TYPE", "*/*");
+                } else {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                }
                 startActivityForResult(intent, PICKFILE_RESULT_CODE);
-
             }
         });
 
@@ -1698,6 +1723,18 @@ public class UploadFragment extends Fragment {
                 }
             }
         });
+
+        viewFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    openFile(getContext(),filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -1706,12 +1743,34 @@ public class UploadFragment extends Fragment {
         switch(requestCode) {
             case PICKFILE_RESULT_CODE:
                 if(resultCode == getActivity().RESULT_OK) {
-                    String filePath = data.getData().getPath();
+                    filePath = data.getData().getPath();
+
+                    if(filePath.contains("/external/images/media/")) {
+                        Uri selectedImageURI = data.getData();
+                        File imageFile = new File(getRealPathFromURI(selectedImageURI));
+                        filePath = imageFile.getAbsolutePath();
+                    }
+
                     fileName = filePath.substring(filePath.lastIndexOf("/")+1);
                     txtNoFile.setText(fileName);
+                    viewFile.setVisibility(View.VISIBLE);
                 }
                 break;
         }
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContext().getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
     private void insertIntoUploadDb(int flag) {
@@ -1753,6 +1812,134 @@ public class UploadFragment extends Fragment {
             } while(cursor.moveToNext());
             cursor.close();
         }
+    }
+
+    public void openFile(Context context, String url) throws IOException {
+        // Create URI
+        File file = new File(url);
+        Uri uri = Uri.fromFile(file);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        // Check what kind of file you are trying to open, by comparing the url with extensions.
+        // When the if condition is matched, plugin sets the correct intent (mime) type,
+        // so Android knew what application to use to open the file
+        if (url.contains(".doc") || url.contains(".docx")) {
+            // Word document
+            intent.setDataAndType(uri, "application/msword");
+        } else if(url.contains(".pdf")) {
+            // PDF file
+            intent.setDataAndType(uri,"application/pdf");
+        } else if(url.contains(".ppt") || url.contains(".pptx")) {
+            // Powerpoint file
+            intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+        } else if(url.contains(".xls") || url.contains(".xlsx")) {
+            // Excel file
+            intent.setDataAndType(uri, "application/vnd.ms-excel");
+        } else if(url.contains(".zip") || url.contains(".rar")) {
+            // WAV audio file
+            intent.setDataAndType(uri, "application/zip");
+        } else if(url.contains(".rtf")) {
+            // RTF file
+            intent.setDataAndType(uri, "application/rtf");
+        } else if(url.contains(".wav") || url.contains(".mp3")) {
+            // WAV audio file
+            intent.setDataAndType(uri, "audio/x-wav");
+        } else if(url.contains(".gif")) {
+            // GIF file
+            intent.setDataAndType(uri, "image/gif");
+        } else if(url.contains(".jpg") || url.contains(".jpeg") || url.contains(".png")) {
+            // JPG file
+            showCustomDialog(uri);
+//            intent.setDataAndType(uri, "image/jpeg");
+            return;
+        } else if(url.contains(".txt")) {
+            // Text file
+            intent.setDataAndType(uri, "text/plain");
+        } else if(url.contains(".3gp") || url.contains(".mpg") || url.contains(".mpeg") || url.contains(".mpe") || url.contains(".mp4") || url.contains(".avi")) {
+            // Video files
+            intent.setDataAndType(uri, "video/*");
+        } else {
+            //if you want you can also define the intent type for any other file
+
+            //additionally use else clause below, to manage other unknown extensions
+            //in this case, Android will show all applications installed on the device
+            //so you can choose which application to use
+            intent.setDataAndType(uri, "*/*");
+        }
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        Intent intent1 = Intent.createChooser(intent, "Open File");
+        try {
+            context.startActivity(intent1);
+        } catch (ActivityNotFoundException e) {
+            // Instruct the user to install a PDF reader here, or something
+        }
+
+        /*intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);*/
+    }
+
+    private void showCustomDialog(Uri uri) {
+
+        final android.support.v7.app.AlertDialog.Builder DialogMaster = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+        @SuppressLint("WrongConstant")
+        LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogViewMaster = li.inflate(R.layout.image_dailog, null);
+        DialogMaster.setView(dialogViewMaster);
+
+        final android.support.v7.app.AlertDialog showMaster = DialogMaster.show();
+
+        Button btnDismissMaster = (Button) showMaster.findViewById(R.id.buttonClose);
+        ImageView image = (ImageView) showMaster.findViewById(R.id.imageviewDialog);
+
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+            image.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        btnDismissMaster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMaster.dismiss();
+            }
+        });
+        showMaster.setCancelable(false);
+
+    }
+
+    private void showAttachDialog() {
+
+        final android.support.v7.app.AlertDialog.Builder DialogMaster = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+        @SuppressLint("WrongConstant")
+        LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogViewMaster = li.inflate(R.layout.attachment_dialog, null);
+        DialogMaster.setView(dialogViewMaster);
+
+        final android.support.v7.app.AlertDialog showMaster = DialogMaster.show();
+
+        Button btnImg = (Button) showMaster.findViewById(R.id.btnImg);
+        Button btnDoc = (Button) showMaster.findViewById(R.id.btnDoc);
+        Button btnCancel = (Button) showMaster.findViewById(R.id.btnCancel);
+
+        /*btnImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivityPermissionsDispatcher.onPickPhotoWithCheck(this);
+            }
+        });
+*/
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMaster.dismiss();
+            }
+        });
+        showMaster.setCancelable(false);
 
     }
 
