@@ -3,31 +3,27 @@ package com.example.admin.kamathotelapp;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DatabaseCopy;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
+import com.example.admin.kamathotelapp.libs.UtilityClass;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private SharedPref sharedPref;
     View focusView = null;
     private static final int RECORD_REQUEST_CODE = 101;
+    String device_id;
+    String version;
+    int version_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +60,17 @@ public class MainActivity extends AppCompatActivity {
 //        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         sharedPref = new SharedPref(MainActivity.this);
+
+          device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionName;
+            version_code = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -124,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
                 if((uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
                         uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
                         uname.equalsIgnoreCase("personal")) && pwd.equals("password")) {
+
+                    if (UtilityClass.isConnectingToInternet(MainActivity.this)) {
+                      /*  LoginActivityTask loginTask = new LoginActivityTask();
+                        loginTask.execute();*/
+                    }  else {
+                        UtilityClass.showToast(MainActivity.this, "Time out or No Network or Wrong Credentials");
+                    }
+
                     sharedPref.setLoginInfo(uname, pwd);
                     Intent intent = new Intent(MainActivity.this, NavigationDrawerActivity.class);
                     startActivity(intent);
@@ -139,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
                     focusView = etPassword;
                     focusView.requestFocus();
                     return;
+                }else {
+                    UtilityClass.showToast(MainActivity.this, "Please fill the required information");
                 }
 
             }

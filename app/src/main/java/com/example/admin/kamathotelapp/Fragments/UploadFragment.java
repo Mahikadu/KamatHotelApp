@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -82,6 +83,10 @@ public class UploadFragment extends Fragment {
     private String valLevel2="", valLevel3="", valLevel4="", valLevel5="", valLevel6="", valLevel7="";
     @InjectView(R.id.spinLegalEntity)
     AutoCompleteTextView autoLegalEntity;
+    @InjectView(R.id.spinIndividuals)
+    AutoCompleteTextView autoIndividuals;
+    @InjectView(R.id.etNewProposal)
+    EditText etNewProposal;
     @InjectView(R.id.spinProperty)
     AutoCompleteTextView autoProperty;
     @InjectView(R.id.spinMonth)
@@ -137,7 +142,7 @@ public class UploadFragment extends Fragment {
     String chk = "";
     String manufactures = android.os.Build.MANUFACTURER;
     String filePath;
-    public static CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7;
+    public static CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7,cardNewProposal,cardIndividuals;
     public static TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
     public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7, viewFile;
     public static TextView txtNoFile;
@@ -185,6 +190,8 @@ public class UploadFragment extends Fragment {
         txtNoFile = (TextView) view.findViewById(R.id.txtNofile);
         no_files = (TextView) view.findViewById(R.id.no_files);
 
+        cardNewProposal = (CardView) view.findViewById(R.id.newProposalcardview);
+        cardIndividuals = (CardView) view.findViewById(R.id.individualscardview);
         cardlevel2 = (CardView) view.findViewById(R.id.level2cardview);
         cardlevel3 = (CardView) view.findViewById(R.id.level3cardview);
         cardlevel4 = (CardView) view.findViewById(R.id.level4cardview);
@@ -243,6 +250,7 @@ public class UploadFragment extends Fragment {
         uploadModel = new UploadModel();
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
+        List<String> listIndividuals = Arrays.asList(getResources().getStringArray(R.array.individuals));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
 
         List<String> listYear = Arrays.asList(getResources().getStringArray(R.array.year));
@@ -296,6 +304,17 @@ public class UploadFragment extends Fragment {
                 if (strLegalArray != null && strLegalArray.length > 0) {
                     strLegalEntity = autoLegalEntity.getText().toString();
                     legalEntityString = parent.getItemAtPosition(position).toString();
+
+                    if(strLegalEntity.equalsIgnoreCase("Individuals")){
+                        cardIndividuals.setVisibility(View.VISIBLE);
+                        cardNewProposal.setVisibility(View.GONE);
+                    }else if(strLegalEntity.equalsIgnoreCase("New Proposal")){
+                        cardNewProposal.setVisibility(View.VISIBLE);
+                        cardIndividuals.setVisibility(View.GONE);
+                    }else {
+                        cardIndividuals.setVisibility(View.GONE);
+                        cardNewProposal.setVisibility(View.GONE);
+                    }
                 }
             }
         });

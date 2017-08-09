@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import com.example.admin.kamathotelapp.Adapters.GridDataAdapter;
 
 import com.example.admin.kamathotelapp.MyRecyclerItemClickListener;
-
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.scanlibrary.ScanActivity;

@@ -42,6 +42,22 @@
         <item>Vishal Amusements Limtied</item>
         <item>Vits Hotels (Bhubaneswar) Pvt Ltd</item>
         <item>Woodlink Developers &amp; Resorts Pvt Ltd</item>
+        <item>Individuals</item>
+        <item>New Proposal</item>
+    </string-array>
+
+    <string-array name="individuals">
+        <item>Dr. Vithal V. Kamat</item>
+        <item>Mrs. Vidya V. Kamat</item>
+        <item>Mr. Vishal V.Kamat</item>
+        <item>Aditi Vishal Kamat</item>
+        <item>Vidita V. Kamat</item>
+        <item>Mr.Krishna V. Kamat</item>
+        <item>Mr. Shivanand V. Kamat</item>
+        <item>Mr. Ramesh N Shanbhag</item>
+        <item>Mr. Ajit N. Shanbhag</item>
+        <item>Mr. Narayan R. Shanbhag</item>
+
     </string-array>
 
     <string-array name="property">
