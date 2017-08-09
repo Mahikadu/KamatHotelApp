@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 import com.example.admin.kamathotelapp.Adapters.GridDataAdapter;
 
 import com.example.admin.kamathotelapp.MyRecyclerItemClickListener;
+
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.scanlibrary.ScanActivity;
@@ -85,7 +86,21 @@ public class ScanFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         mProgressBar.setVisibility(View.VISIBLE);
-        new LoadImage().execute();
+
+        String ExternalStorageDirectoryPath = Environment
+                .getExternalStorageDirectory()
+                .getAbsolutePath();
+        String targetPath = ExternalStorageDirectoryPath + "/scanCrop/";
+        File targetDirector = new File(targetPath);
+        try {
+            if(targetDirector.exists()) {
+                new LoadImage().execute();
+            }else{
+                mProgressBar.setVisibility(View.GONE);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         recyclerView = (RecyclerView)view.findViewById(R.id.card_recycler_view);
         recyclerView.setHasFixedSize(true);

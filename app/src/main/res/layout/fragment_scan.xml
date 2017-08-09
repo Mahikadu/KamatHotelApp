@@ -11,20 +11,15 @@
         android:layout_above="@+id/tvFooter"
         android:layout_marginBottom="15dp">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:fitsSystemWindows="true"
-            >
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/card_recycler_view"
                 android:scrollbars="vertical"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-        </android.support.design.widget.CoordinatorLayout>
+
 
         <ProgressBar
             android:layout_width="wrap_content"
