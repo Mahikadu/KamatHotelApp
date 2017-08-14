@@ -71,7 +71,7 @@ public class ScanFragment extends Fragment {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getActivity().setTitle("Document Scan");
         //////////Crash Report
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scan, container, false);
         init(view);

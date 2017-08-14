@@ -113,7 +113,7 @@ public class DataBaseCon {
     public Cursor fetchAlldata(String tbl) {
         String query = null;
         try {
-            query = "select * from table_M_Category";
+            query = "select * from "+tbl;
 
             Log.i("TAG", "query :" + query);
         } catch (Exception e) {

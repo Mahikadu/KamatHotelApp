@@ -22,20 +22,20 @@ public class SOAPWebservice {
 	}
 
 	// soap service for login
-	public SoapPrimitive loginWebservice(String id, String username,
-										 String password) {
-		SoapPrimitive result = null;
+	public SoapObject loginWebservice(String username, String os,String deviceID,
+										 String source,String password,int versionCode,String version) {
+		SoapObject result = null;
 
 		try {
 			SoapObject request = new SoapObject("http://tempuri.org/",
 					"Get_login");// soap object
 			request.addProperty("userid", username);
-			request.addProperty("os", password);
-			request.addProperty("device_id", password);
-			request.addProperty("source", password);
+			request.addProperty("os", os);
+			request.addProperty("device_id", deviceID);
+			request.addProperty("source", source);
 			request.addProperty("password", password);
-			request.addProperty("build_version_code", password);
-			request.addProperty("version", password);
+			request.addProperty("build_version_code", versionCode);
+			request.addProperty("version", version);
 
 
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -49,7 +49,7 @@ public class SOAPWebservice {
 					envelope);
 
 			// response soap object
-			result = (SoapPrimitive) envelope.getResponse();
+			result = (SoapObject) envelope.getResponse();
 			Log.e("result Login", result.toString());
 			return result;
 
@@ -60,16 +60,16 @@ public class SOAPWebservice {
 		}
 	}
 
-	public SoapPrimitive MasterSyncservice(String id, String username,
-										 String password) {
-		SoapPrimitive result = null;
+	public SoapObject MasterSyncservice(String id, String date,
+										 String userid) {
+        SoapObject result = null;
 
 		try {
 			SoapObject request = new SoapObject("http://tempuri.org/",
 					"Get_Masters");// soap object
-			request.addProperty("Id", username);
-			request.addProperty("date", password);
-			request.addProperty("userid", password);
+			request.addProperty("Id", id);
+			request.addProperty("date", date);
+			request.addProperty("userid", userid);
 
 
 
@@ -84,7 +84,7 @@ public class SOAPWebservice {
 					envelope);
 
 			// response soap object
-			result = (SoapPrimitive) envelope.getResponse();
+			result = (SoapObject) envelope.getResponse();
 			Log.e("result master", result.toString());
 			return result;
 

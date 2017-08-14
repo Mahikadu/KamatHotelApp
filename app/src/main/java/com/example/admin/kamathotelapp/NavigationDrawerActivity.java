@@ -36,7 +36,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         sharedPref = new SharedPref(this);
         logout = (ImageView) findViewById(R.id.imgLogout);
         //////////Crash Report
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

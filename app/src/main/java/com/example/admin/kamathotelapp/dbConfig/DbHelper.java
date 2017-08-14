@@ -29,6 +29,13 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_PER = "table_personal";
     public static final String TABLE_LEGAL = "table_legal";
     public static final String TABLE_UPLOAD = "table_upload";
+    public static final String M_Legal_Entity = "M_Legal_Entity";
+    public static final String M_Property = "M_Property";
+    public static final String M_Location = "M_Location";
+    public static final String M_Year = "M_Year";
+    public static final String M_Quater = "M_Quater";
+    public static final String M_Month = "M_Month";
+    public static final String M_Level_Data = "M_Level_Data";
 
     public static final int DATABASE_VERSION = 1;
     private static DbHelper dbInstance = null;

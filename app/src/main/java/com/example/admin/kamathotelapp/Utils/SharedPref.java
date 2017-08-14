@@ -14,6 +14,7 @@ public class SharedPref {
 
     private static final String KEY_LoginId = "key_loginid";
     private static final String KEY_PWD = "key_password";
+    private static final String KEY_RoleId = "key_roleId";
     private static final String KEY_Result = "key_result";
     private static final String KEY_NODATA = "key_nodata";
 
@@ -23,9 +24,10 @@ public class SharedPref {
         editor = sharedPref.edit();
     }
 
-    public void setLoginInfo(String loginId, String password) {
+    public void setLoginInfo(String loginId, String password,String roleID) {
         editor.putString(KEY_LoginId, loginId);
         editor.putString(KEY_PWD, password);
+        editor.putString(KEY_RoleId, roleID);
         editor.commit();
     }
 
@@ -37,6 +39,11 @@ public class SharedPref {
     public String getPassword() {
         String pass = sharedPref.getString(KEY_PWD, "");
         return pass;
+    }
+
+    public String getRoleID() {
+        String roleId = sharedPref.getString(KEY_RoleId, "");
+        return roleId;
     }
     public String getLoginResult() {
         return sharedPref.getString(KEY_Result, "false");
@@ -51,6 +58,7 @@ public class SharedPref {
         try {
             editor.remove(KEY_LoginId);
             editor.remove(KEY_PWD);
+            editor.remove(KEY_RoleId);
             editor.clear();
             editor.commit();
         } catch (Exception e) {
