@@ -2158,14 +2158,14 @@ public class UploadFragment extends Fragment {
      public void fetchLevel2dataFin() {
         try {
             level2list = new ArrayList<>();
-            String Level2 = "level2";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level2,DbHelper.TABLE_FINANCE);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    String branch = "";
-                    branch = cursor1.getString(cursor1.getColumnIndex("level2"));
-                    level2list.add(branch);
+                    String level2Fin = "";
+                    level2Fin = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level2list.add(level2Fin);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }

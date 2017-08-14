@@ -61,7 +61,7 @@ public class SOAPWebservice {
 	}
 
 	public SoapObject MasterSyncservice(String id, String date,
-										 String userid) {
+										 String userid, String roleId) {
         SoapObject result = null;
 
 		try {
@@ -70,6 +70,7 @@ public class SOAPWebservice {
 			request.addProperty("Id", id);
 			request.addProperty("date", date);
 			request.addProperty("userid", userid);
+			request.addProperty("roleid", roleId);
 
 
 

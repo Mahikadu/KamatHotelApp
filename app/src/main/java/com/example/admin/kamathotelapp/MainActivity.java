@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     SOAPWebservice ws;
     ProgressDialog progress;
     private String strUpdatedDate = "";
-    private String value, text, parent_Ref, updated_date,date;
+    private String value, text, parent_Ref, updated_date,date,roleId;
     private SimpleDateFormat dateFormatter;
 
     @Override
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                    UtilityClass.showToast(context,"You have entered wrong username or password");
                 }else{
                     UtilityClass.showToast(context,"You have login successfully..!");
-                    String roleId = res.getPropertyAsString("RoleId");
+                     roleId = res.getPropertyAsString("RoleId");
                     sharedPref.clearPref();
                     sharedPref.setLoginInfo(uname, pwd,roleId);
 
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("1",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("1",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("2",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("2",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -515,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("3",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("3",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -599,7 +599,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("4",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("4",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -683,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("5",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("5",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -767,7 +767,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("6",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("6",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -860,7 +860,7 @@ public class MainActivity extends AppCompatActivity {
                 strUpdatedDate = "";
             }
             cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("7",strUpdatedDate,uname);
+            SoapObject result = ws.MasterSyncservice("7",strUpdatedDate,uname,roleId);
             return result;
         }
 
