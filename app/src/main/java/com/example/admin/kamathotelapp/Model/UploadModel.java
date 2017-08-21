@@ -5,6 +5,177 @@ package com.example.admin.kamathotelapp.Model;
  */
 public class UploadModel {
     String id, level2, level3, level4, level5, level6, level7, fileName;
+  String  roleID, legalEntityID, propertyID, locationID, Doc_no,
+    loginId,  date, individualID, newProposal,txtL2Id,txtL3Id,txtL4Id,
+    txtL5Id,txtL6Id,txtL7Id, year, quarter, month, fileUp, filePath, fileExtension;
+
+    public String getRoleID() {
+        return roleID;
+    }
+
+    public void setRoleID(String roleID) {
+        this.roleID = roleID;
+    }
+
+    public String getLegalEntityID() {
+        return legalEntityID;
+    }
+
+    public void setLegalEntityID(String legalEntityID) {
+        this.legalEntityID = legalEntityID;
+    }
+
+    public String getPropertyID() {
+        return propertyID;
+    }
+
+    public void setPropertyID(String propertyID) {
+        this.propertyID = propertyID;
+    }
+
+    public String getLocationID() {
+        return locationID;
+    }
+
+    public void setLocationID(String locationID) {
+        this.locationID = locationID;
+    }
+
+    public String getDoc_no() {
+        return Doc_no;
+    }
+
+    public void setDoc_no(String doc_no) {
+        Doc_no = doc_no;
+    }
+
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getIndividualID() {
+        return individualID;
+    }
+
+    public void setIndividualID(String individualID) {
+        this.individualID = individualID;
+    }
+
+    public String getNewProposal() {
+        return newProposal;
+    }
+
+    public void setNewProposal(String newProposal) {
+        this.newProposal = newProposal;
+    }
+
+    public String getTxtL2Id() {
+        return txtL2Id;
+    }
+
+    public void setTxtL2Id(String txtL2Id) {
+        this.txtL2Id = txtL2Id;
+    }
+
+    public String getTxtL3Id() {
+        return txtL3Id;
+    }
+
+    public void setTxtL3Id(String txtL3Id) {
+        this.txtL3Id = txtL3Id;
+    }
+
+    public String getTxtL4Id() {
+        return txtL4Id;
+    }
+
+    public void setTxtL4Id(String txtL4Id) {
+        this.txtL4Id = txtL4Id;
+    }
+
+    public String getTxtL5Id() {
+        return txtL5Id;
+    }
+
+    public void setTxtL5Id(String txtL5Id) {
+        this.txtL5Id = txtL5Id;
+    }
+
+    public String getTxtL6Id() {
+        return txtL6Id;
+    }
+
+    public void setTxtL6Id(String txtL6Id) {
+        this.txtL6Id = txtL6Id;
+    }
+
+    public String getTxtL7Id() {
+        return txtL7Id;
+    }
+
+    public void setTxtL7Id(String txtL7Id) {
+        this.txtL7Id = txtL7Id;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(String quarter) {
+        this.quarter = quarter;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getFileUp() {
+        return fileUp;
+    }
+
+    public void setFileUp(String fileUp) {
+        this.fileUp = fileUp;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
 
     public String getId() {
         return id;

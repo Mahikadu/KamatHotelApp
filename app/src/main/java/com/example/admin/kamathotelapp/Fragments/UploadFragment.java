@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -39,6 +40,10 @@ import android.widget.Toast;
 import com.example.admin.kamathotelapp.Adapters.UploadAdapter;
 import com.example.admin.kamathotelapp.KHIL;
 import com.example.admin.kamathotelapp.Model.LegalEntityModel;
+import com.example.admin.kamathotelapp.Model.LeveldataModel;
+import com.example.admin.kamathotelapp.Model.LocationModel;
+import com.example.admin.kamathotelapp.Model.MonthModel;
+import com.example.admin.kamathotelapp.Model.PropertyModel;
 import com.example.admin.kamathotelapp.Model.UploadModel;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
@@ -46,16 +51,23 @@ import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
+import com.example.admin.kamathotelapp.libs.SOAPWebservice;
 
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -75,6 +87,8 @@ public class UploadFragment extends Fragment {
     Button btnUpdate;
     @InjectView(R.id.btnCancel)
     Button btnCancel;
+    @InjectView(R.id.btnSubmit)
+    Button btnSubmit;
     public static ListView listUpload;
     private String loginId, password,roleID;
     List<UploadModel> uploadModelList;
@@ -98,6 +112,9 @@ public class UploadFragment extends Fragment {
     @InjectView(R.id.spinLoc)
     AutoCompleteTextView autoLoc;
     public static AutoCompleteTextView txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
+    public String txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,monthID;
+    public String legalEntityID,propertyID,individualID,locationID;
+    public String legalEntityValue,propertyValue,individualValue,locationValue;
     String[] strLegalArray = null;
     String[] strPropertyArray = null;
     String[] strMonthArray = null;
@@ -150,12 +167,24 @@ public class UploadFragment extends Fragment {
     private static final int PICKFILE_RESULT_CODE = 1;
     public String fileName="";
     private Utils utils;
-    private String legalEntity, property, year, quarter, month, location, file="", level2="", level3="", level4="", level5="", level6="", level7="";
+    private String legalEntity,individuals = "",newProposal = "",property, year, quarter, month, location, file="", level2="", level3="", level4="", level5="", level6="", level7="";
     public static LinearLayout layout_edit;
     public static int ID = 0;
-    private ArrayList<String> listIndividuals,listProperty,listYear,listQuarter,listLoc,listMonth;
+    private ArrayList<String> listIndividuals,listYear,listQuarter;
     LegalEntityModel legalEntityModel;
     private ArrayList<LegalEntityModel> listLegal,listLegalAll;
+    private ArrayList<LeveldataModel> listLevelData;
+    LeveldataModel leveldataModel;
+    private ArrayList<PropertyModel> listProperty;
+    PropertyModel propertyModel;
+    private ArrayList<LocationModel> listLoc;
+    LocationModel locationModel;
+    private ArrayList<MonthModel> listMonth;
+    MonthModel monthModel;
+    private SimpleDateFormat dateFormatter;
+    private String date;
+    public String fileExtension = "";
+    private ArrayList<UploadModel> submitDatalist;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -184,6 +213,10 @@ public class UploadFragment extends Fragment {
         loginId = sharedPref.getLoginId();
         password = sharedPref.getPassword();
         roleID = sharedPref.getRoleID();
+
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        date = dateFormatter.format(cal.getTime());
         //................Auto Complete Text View......
         txtL2 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel2);
         txtL3 = (AutoCompleteTextView) view.findViewById(R.id.spinLevel3);
@@ -255,7 +288,7 @@ public class UploadFragment extends Fragment {
         uploadModel = new UploadModel();
 
              fetchLegalEntity();
-
+             FetchLeveldata();
         /////////Details of legal Entity
         if (listLegal.size() > 0) {
             strLegalArray = new String[listLegal.size()];
@@ -303,11 +336,22 @@ public class UploadFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLegalArray != null && strLegalArray.length > 0) {
+                    String ID = "";
                     strLegalEntity = autoLegalEntity.getText().toString();
                     legalEntityString = parent.getItemAtPosition(position).toString();
+                    for(int i=0; i<listLegal.size(); i++) {
+                        legalEntityModel = listLegal.get(i);
+                        String entity = legalEntityModel.getText();
+                        if (entity.equalsIgnoreCase(legalEntityString)) {
+                            ID = legalEntityModel.getId();
+                            legalEntityID = ID;
+                            legalEntityValue = legalEntityModel.getValue();
+                        }
+                    }
                     autoProperty.setText("");
                     autoIndividuals.setText("");
-                    long positionId = id+1;
+                    autoLoc.setText("");
+//                    long positionId = id+1;
                     if(strLegalEntity.equalsIgnoreCase("Individuals")){
 
                         cardIndividuals.setVisibility(View.VISIBLE);
@@ -316,7 +360,7 @@ public class UploadFragment extends Fragment {
 
                         listIndividuals = new ArrayList<>();
                         String individuals = "";
-                        String where1 = " where parent_Ref = " + "'" + positionId + "'";
+                        String where1 = " where parent_Ref = " + "'" + legalEntityID + "'";
                         String text = "text";
                         Cursor cursor = KHIL.dbCon.fetchFromSelectDistinctWhere(text,DbHelper.M_Legal_Entity, where1);
                         if (cursor != null && cursor.getCount() > 0) {
@@ -364,11 +408,12 @@ public class UploadFragment extends Fragment {
                             }
                         });
                         autoIndividuals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            String eid,parentref;
+                            String eid ="",parentref;
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 String individual = parent.getItemAtPosition(position).toString();
                                 autoProperty.setText("");
+                                autoLoc.setText("");
 
                                 for(int i=0; i<listLegalAll.size(); i++){
                                     legalEntityModel = listLegalAll.get(i);
@@ -377,16 +422,23 @@ public class UploadFragment extends Fragment {
                                          eid = legalEntityModel.getId();
                                          parentref = legalEntityModel.getParent_Ref();
 
+                                          individualID = eid;
+                                        individualValue = legalEntityModel.getValue();
+
                                         listProperty = new ArrayList<>();
                                         String property = "";
                                         String where1 = " where legal_Entity_Id = " + "'" + eid + "'";
                                         String text1 = "text";
-                                        Cursor cursor = KHIL.dbCon.fetchFromSelectDistinctWhere(text1,DbHelper.M_Property, where1);
+                                        Cursor cursor = KHIL.dbCon.fetchFromSelect(DbHelper.M_Property, where1);
                                         if (cursor != null && cursor.getCount() > 0) {
                                             cursor.moveToFirst();
                                             do {
-                                                property = cursor.getString(cursor.getColumnIndex("text"));
-                                                listProperty.add(property);
+                                                propertyModel = new PropertyModel();
+                                                propertyModel.setId(cursor.getString(cursor.getColumnIndex("id")));
+                                                propertyModel.setText(cursor.getString(cursor.getColumnIndex("text")));
+                                                propertyModel.setValue(cursor.getString(cursor.getColumnIndex("value")));
+                                                propertyModel.setLegalEntityId(cursor.getString(cursor.getColumnIndex("legal_Entity_Id")));
+                                                listProperty.add(propertyModel);
                                             } while (cursor.moveToNext());
                                             cursor.close();
                                         }
@@ -394,7 +446,8 @@ public class UploadFragment extends Fragment {
                                         if (listProperty.size() > 0) {
                                             strPropertyArray = new String[listProperty.size()];
                                             for (int j = 0; j < listProperty.size(); j++) {
-                                                strPropertyArray[j] = listProperty.get(j);
+                                                propertyModel = listProperty.get(j);
+                                                strPropertyArray[j] = propertyModel.getText();
                                             }
                                         }
                                         if (listProperty != null && listProperty.size() > 0) {
@@ -437,6 +490,95 @@ public class UploadFragment extends Fragment {
                                                 if (strPropertyArray != null && strPropertyArray.length > 0) {
                                                     strProperty = autoProperty.getText().toString();
                                                     propertyString = parent.getItemAtPosition(position).toString();
+
+                                                    for (int i = 0; i < listProperty.size(); i++) {
+                                                        propertyModel = listProperty.get(i);
+                                                        String text = propertyModel.getText();
+                                                        if (text.equalsIgnoreCase(propertyString)) {
+                                                           String propid = propertyModel.getId();
+                                                            propertyID = propid;
+                                                            propertyValue = propertyModel.getValue();
+
+                                                            listLoc = new ArrayList<>();
+                                                            String location = "";
+                                                            String where1 = " where property_id = " + "'" + propertyID + "'";
+                                                            Cursor cursor4 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Location,where1);
+                                                            if (cursor4 != null && cursor4.getCount() > 0) {
+                                                                cursor4.moveToFirst();
+                                                                do {
+                                                                    locationModel = new LocationModel();
+                                                                    locationModel.setId(cursor4.getString(cursor4.getColumnIndex("id")));
+                                                                    locationModel.setText(cursor4.getString(cursor4.getColumnIndex("text")));
+                                                                    locationModel.setValue(cursor4.getString(cursor4.getColumnIndex("value")));
+                                                                    locationModel.setProperty_id(cursor4.getString(cursor4.getColumnIndex("property_id")));
+                                                                    listLoc.add(locationModel);
+                                                                } while (cursor4.moveToNext());
+                                                                cursor4.close();
+                                                            }
+                                                            ///////////////////////////////
+                                                            ///////////////Details of Location
+                                                            if (listLoc.size() > 0) {
+                                                                strLocArray = new String[listLoc.size()];
+                                                                //   strLeadArray[0] = "Select Source Lead";
+                                                                for (int m = 0; m < listLoc.size(); m++) {
+                                                                    locationModel = listLoc.get(m);
+                                                                    strLocArray[m] = locationModel.getText();
+                                                                }
+                                                            }
+                                                            if (listLoc != null && listLoc.size() > 0) {
+                                                                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLocArray) {
+                                                                    @Override
+                                                                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                                                        View v = null;
+                                                                        // If this is the initial dummy entry, make it hidden
+                                                                        if (position == 0) {
+                                                                            TextView tv = new TextView(getContext());
+                                                                            tv.setHeight(0);
+                                                                            tv.setVisibility(View.GONE);
+                                                                            v = tv;
+                                                                        } else {
+                                                                            // Pass convertView as null to prevent reuse of special case views
+                                                                            v = super.getDropDownView(position, null, parent);
+                                                                        }
+                                                                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                                                        parent.setVerticalScrollBarEnabled(false);
+                                                                        return v;
+                                                                    }
+                                                                };
+
+                                                                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                autoLoc.setAdapter(adapter1);
+                                                            }
+
+                                                            autoLoc.setOnTouchListener(new View.OnTouchListener() {
+                                                                @Override
+                                                                public boolean onTouch(View v, MotionEvent event) {
+                                                                    autoLoc.showDropDown();
+                                                                    return false;
+                                                                }
+                                                            });
+
+                                                            autoLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                @Override
+                                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                    if (strLocArray != null && strLocArray.length > 0) {
+                                                                        strLoc = autoLoc.getText().toString();
+                                                                        locString = parent.getItemAtPosition(position).toString();
+
+                                                                        for (int i = 0; i < listLoc.size(); i++) {
+                                                                            locationModel = listLoc.get(i);
+                                                                            String text = locationModel.getText();
+                                                                            if (text.equalsIgnoreCase(locString)) {
+                                                                                locationID  = locationModel.getId();
+                                                                                locationValue = locationModel.getValue();
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+
+                                                        }
+                                                    }
                                                 }
                                             }
                                         });
@@ -458,22 +600,26 @@ public class UploadFragment extends Fragment {
 
                         listProperty = new ArrayList<>();
                         String property = "";
-                        String where1 = " where legal_Entity_Id = " + "'" + positionId + "'";
-                        String text = "text";
-                        Cursor cursor = KHIL.dbCon.fetchFromSelectDistinctWhere(text,DbHelper.M_Property, where1);
+                        String where1 = " where legal_Entity_Id = " + "'" + legalEntityID + "'";
+                        Cursor cursor = KHIL.dbCon.fetchFromSelect(DbHelper.M_Property, where1);
                         if (cursor != null && cursor.getCount() > 0) {
                             cursor.moveToFirst();
                             do {
-                                property = cursor.getString(cursor.getColumnIndex("text"));
-                                listProperty.add(property);
+                                propertyModel = new PropertyModel();
+                                propertyModel.setId(cursor.getString(cursor.getColumnIndex("id")));
+                                propertyModel.setText(cursor.getString(cursor.getColumnIndex("text")));
+                                propertyModel.setValue(cursor.getString(cursor.getColumnIndex("value")));
+                                propertyModel.setLegalEntityId(cursor.getString(cursor.getColumnIndex("legal_Entity_Id")));
+                                listProperty.add(propertyModel);
                             } while (cursor.moveToNext());
                             cursor.close();
                         }
                         ///////////////Details of property
                         if (listProperty.size() > 0) {
                             strPropertyArray = new String[listProperty.size()];
-                            for (int i = 0; i < listProperty.size(); i++) {
-                                strPropertyArray[i] = listProperty.get(i);
+                            for (int j = 0; j < listProperty.size(); j++) {
+                                propertyModel = listProperty.get(j);
+                                strPropertyArray[j] = propertyModel.getText();
                             }
                         }
 
@@ -517,6 +663,95 @@ public class UploadFragment extends Fragment {
                                 if (strPropertyArray != null && strPropertyArray.length > 0) {
                                     strProperty = autoProperty.getText().toString();
                                     propertyString = parent.getItemAtPosition(position).toString();
+
+                                    for (int i = 0; i < listProperty.size(); i++) {
+                                        propertyModel = listProperty.get(i);
+                                        String text = propertyModel.getText();
+                                        if (text.equalsIgnoreCase(propertyString)) {
+                                            String propid = propertyModel.getId();
+                                            propertyID = propid;
+                                            propertyValue = propertyModel.getValue();
+
+
+                                            listLoc = new ArrayList<>();
+                                            String location = "";
+                                            String where1 = " where property_id = " + "'" + propertyID + "'";
+                                            Cursor cursor4 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Location,where1);
+                                            if (cursor4 != null && cursor4.getCount() > 0) {
+                                                cursor4.moveToFirst();
+                                                do {
+                                                    locationModel = new LocationModel();
+                                                    locationModel.setId(cursor4.getString(cursor4.getColumnIndex("id")));
+                                                    locationModel.setText(cursor4.getString(cursor4.getColumnIndex("text")));
+                                                    locationModel.setValue(cursor4.getString(cursor4.getColumnIndex("value")));
+                                                    locationModel.setProperty_id(cursor4.getString(cursor4.getColumnIndex("property_id")));
+                                                    listLoc.add(locationModel);
+                                                } while (cursor4.moveToNext());
+                                                cursor4.close();
+                                            }
+                                            ///////////////////////////////
+                                            ///////////////Details of Location
+                                            if (listLoc.size() > 0) {
+                                                strLocArray = new String[listLoc.size()];
+                                                //   strLeadArray[0] = "Select Source Lead";
+                                                for (int m = 0; m < listLoc.size(); m++) {
+                                                    locationModel = listLoc.get(m);
+                                                    strLocArray[m] = locationModel.getText();
+                                                }
+                                            }
+                                            if (listLoc != null && listLoc.size() > 0) {
+                                                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLocArray) {
+                                                    @Override
+                                                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                                        View v = null;
+                                                        // If this is the initial dummy entry, make it hidden
+                                                        if (position == 0) {
+                                                            TextView tv = new TextView(getContext());
+                                                            tv.setHeight(0);
+                                                            tv.setVisibility(View.GONE);
+                                                            v = tv;
+                                                        } else {
+                                                            // Pass convertView as null to prevent reuse of special case views
+                                                            v = super.getDropDownView(position, null, parent);
+                                                        }
+                                                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                                        parent.setVerticalScrollBarEnabled(false);
+                                                        return v;
+                                                    }
+                                                };
+
+                                                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                autoLoc.setAdapter(adapter1);
+                                            }
+
+                                            autoLoc.setOnTouchListener(new View.OnTouchListener() {
+                                                @Override
+                                                public boolean onTouch(View v, MotionEvent event) {
+                                                    autoLoc.showDropDown();
+                                                    return false;
+                                                }
+                                            });
+
+                                            autoLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    if (strLocArray != null && strLocArray.length > 0) {
+                                                        strLoc = autoLoc.getText().toString();
+                                                        locString = parent.getItemAtPosition(position).toString();
+
+                                                        for (int i = 0; i < listLoc.size(); i++) {
+                                                            locationModel = listLoc.get(i);
+                                                            String text = locationModel.getText();
+                                                            if (text.equalsIgnoreCase(locString)) {
+                                                                locationID  = locationModel.getId();
+                                                                locationValue = locationModel.getValue();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
                                 }
                             }
                         });
@@ -639,8 +874,12 @@ public class UploadFragment extends Fragment {
                 if (cursor3 != null && cursor3.getCount() > 0) {
                     cursor3.moveToFirst();
                     do {
-                        month = cursor3.getString(cursor3.getColumnIndex("text"));
-                        listMonth.add(month);
+                        monthModel = new MonthModel();
+                        monthModel.setId(cursor3.getString(cursor3.getColumnIndex("id")));
+                        monthModel.setText(cursor3.getString(cursor3.getColumnIndex("text")));
+                        monthModel.setValue(cursor3.getString(cursor3.getColumnIndex("value")));
+                        monthModel.setQuarter_id(cursor3.getString(cursor3.getColumnIndex("quater_id")));
+                        listMonth.add(monthModel);
                     } while (cursor3.moveToNext());
                     cursor3.close();
                 }
@@ -649,7 +888,8 @@ public class UploadFragment extends Fragment {
                     if (listMonth.size() > 0) {
                         strMonthArray = new String[listMonth.size()];
                         for (int i = 0; i < listMonth.size(); i++) {
-                            strMonthArray[i] = listMonth.get(i);
+                            monthModel  = listMonth.get(i);
+                            strMonthArray[i] = monthModel.getText();
                         }
                     }
                 }
@@ -691,65 +931,22 @@ public class UploadFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (strMonthArray != null && strMonthArray.length > 0) {
-                            strMonth = autoMonth.getText().toString();
                             monthString = parent.getItemAtPosition(position).toString();
+
+                            for (int i = 0; i < listMonth.size(); i++) {
+                                monthModel = listMonth.get(i);
+                                String text = monthModel.getText();
+                                if (text.equalsIgnoreCase(monthString)) {
+                                    monthID = monthModel.getValue();
+                                }
+                            }
                         }
                     }
                 });
 
             }
         });
-        ///////////////////////////////
-        ///////////////Details of Location
-        if (listLoc.size() > 0) {
-            strLocArray = new String[listLoc.size()];
-            //   strLeadArray[0] = "Select Source Lead";
-            for (int i = 0; i < listLoc.size(); i++) {
-                strLocArray[i] = listLoc.get(i);
-            }
-        }
-        if (listLoc != null && listLoc.size() > 0) {
-            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLocArray) {
-                @Override
-                public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                    View v = null;
-                    // If this is the initial dummy entry, make it hidden
-                    if (position == 0) {
-                        TextView tv = new TextView(getContext());
-                        tv.setHeight(0);
-                        tv.setVisibility(View.GONE);
-                        v = tv;
-                    } else {
-                        // Pass convertView as null to prevent reuse of special case views
-                        v = super.getDropDownView(position, null, parent);
-                    }
-                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
-                    parent.setVerticalScrollBarEnabled(false);
-                    return v;
-                }
-            };
 
-            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoLoc.setAdapter(adapter1);
-        }
-
-        autoLoc.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                autoLoc.showDropDown();
-                return false;
-            }
-        });
-
-        autoLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (strLocArray != null && strLocArray.length > 0) {
-                    strLoc = autoLoc.getText().toString();
-                    locString = parent.getItemAtPosition(position).toString();
-                }
-            }
-        });
 
         btnAttach.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -808,11 +1005,19 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level2txtlayout.setHint("Financial Type");
                     if (strLevel2Array != null && strLevel2Array.length > 0) {
-
+                        String aid = "",parentref = "";
                         valLevel2 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel2)) {
+                                aid = leveldataModel.getaID();
+                                txtL2Id = leveldataModel.getValue();
 
+                            }
+                        }
                         if (valLevel2 != null && valLevel2.length() > 0) {
-                            fetchLevel3dataFin();
+                            fetchLevel3dataFin(aid);
                             level3txtlayout.setHint(valLevel2);
                             cardlevel3.setVisibility(View.VISIBLE);
                             txtL3.setVisibility(View.VISIBLE);
@@ -849,10 +1054,18 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel3Array != null && strLevel3Array.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel3 = parent.getItemAtPosition(position).toString();
-
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel3)) {
+                                aid = leveldataModel.getaID();
+                                txtL3Id = leveldataModel.getValue();
+                            }
+                        }
                         if (valLevel3 != null && valLevel3.length() > 0) {
-                            fetchLevel4data();
+                            fetchLevel4data(aid);
                             if(chk.equals("no")) {
                                 cardlevel4.setVisibility(View.GONE);
                             } else {
@@ -889,10 +1102,18 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel4Array != null && strLevel4Array.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
-
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = leveldataModel.getValue();
+                            }
+                        }
                         if (valLevel4 != null && valLevel4.length() > 0) {
-                            fetchLevel5data();
+                            fetchLevel5data(aid);
                             if(chk.equals("no")) {
                                 cardlevel5.setVisibility(View.GONE);
                             } else if(chk.equals("yes")) {
@@ -927,10 +1148,18 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5Array != null && strLevel5Array.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel5 = parent.getItemAtPosition(position).toString();
-
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = leveldataModel.getValue();
+                            }
+                        }
                         if (valLevel5 != null && valLevel5.length() > 0) {
-                            fetchLevel6data();
+                            fetchLevel6data(aid);
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
@@ -962,7 +1191,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6Array != null && strLevel6Array.length > 0) {
+                        String aid;
                         valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = leveldataModel.getValue();
+                            }
+                        }
                     }
                 }
             });
@@ -1006,10 +1245,18 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("HR");
                     if (strLevel4ArrayHR != null && strLevel4ArrayHR.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
-
+                         for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = leveldataModel.getValue();
+                            }
+                        }
                         if (valLevel4 != null && valLevel4.length() > 0) {
-                            fetchLevel5dataHR();
+                            fetchLevel5dataHR(aid);
                             level5txtlayout.setHint(valLevel4);
                             cardlevel5.setVisibility(View.VISIBLE);
                         }
@@ -1035,10 +1282,18 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayHR != null && strLevel5ArrayHR.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel5 = parent.getItemAtPosition(position).toString();
-
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = leveldataModel.getValue();
+                            }
+                        }
                         if (valLevel5 != null && valLevel5.length() > 0) {
-                            fetchLevel6dataHR();
+                            fetchLevel6dataHR(aid);
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
@@ -1065,7 +1320,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6ArrayHR != null && strLevel6ArrayHR.length > 0) {
+                        String aid;
                         valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = leveldataModel.getValue();
+                            }
+                        }
                     }
                 }
             });
@@ -1110,11 +1375,19 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("CMD");
                     if (strLevel4ArrayCMD != null && strLevel4ArrayCMD.length > 0) {
-
+                       String aid = "",parentref = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
-                            fetchLevel5dataCMD();
+                            fetchLevel5dataCMD(aid);
 
                             if(chk.equals("yes")) {
                                 level5txtlayout.setHint(valLevel4);
@@ -1146,10 +1419,18 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayCMD != null && strLevel5ArrayCMD.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel5 = parent.getItemAtPosition(position).toString();
-
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = leveldataModel.getValue();
+                            }
+                        }
                         if (valLevel5 != null && valLevel5.length() > 0) {
-                            fetchLevel6dataCMD();
+                            fetchLevel6dataCMD(aid);
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
@@ -1176,10 +1457,19 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6ArrayCMD != null && strLevel6ArrayCMD.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel6 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                               txtL6Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
-                            fetchLevel7dataCMD();
+                            fetchLevel7dataCMD(aid);
                             if(chk.equals("yes")) {
                                 level7txtlayout.setHint(valLevel5);
                                 cardlevel7.setVisibility(View.VISIBLE);
@@ -1203,7 +1493,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel7ArrayCMD != null && strLevel7ArrayCMD.length > 0) {
+                        String aid = "";
                         valLevel7 = parent.getItemAtPosition(position).toString();
+
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel7)) {
+                                aid = leveldataModel.getaID();
+                                txtL7Id = leveldataModel.getValue();
+                            }
+                        }
                     }
                 }
             });
@@ -1251,10 +1551,19 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level2txtlayout.setHint("Type");
                     if (strLevel2ArrayCS != null && strLevel2ArrayCS.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel2 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel2)) {
+                                aid = leveldataModel.getaID();
+                                txtL2Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel2 != null && valLevel2.length() > 0) {
-                            fetchLevel3dataCS();
+                            fetchLevel3dataCS(aid);
                             level3txtlayout.setHint(valLevel2);
                             cardlevel3.setVisibility(View.VISIBLE);
                         }
@@ -1287,10 +1596,19 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel3ArrayCS != null && strLevel3ArrayCS.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel3 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel3)) {
+                                aid = leveldataModel.getaID();
+                                txtL3Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel3 != null && valLevel3.length() > 0) {
-                            fetchLevel4dataCS();
+                            fetchLevel4dataCS(aid);
                             if(chk.equals("no")) {
                                 cardlevel4.setVisibility(View.GONE);
                             } else {
@@ -1320,7 +1638,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel4ArrayCS != null && strLevel4ArrayCS.length > 0) {
+                        String aid = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = leveldataModel.getValue();
+                            }
+                        }
+
                     }
                 }
             });
@@ -1363,10 +1691,19 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("Occupancy");
                     if (strLevel4ArrayMAR != null && strLevel4ArrayMAR.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
-                            fetchLevel5dataMAR();
+                            fetchLevel5dataMAR(aid);
                             if(chk.equals("yes")) {
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
@@ -1397,10 +1734,19 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayMAR != null && strLevel5ArrayMAR.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel5 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
-                            fetchLevel6dataMAR();
+                            fetchLevel6dataMAR(aid);
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
@@ -1427,10 +1773,19 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6ArrayMAR != null && strLevel6ArrayMAR.length > 0) {
+                        String aid = "",parentref  ="";
                         valLevel6 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
-                            fetchLevel7dataMAR();
+                            fetchLevel7dataMAR(aid);
                             if(chk.equals("yes")) {
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
@@ -1454,7 +1809,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel7ArrayMAR != null && strLevel7ArrayMAR.length > 0) {
+                        String aid = "";
                         valLevel7 = parent.getItemAtPosition(position).toString();
+
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel7)) {
+                                aid = leveldataModel.getaID();
+                                txtL7Id = leveldataModel.getValue();
+                            }
+                        }
                     }
                 }
             });
@@ -1501,10 +1866,20 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level3txtlayout.setHint("Type");
                     if (strLevel3ArrayPer != null && strLevel3ArrayPer.length > 0) {
+                        String aid ="",parentref = "";
                         valLevel3 = parent.getItemAtPosition(position).toString();
 
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel3)) {
+                                aid = leveldataModel.getaID();
+                                txtL3Id = leveldataModel.getValue();
+                            }
+                        }
+
                         if (valLevel3 != null && valLevel3.length() > 0) {
-                            fetchLevel4dataPER();
+                            fetchLevel4dataPER(aid);
                             if(chk.equals("no")) {
                                 cardlevel4.setVisibility(View.GONE);
                             } else {
@@ -1538,10 +1913,20 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel4ArrayPer != null && strLevel4ArrayPer.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
 
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                               txtL4Id = leveldataModel.getValue();
+                            }
+                        }
+
                         if (valLevel4 != null && valLevel4.length() > 0) {
-                            fetchLevel5dataPER();
+                            fetchLevel5dataPER(aid);
                             if(chk.equals("no")) {
                                 cardlevel5.setVisibility(View.GONE);
                             } else if(chk.equals("yes")) {
@@ -1570,7 +1955,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayPer != null && strLevel5ArrayPer.length > 0) {
+                        String aid = "";
                         valLevel5 = parent.getItemAtPosition(position).toString();
+
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = leveldataModel.getValue();
+                            }
+                        }
                     }
                 }
             });
@@ -1611,11 +2006,19 @@ public class UploadFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     level4txtlayout.setHint("Legal");
                     if (strLevel4ArrayLEGAL != null && strLevel4ArrayLEGAL.length > 0) {
-
+                        String aid = "",parentref = "";
                         valLevel4 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
-                            fetchLevel5dataLEGAL();
+                            fetchLevel5dataLEGAL(aid);
                             level5txtlayout.setHint(valLevel4);
                             cardlevel5.setVisibility(View.VISIBLE);
                         }
@@ -1639,10 +2042,19 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel5ArrayLEGAL!= null && strLevel5ArrayLEGAL.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel5 = parent.getItemAtPosition(position).toString();
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = leveldataModel.getValue();
+                            }
+                        }
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
-                            fetchLevel6dataLEGAL();
+                            fetchLevel6dataLEGAL(aid);
                             if(chk.equals("yes")) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
@@ -1668,10 +2080,20 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6ArrayLEGAL!= null && strLevel6ArrayLEGAL.length > 0) {
+                        String aid = "",parentref = "";
                         valLevel6 = parent.getItemAtPosition(position).toString();
 
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = leveldataModel.getValue();
+                            }
+                        }
+
                         if (valLevel6 != null && valLevel6.length() > 0) {
-                            fetchLevel7dataLEGAL();
+                            fetchLevel7dataLEGAL(aid);
                             if(chk.equals("yes")) {
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
@@ -1695,7 +2117,17 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel7ArrayLEGAL != null && strLevel7ArrayLEGAL.length > 0) {
+                        String aid = "";
                         valLevel7 = parent.getItemAtPosition(position).toString();
+
+                        for(int i=0; i<listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel7)) {
+                                aid = leveldataModel.getaID();
+                                txtL7Id = leveldataModel.getValue();
+                            }
+                        }
                     }
                 }
             });
@@ -1737,6 +2169,8 @@ public class UploadFragment extends Fragment {
                 listUpload.setVisibility(View.VISIBLE);
                 
                 legalEntity = autoLegalEntity.getText().toString();
+                individuals = autoIndividuals.getText().toString();
+                newProposal = etNewProposal.getText().toString();
                 property = autoProperty.getText().toString();
                 year = autoYear.getText().toString();
                 quarter = autoQuarter.getText().toString();
@@ -1801,6 +2235,8 @@ public class UploadFragment extends Fragment {
                 btnUpload.setVisibility(View.VISIBLE);
 
                 legalEntity = autoLegalEntity.getText().toString();
+                individuals = autoIndividuals.getText().toString();
+                newProposal = etNewProposal.getText().toString();
                 property = autoProperty.getText().toString();
                 year = autoYear.getText().toString();
                 quarter = autoQuarter.getText().toString();
@@ -1915,6 +2351,19 @@ public class UploadFragment extends Fragment {
             }
         });
 
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int size = getAllSubmitData();
+                if (size > 0) {
+                    new SaveInsertUpdate().execute();
+                } else {
+                    Toast.makeText(getActivity(), "No data for uploading ", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
 
@@ -1935,6 +2384,9 @@ public class UploadFragment extends Fragment {
 
                     fileName = filePath.substring(filePath.lastIndexOf("/")+1);
                     txtNoFile.setText(fileName);
+                    String filename11 = fileName;
+                    String filenameArray[] = filename11.split("\\.");
+                    fileExtension = filenameArray[filenameArray.length-1];
                     viewFile.setVisibility(View.VISIBLE);
                 }
                 break;
@@ -1956,6 +2408,25 @@ public class UploadFragment extends Fragment {
     }
 
     private void insertIntoUploadDb(int flag) {
+
+        String Doc_no = roleID+"_"+legalEntityValue+"_"+propertyValue+"_"+locationValue+"_"+year+"_"+quarter+"_"+monthID;
+        String fileUp = Doc_no;
+        if (txtL2Id != null && txtL2Id.length()>0){
+            fileUp = fileUp+"_"+txtL2Id;
+        }if (txtL3Id != null && txtL3Id.length()>0){
+            fileUp = fileUp+"_"+txtL3Id;
+        }if (txtL4Id != null && txtL4Id.length()>0){
+            fileUp = fileUp+"_"+txtL4Id;
+        }if (txtL5Id != null && txtL5Id.length()>0){
+            fileUp = fileUp+"_"+txtL5Id;
+        }if (txtL6Id != null && txtL6Id.length()>0){
+            fileUp = fileUp+"_"+txtL6Id;
+        }if (txtL7Id != null && txtL7Id.length()>0){
+            fileUp = fileUp+"_"+txtL7Id;
+        }
+
+        fileUp = fileUp+fileName;
+        String strLastSync = "0";
         String selection = "id = ?";
         String id = "";
 
@@ -1965,13 +2436,16 @@ public class UploadFragment extends Fragment {
         }
         id = String.valueOf(ID);
         String[] selectionArgs = {id};
-
-        String valuesArray[] = {id, loginId, legalEntity, property, year, quarter, month, location, file, level2, level3, level4, level5, level6, level7};
+        String valuesArray[] = {id, loginId, legalEntity,individuals,newProposal,property, year, quarter, month,
+                location, file, level2, level3, level4, level5, level6, level7,txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,
+                roleID,legalEntityID,propertyID,individualID,locationID,Doc_no,fileUp,filePath,fileExtension,"",date,strLastSync};
 
         boolean result = KHIL.dbCon.updateBulk(DbHelper.TABLE_UPLOAD, selection, valuesArray, utils.columnNamesUpload, selectionArgs);
 
         if (result) {
             System.out.println("Upload details are added");
+           /* SaveInsertUpdate saveInsertUpdate = new SaveInsertUpdate();
+            saveInsertUpdate.execute();*/
             getUploadData();
         } else {
             System.out.println("FAILURE..!!");
@@ -2136,6 +2610,27 @@ public class UploadFragment extends Fragment {
             uploadModel.setLevel5(cursor.getString(cursor.getColumnIndex("level5")));
             uploadModel.setLevel6(cursor.getString(cursor.getColumnIndex("level6")));
             uploadModel.setLevel7(cursor.getString(cursor.getColumnIndex("level7")));
+            uploadModel.setRoleID(cursor.getString(cursor.getColumnIndex("role_Id")));
+            uploadModel.setLegalEntityID(cursor.getString(cursor.getColumnIndex("legalEntityID")));
+            uploadModel.setPropertyID(cursor.getString(cursor.getColumnIndex("propertyID")));
+            uploadModel.setLocationID(cursor.getString(cursor.getColumnIndex("locationID")));
+            uploadModel.setDoc_no(cursor.getString(cursor.getColumnIndex("doc_no")));
+            uploadModel.setLoginId(cursor.getString(cursor.getColumnIndex("user_id")));
+            uploadModel.setDate(cursor.getString(cursor.getColumnIndex("updated_date")));
+            uploadModel.setIndividualID(cursor.getString(cursor.getColumnIndex("individualID")));
+            uploadModel.setNewProposal(cursor.getString(cursor.getColumnIndex("new_proposal")));
+            uploadModel.setTxtL2Id(cursor.getString(cursor.getColumnIndex("level2Id")));
+            uploadModel.setTxtL3Id(cursor.getString(cursor.getColumnIndex("level3Id")));
+            uploadModel.setTxtL4Id(cursor.getString(cursor.getColumnIndex("level4Id")));
+            uploadModel.setTxtL5Id(cursor.getString(cursor.getColumnIndex("level5Id")));
+            uploadModel.setTxtL6Id(cursor.getString(cursor.getColumnIndex("level6Id")));
+            uploadModel.setTxtL7Id(cursor.getString(cursor.getColumnIndex("level7Id")));
+            uploadModel.setYear(cursor.getString(cursor.getColumnIndex("col_year")));
+            uploadModel.setQuarter(cursor.getString(cursor.getColumnIndex("quarter")));
+            uploadModel.setMonth(cursor.getString(cursor.getColumnIndex("col_month")));
+            uploadModel.setFileUp(cursor.getString(cursor.getColumnIndex("file")));
+            uploadModel.setFilePath(cursor.getString(cursor.getColumnIndex("file_path")));
+            uploadModel.setFileExtension(cursor.getString(cursor.getColumnIndex("file_extension")));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -2158,7 +2653,7 @@ public class UploadFragment extends Fragment {
      public void fetchLevel2dataFin() {
         try {
             level2list = new ArrayList<>();
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "1" + "'";
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -2206,19 +2701,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel3dataFin() {
+    private void fetchLevel3dataFin(String aID) {
         try {
 
             level3list = new ArrayList<>();
-
-            String where = " where level2 like " + "'" + valLevel2 + "'";
-            String Level3 = "level3";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level3,DbHelper.TABLE_FINANCE, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "2" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String branch = "";
-                    branch = cursor1.getString(cursor1.getColumnIndex("level3"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level3list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2260,18 +2753,16 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel4data() {
+    private void fetchLevel4data(String aID) {
         try {
             level4list = new ArrayList<>();
-
-            String where = " where level3 like " + "'" + valLevel3 + "'";
-            String Level4 = "level4";
             String branch = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_FINANCE, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2322,19 +2813,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel5data() {
+    private void fetchLevel5data(String aID) {
         try {
 
             level5list = new ArrayList<>();
-
-            String where = " where level4 like " + "'" + valLevel4 + "'";
-            String Level5 = "level5";
             String branch = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_FINANCE, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level5list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2383,18 +2872,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel6data() {
+    private void fetchLevel6data(String aID) {
         try {
 
             level6list = new ArrayList<>();
             String branch = "";
-            String where = " where level5 like " + "'" + valLevel5 + "'";
-            String Level6 = "level6";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_FINANCE, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level6list.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2446,14 +2934,13 @@ public class UploadFragment extends Fragment {
     private void fetchLevel4dataHR() {
         try {
             level4listHR = new ArrayList<>();
-
-            String Level4 = "level4";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_HR);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String hr = "";
-                    hr = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    hr = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4listHR.add(hr);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2495,19 +2982,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel5dataHR() {
+    private void fetchLevel5dataHR(String aID) {
         try {
 
             level5listHR = new ArrayList<>();
-
-            String where = " where level4 like " + "'" + valLevel4 + "'";
-            String Level5 = "level5";
             String level5 = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_HR, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    level5 = cursor1.getString(cursor1.getColumnIndex("text"));
                     level5listHR.add(level5);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2550,18 +3035,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel6dataHR() {
+    private void fetchLevel6dataHR(String aID) {
         try {
 
             level6listHR = new ArrayList<>();
             String branch = "";
-            String where = " where level5 like " + "'" + valLevel5 + "'";
-            String Level6 = "level6";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_HR, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level6listHR.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2614,13 +3098,13 @@ public class UploadFragment extends Fragment {
         try {
             level4listCMD = new ArrayList<>();
 
-            String Level4 = "level4";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_CMD);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String cmd = "";
-                    cmd = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    cmd = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4listCMD.add(cmd);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2662,19 +3146,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel5dataCMD() {
+    private void fetchLevel5dataCMD(String aID) {
         try {
             level5listCMD = new ArrayList<>();
-
-            String where = " where level4 like " + "'" + valLevel4 + "'";
-            String Level5 = "level5";
-            String level5 = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_CMD, where);
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
-                    level5listCMD.add(level5);
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listCMD.add(temp);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
@@ -2723,18 +3205,18 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel6dataCMD() {
+    private void fetchLevel6dataCMD(String aID) {
         try {
 
             level6listCMD = new ArrayList<>();
             String branch = "";
-            String where = " where level5 like " + "'" + valLevel5 + "'";
-            String Level6 = "level6";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_CMD, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "6" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level6listCMD.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2783,18 +3265,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel7dataCMD() {
+    private void fetchLevel7dataCMD(String aID) {
         try {
 
             level7listCMD = new ArrayList<>();
             String branch = "";
-            String where = " where level6 like " + "'" + valLevel6 + "'";
-            String Level7 = "level7";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level7,DbHelper.TABLE_CMD, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "7" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level7"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level7listCMD.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2847,13 +3328,13 @@ public class UploadFragment extends Fragment {
         try {
             level2listCS = new ArrayList<>();
 
-            String Level2 = "level2";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level2,DbHelper.TABLE_CS);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "1" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String branch = "";
-                    branch = cursor1.getString(cursor1.getColumnIndex("level2"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level2listCS.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2895,18 +3376,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel3dataCS() {
+    private void fetchLevel3dataCS(String aID) {
         try {
             level3listCS = new ArrayList<>();
 
-            String where = " where level2 like " + "'" + valLevel2 + "'";
-            String Level3 = "level3";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level3,DbHelper.TABLE_CS, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "2" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String branch = "";
-                    branch = cursor1.getString(cursor1.getColumnIndex("level3"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level3listCS.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -2948,18 +3428,16 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel4dataCS() {
+    private void fetchLevel4dataCS(String aID) {
         try {
             level4listCS = new ArrayList<>();
-
-            String where = " where level3 like " + "'" + valLevel3 + "'";
-            String Level4 = "level4";
             String branch = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_CS, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4listCS.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3014,13 +3492,14 @@ public class UploadFragment extends Fragment {
         try {
             level4listMAR = new ArrayList<>();
 
-            String Level4 = "level4";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_MAR);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String mar = "";
-                    mar = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    mar = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4listMAR.add(mar);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3062,20 +3541,18 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel5dataMAR() {
+    private void fetchLevel5dataMAR(String aID) {
         try {
 
             level5listMAR = new ArrayList<>();
-
-            String where = " where level4 like " + "'" + valLevel4 + "'";
-            String Level5 = "level5";
-            String level5 = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_MAR, where);
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
-                    level5listMAR.add(level5);
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listMAR.add(temp);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
@@ -3124,17 +3601,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel6dataMAR() {
+    private void fetchLevel6dataMAR(String aID) {
         try {
             level6listMAR = new ArrayList<>();
             String branch = "";
-            String where = " where level5 like " + "'" + valLevel5 + "'";
-            String Level6 = "level6";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_MAR, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level6listMAR.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3183,18 +3660,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel7dataMAR() {
+    private void fetchLevel7dataMAR(String aID) {
         try {
 
             level7listMAR = new ArrayList<>();
             String branch = "";
-            String where = " where level6 like " + "'" + valLevel6 + "'";
-            String Level7 = "level7";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level7,DbHelper.TABLE_MAR, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "6" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level7"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level7listMAR.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3247,13 +3723,14 @@ public class UploadFragment extends Fragment {
         try {
             level3listPER = new ArrayList<>();
 
-            String Level3 = "level3";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level3,DbHelper.TABLE_PER);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "2" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String branch = "";
-                    branch = cursor1.getString(cursor1.getColumnIndex("level3"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level3listPER.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3295,18 +3772,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel4dataPER() {
+    private void fetchLevel4dataPER(String aID) {
         try {
             level4listPER = new ArrayList<>();
-
-            String where = " where level3 like " + "'" + valLevel3 + "'";
-            String Level4 = "level4";
             String branch = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level4,DbHelper.TABLE_PER, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4listPER.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3357,18 +3833,17 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel5dataPER() {
+    private void fetchLevel5dataPER(String aID) {
         try {
             level5listPER = new ArrayList<>();
-
-            String where = " where level4 like " + "'" + valLevel4 + "'";
-            String Level5 = "level5";
             String branch = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_PER, where);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level5"));
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
                     level5listPER.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3421,13 +3896,14 @@ public class UploadFragment extends Fragment {
         try {
             level4listLEGAL = new ArrayList<>();
 
-            String Level4 = "level4";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinct(Level4,DbHelper.TABLE_LEGAL);
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
                     String legal = "";
-                    legal = cursor1.getString(cursor1.getColumnIndex("level4"));
+                    legal = cursor1.getString(cursor1.getColumnIndex("text"));
                     level4listLEGAL.add(legal);
                 } while (cursor1.moveToNext());
                 cursor1.close();
@@ -3469,20 +3945,19 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel5dataLEGAL() {
+    private void fetchLevel5dataLEGAL(String aID) {
         try {
 
             level5listLEGAL = new ArrayList<>();
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
 
-            String where = " where level4 like " + "'" + valLevel4 + "'";
-            String Level5 = "level5";
-            String level5 = "";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level5,DbHelper.TABLE_LEGAL, where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    level5 = cursor1.getString(cursor1.getColumnIndex("level5"));
-                    level5listLEGAL.add(level5);
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listLEGAL.add(temp);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
@@ -3524,23 +3999,22 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel6dataLEGAL() {
+    private void fetchLevel6dataLEGAL(String aID) {
         try {
             level6listLEGAL = new ArrayList<>();
-            String branch = "";
-            String where = " where level5 like " + "'" + valLevel5 + "'";
-            String Level6 = "level6";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level6,DbHelper.TABLE_LEGAL, where);
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level6"));
-                    level6listLEGAL.add(branch);
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level6listLEGAL.add(temp);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
+            if(temp.equals("null")) {
                 chk = "no";
                 return;
             } else {
@@ -3583,23 +4057,22 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    private void fetchLevel7dataLEGAL() {
+    private void fetchLevel7dataLEGAL(String aID) {
         try {
             level7listLEGAL = new ArrayList<>();
-            String branch = "";
-            String where = " where level6 like " + "'" + valLevel6 + "'";
-            String Level7 = "level7";
-            Cursor cursor1 = KHIL.dbCon.fetchFromSelectDistinctWhere(Level7,DbHelper.TABLE_LEGAL, where);
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "6" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
                 do {
-                    branch = cursor1.getString(cursor1.getColumnIndex("level7"));
-                    level7listLEGAL.add(branch);
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level7listLEGAL.add(temp);
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
+            if(temp.equals("null")) {
                 chk = "no";
                 return;
             } else {
@@ -3761,18 +4234,129 @@ public class UploadFragment extends Fragment {
             cursor3.close();
         }
 
-        listLoc = new ArrayList<>();
-        String location = "";
-        Cursor cursor4 = KHIL.dbCon.fetchFromSelectDistinct(text,DbHelper.M_Location);
-        if (cursor4 != null && cursor4.getCount() > 0) {
-            cursor4.moveToFirst();
+
+
+    }
+
+    private void FetchLeveldata(){
+        listLevelData = new ArrayList<>();
+        String where = " where role_ID = " + "'" + roleID + "'";
+        Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+        if (cursor1 != null && cursor1.getCount() > 0) {
+            cursor1.moveToFirst();
             do {
-                location = cursor4.getString(cursor4.getColumnIndex("text"));
-                listLoc.add(location);
-            } while (cursor4.moveToNext());
-            cursor4.close();
+                leveldataModel = new LeveldataModel();
+                leveldataModel.setId(cursor1.getString(cursor1.getColumnIndex("id")));
+                leveldataModel.setValue(cursor1.getString(cursor1.getColumnIndex("value")));
+                leveldataModel.setText(cursor1.getString(cursor1.getColumnIndex("text")));
+                leveldataModel.setParentRef(cursor1.getString(cursor1.getColumnIndex("parent_Ref")));
+                leveldataModel.setaID(cursor1.getString(cursor1.getColumnIndex("aID")));
+                leveldataModel.setRoleID(cursor1.getString(cursor1.getColumnIndex("role_ID")));
+                leveldataModel.setDataLevel(cursor1.getString(cursor1.getColumnIndex("data_level")));
+                leveldataModel.setQuaterId(cursor1.getString(cursor1.getColumnIndex("quater_Id")));
+                listLevelData.add(leveldataModel);
+            } while (cursor1.moveToNext());
+            cursor1.close();
+        }
+    }
+
+    public int getAllSubmitData() {
+        Cursor cursor = null;
+        int size = 0;
+
+        submitDatalist = new ArrayList<>();
+        submitDatalist.clear();
+        try {
+            // WHERE clause
+            String where = " where last_sync = '0'"+" and user_id = '" + loginId + "'";
+
+            cursor = KHIL.dbCon.fetchFromSelect(DbHelper.TABLE_UPLOAD, where);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                do {
+                    uploadModel = createUploadModel(cursor);
+                    submitDatalist.add(uploadModel);
+                } while(cursor.moveToNext());
+                cursor.close();
+                size = submitDatalist.size();
+            } else {
+                size = 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
+    private SoapPrimitive SyncAllData(){
+        SoapPrimitive objLead = null;
+        SoapPrimitive object = null;
+
+        SOAPWebservice webService = new SOAPWebservice(getActivity());
+        for (int k =0;k<submitDatalist.size();k++){
+            uploadModel = submitDatalist.get(k);
+            objLead = webService.Insert_upload(uploadModel.getRoleID(),uploadModel.getLegalEntityID(),uploadModel.getPropertyID(),
+                    uploadModel.getLocationID(),uploadModel.getDoc_no(),uploadModel.getLoginId(), uploadModel.getLoginId(),uploadModel.getDate(),uploadModel.getDate(),
+                    uploadModel.getIndividualID(),uploadModel.getNewProposal(),"",uploadModel.getTxtL2Id(),uploadModel.getTxtL3Id(),
+                    uploadModel.getTxtL4Id(),uploadModel.getTxtL5Id(),uploadModel.getTxtL6Id(),uploadModel.getTxtL7Id(),
+                    uploadModel.getYear(),uploadModel.getQuarter(),uploadModel.getMonth(),uploadModel.getFileUp(),uploadModel.getFilePath(),
+                    uploadModel.getFilePath()+uploadModel.getFileUp(), uploadModel.getFileExtension());
+            String id =  String.valueOf(objLead);
+            if (id.equalsIgnoreCase("null") || id.equals(null) || id.contains("ERROR")){
+                String strLastSync = "0";
+                String selection = "file = ?";
+                String[] selectionArgs = {uploadModel.getFileUp()};
+                String valuesArray[] = {strLastSync};
+                String[] columnNames = {"last_sync"};
+                boolean result = KHIL.dbCon.updateBulk(DbHelper.TABLE_UPLOAD, selection, valuesArray, columnNames, selectionArgs);
+                if (result) {
+                    System.out.println("Upload details are added");
+                } else {
+                    System.out.println("FAILURE..!!");
+                }
+            }else {
+                String strLastSync = "1";
+                String selection = "file = ?";
+
+                String[] selectionArgs = {uploadModel.getFileUp()};
+                String valuesArray[] = {id,strLastSync};
+                String[] columnNames = {"trans_id","last_sync"};
+                boolean result = KHIL.dbCon.updateBulk(DbHelper.TABLE_UPLOAD, selection, valuesArray, columnNames, selectionArgs);
+                if (result) {
+                    System.out.println("Upload details are added");
+                } else {
+                    System.out.println("FAILURE..!!");
+                }
+            }
         }
 
 
+        return objLead;
+    }
+    private class SaveInsertUpdate extends AsyncTask<Void, Void, SoapPrimitive> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            progress.setMessage("Please wait ...");
+//            progress.show();
+        }
+
+        @Override
+        protected SoapPrimitive doInBackground(Void... params) {
+            SoapPrimitive soapObject = null;
+
+            SoapPrimitive object = SyncAllData();
+
+            return soapObject;
+        }
+        @Override
+        protected void onPostExecute(SoapPrimitive soapObject) {
+            super.onPostExecute(soapObject);
+//            progress.dismiss();
+
+
+        }
     }
 }

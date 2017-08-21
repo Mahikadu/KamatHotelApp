@@ -96,6 +96,66 @@ public class SOAPWebservice {
 		}
 	}
 
+	// TODO: insert upload web service
+	public SoapPrimitive Insert_upload(String Role_Id, String Legal_Entity_Id,
+								   String Property_Id, String Location_Id, String Document_No,
+								   String Created_By, String Updated_By, String Created_Date, String Updated_Date,
+								   String Individuals_Id, String NewProposal, String Trans_Id, String Level2_Id, String Level3_Id,
+								   String Level4_Id, String Level5_Id, String Level6_Id, String Level7_Id, String Year, String Quarter,
+								   String Month, String File_Name, String File_Path, String File_Path_File_Name, String File_Exten) {
+		SoapPrimitive result = null;
+
+		try {
+			SoapObject request = new SoapObject("http://tempuri.org/",
+					"Insert_Upload");// soap object
+			request.addProperty("Role_Id", Role_Id);
+			request.addProperty("Legal_Entity_Id", Legal_Entity_Id);
+			request.addProperty("Property_Id", Property_Id);
+			request.addProperty("Location_Id", Location_Id);
+			request.addProperty("Document_No", Document_No);
+			request.addProperty("Created_By", Created_By);
+			request.addProperty("Updated_By", Updated_By);
+			request.addProperty("Created_Date", Created_Date);
+			request.addProperty("Updated_Date", Updated_Date);
+			request.addProperty("Individuals_Id", Individuals_Id);
+			request.addProperty("NewProposal", NewProposal);
+			request.addProperty("Trans_Id", Trans_Id);
+			request.addProperty("Level2_Id", Level2_Id);
+			request.addProperty("Level3_Id", Level3_Id);
+			request.addProperty("Level4_Id", Level4_Id);
+			request.addProperty("Level5_Id", Level5_Id);
+			request.addProperty("Level6_Id", Level6_Id);
+			request.addProperty("Level7_Id", Level7_Id);
+			request.addProperty("Year", Year);
+			request.addProperty("Quarter", Quarter);
+			request.addProperty("Month", Month);
+			request.addProperty("File_Name", File_Name);
+			request.addProperty("File_Path", File_Path);
+			request.addProperty("File_Path_File_Name", File_Path_File_Name);
+			request.addProperty("File_Exten", File_Exten);
+
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);// soap envelop with version
+			envelope.setOutputSoapObject(request); // set request object
+			envelope.dotNet = true;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);// http
+			// transport
+			// call
+			androidHttpTransport.call("http://tempuri.org/IService1/Insert_Upload",
+					envelope);
+
+			// response soap object
+			result = (SoapPrimitive) envelope.getResponse();
+			Log.e("result Insert_Upload", result.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+	}
 
 
 }

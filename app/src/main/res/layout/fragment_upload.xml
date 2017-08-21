@@ -754,6 +754,7 @@
 
 
                 <HorizontalScrollView
+                    android:id="@+id/horizonScroll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -782,7 +783,18 @@
                             android:visibility="gone" />
                     </LinearLayout>
                 </HorizontalScrollView>
-
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_corner_orrange_bg"
+            android:padding="15dp"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            android:text="Submit"
+            android:layout_gravity="right"
+            android:layout_marginRight="6dp"/>
     </LinearLayout>
     </ScrollView>
 

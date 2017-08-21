@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.Settings;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     SOAPWebservice ws;
     ProgressDialog progress;
     private String strUpdatedDate = "";
-    private String value, text, parent_Ref, updated_date,date,roleId;
+    private String value, text, parent_Ref, updated_date,date,roleId,property_id;
     private SimpleDateFormat dateFormatter;
 
     @Override
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         ws = new SOAPWebservice(context);
         utils = new Utils(context);
         progress = new ProgressDialog(context);
-        dateFormatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         date = dateFormatter.format(cal.getTime());
 
@@ -305,16 +306,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+                String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Legal_Entity, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();
+                result = ws.MasterSyncservice("1",strUpdatedDate,uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("1",strUpdatedDate,uname,roleId);
             return result;
         }
 
@@ -401,17 +408,25 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+                String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Property, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();
+                result = ws.MasterSyncservice("2",strUpdatedDate,uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("2",strUpdatedDate,uname,roleId);
             return result;
+
+
         }
 
         @Override
@@ -506,17 +521,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+                String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Location, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();
+                result = ws.MasterSyncservice("3",strUpdatedDate,uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("3",strUpdatedDate,uname,roleId);
             return result;
+
         }
 
         @Override
@@ -556,13 +578,23 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 text = "";
                             }
+                            if (root.getPropertyAsString("Property_Id") != null) {
+
+                                if (!root.getPropertyAsString("Property_Id").equalsIgnoreCase("anyType{}")) {
+                                    property_id = root.getPropertyAsString("Property_Id");
+                                } else {
+                                    property_id = "";
+                                }
+                            } else {
+                                property_id = "";
+                            }
 
                             String selection = "id = ?";
                             id = id+1;
                             // WHERE clause arguments
                             String[] selectionArgs = {id+""};
-                            //            "id","value", "text", "parent_Ref", "updated_date"
-                            String valuesArray[] = {id+"", value, text, date};
+                            //            "id","value", "text", "property_id", "updated_date"
+                            String valuesArray[] = {id+"", value, text,property_id,date};
                             boolean output = KHIL.dbCon.updateBulk(DbHelper.M_Location, selection, valuesArray, utils.columnNamesM_Location, selectionArgs);
 
                         }
@@ -590,17 +622,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+                String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Year, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();
+                result = ws.MasterSyncservice("4",strUpdatedDate,uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("4",strUpdatedDate,uname,roleId);
             return result;
+
         }
 
         @Override
@@ -674,17 +713,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+                String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Quater, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();
+                result = ws.MasterSyncservice("5",strUpdatedDate,uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("5",strUpdatedDate,uname,roleId);
             return result;
+
         }
 
         @Override
@@ -758,17 +804,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+                String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Month, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();
+                result = ws.MasterSyncservice("6",strUpdatedDate,uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("6",strUpdatedDate,uname,roleId);
             return result;
+
         }
 
         @Override
@@ -851,17 +904,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected SoapObject doInBackground(Void... params) {
 
-           /* Cursor cursor = IDBILifeInsurance.dbCon.fetchLastRow(DbHelper.TABLE_M_DISTRIBUTION, orderBy, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
+            SoapObject result = null;
+            try {
+               /* String orderBy = "id";
+                Cursor cursor = KHIL.dbCon.fetchLastRow(DbHelper.M_Level_Data, orderBy, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    strUpdatedDate = cursor.getString(cursor.getColumnIndex("updated_date"));
 
-            } else {
-                strUpdatedDate = "";
+                } else {
+                    strUpdatedDate = "";
+                }
+                cursor.close();*/
+                result = ws.MasterSyncservice("7","",uname,roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            cursor.close();*/
-            SoapObject result = ws.MasterSyncservice("7",strUpdatedDate,uname,roleId);
             return result;
+
         }
 
         @Override
@@ -876,6 +936,8 @@ public class MainActivity extends AppCompatActivity {
                 if (responseId2.contains("ERROR")) {
 //                    displayMessage(responseId2);
                 } else {
+
+//                    boolean deletAll = KHIL.dbCon.alterTable(DbHelper.M_Level_Data);
 
                     try {
                         int id = 0;

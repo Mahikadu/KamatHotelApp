@@ -21,8 +21,9 @@ public class Utils {
 
     public Utils(Context mContext) {
         this.mContext = mContext;
-        String[] uploadArray = {"id","user_id", "legal_entity", "property", "col_year", "quarter", "col_month", "location", "fileName",
-                "level2", "level3", "level4", "level5", "level6", "level7"};
+        String[] uploadArray = {"id","user_id", "legal_entity","individuals","new_proposal", "property", "col_year", "quarter", "col_month", "location", "fileName",
+                "level2", "level3", "level4", "level5", "level6", "level7","level2Id", "level3Id", "level4Id", "level5Id", "level6Id", "level7Id","role_Id",
+                "legalEntityID","propertyID","individualID","locationID","doc_no","file","file_path","file_extension","trans_id","updated_date","last_sync"};
         columnNamesUpload = Arrays.copyOf(uploadArray, uploadArray.length);
 
 
@@ -32,7 +33,7 @@ public class Utils {
         String[] master2Array = {"id","value", "text", "parent_Ref","legal_Entity_Id","updated_date"};
         columnNamesM_Property = Arrays.copyOf(master2Array, master2Array.length);
 
-        String[] master3Array = {"id","value", "text","updated_date"};
+        String[] master3Array = {"id","value", "text","property_id","updated_date"};
         columnNamesM_Location = Arrays.copyOf(master3Array, master3Array.length);
 
         String[] master4Array = {"id","value", "text","updated_date"};
