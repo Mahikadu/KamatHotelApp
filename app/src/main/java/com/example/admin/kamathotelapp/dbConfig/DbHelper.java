@@ -359,7 +359,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (db != null && !db.isOpen())
             open();
         ContentValues updateValues = createContentValues(values, names);
-        Log.d("Update Query=>", updateValues.toString());
+//        Log.d("Update Query=>", updateValues.toString());
 
         boolean isUpdated = false;
         try {

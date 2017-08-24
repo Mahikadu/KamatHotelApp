@@ -102,7 +102,7 @@ public class SOAPWebservice {
 								   String Created_By, String Updated_By, String Created_Date, String Updated_Date,
 								   String Individuals_Id, String NewProposal, String Trans_Id, String Level2_Id, String Level3_Id,
 								   String Level4_Id, String Level5_Id, String Level6_Id, String Level7_Id, String Year, String Quarter,
-								   String Month, String File_Name, String File_Path, String File_Path_File_Name, String File_Exten) {
+								   String Month, String File_Name, String File_Path, String File_Path_File_Name, String File_Exten,String base64String) {
 		SoapPrimitive result = null;
 
 		try {
@@ -133,6 +133,7 @@ public class SOAPWebservice {
 			request.addProperty("File_Path", File_Path);
 			request.addProperty("File_Path_File_Name", File_Path_File_Name);
 			request.addProperty("File_Exten", File_Exten);
+			request.addProperty("base64String", base64String);
 
 
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(

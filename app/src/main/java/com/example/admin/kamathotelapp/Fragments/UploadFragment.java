@@ -10,15 +10,20 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.text.Html;
+import android.util.Base64;
+import android.util.Base64OutputStream;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,9 +62,12 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,12 +164,11 @@ public class UploadFragment extends Fragment {
     private List<String> level4listMAR, level5listMAR, level6listMAR, level7listMAR;
     private List<String> level3listPER, level4listPER, level5listPER;
     private List<String> level4listLEGAL, level5listLEGAL, level6listLEGAL, level7listLEGAL;
-    String chk = "";
     String manufactures = android.os.Build.MANUFACTURER;
     String filePath;
     public static CardView cardlevel2, cardlevel3,cardlevel4,cardlevel5,cardlevel6,cardlevel7,cardNewProposal,cardIndividuals,cardProperty;
     public static TextInputLayout level2txtlayout, level3txtlayout,level4txtlayout,level5txtlayout,level6txtlayout,level7txtlayout;
-    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, headLev7, viewFile;
+    public TextView headLev2, headLev3, headLev4, headLev5, headLev6, viewFile;// headLev7,
     public static TextView txtNoFile;
     public static TextView no_files;
     private static final int PICKFILE_RESULT_CODE = 1;
@@ -249,7 +256,7 @@ public class UploadFragment extends Fragment {
         headLev4 = (TextView) view.findViewById(R.id.level4);
         headLev5 = (TextView) view.findViewById(R.id.level5);
         headLev6 = (TextView) view.findViewById(R.id.level6);
-        headLev7 = (TextView) view.findViewById(R.id.level7);
+//        headLev7 = (TextView) view.findViewById(R.id.level7);
         viewFile = (TextView) view.findViewById(R.id.txtViewFile);
 
         listUpload = (ListView) view.findViewById(R.id.listViewUpload);
@@ -966,13 +973,13 @@ public class UploadFragment extends Fragment {
 
         if(loginId.equalsIgnoreCase("finance") && password.equalsIgnoreCase("password")) {
 
-            headLev2.setText("Type (Level 2)");
-            headLev3.setText("TypeDesc (Level 3)");
-            headLev4.setText("Level 4");
-            headLev5.setText("Level 5");
-            headLev6.setText("Level 6");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
 //            headLev7.setVisibility(View.GONE);
-            headLev7.setText("Level 7");
+//            headLev7.setText("Level 7");
             txtL2.setHint("Financial Type");
             fetchLevel2dataFin();
 
@@ -1066,11 +1073,11 @@ public class UploadFragment extends Fragment {
                         }
                         if (valLevel3 != null && valLevel3.length() > 0) {
                             fetchLevel4data(aid);
-                            if(chk.equals("no")) {
-                                cardlevel4.setVisibility(View.GONE);
-                            } else {
+                            if(level4list.size()>0){
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                            }else {
+                                cardlevel4.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -1114,11 +1121,11 @@ public class UploadFragment extends Fragment {
                         }
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5data(aid);
-                            if(chk.equals("no")) {
-                                cardlevel5.setVisibility(View.GONE);
-                            } else if(chk.equals("yes")) {
+                            if (level5list.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                            }else {
+                                cardlevel5.setVisibility(View.GONE);
                             }
                         }
 
@@ -1160,10 +1167,10 @@ public class UploadFragment extends Fragment {
                         }
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6data(aid);
-                            if(chk.equals("yes")) {
+                            if (level6list.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -1209,12 +1216,13 @@ public class UploadFragment extends Fragment {
 
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
-            headLev2.setText("Level 2");
-            headLev3.setText("Level 3");
-            headLev4.setText("Type (Level 4)");
-            headLev5.setText("TypeDesc (Level 5)");
-            headLev6.setText("Level 6");
-            headLev7.setText("Level7");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
+
+//            headLev7.setText("Level7");
 //            headLev7.setVisibility(View.GONE);
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
@@ -1294,10 +1302,10 @@ public class UploadFragment extends Fragment {
                         }
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataHR(aid);
-                            if(chk.equals("yes")) {
+                            if (level6listHR.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -1338,12 +1346,12 @@ public class UploadFragment extends Fragment {
 
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
-            headLev2.setText("Level 2");
-            headLev3.setText("Level 3");
-            headLev4.setText("Type (Level 4)");
-            headLev5.setText("TypeDesc (Level 5)");
-            headLev6.setText("Level 6");
-            headLev7.setText("Level 7");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
+//            headLev7.setText("Level 7");
 
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
@@ -1388,14 +1396,12 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataCMD(aid);
-
-                            if(chk.equals("yes")) {
+                            if (level5listCMD.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel5.setVisibility(View.GONE);
                             }
-
                         }
                     }
                 }
@@ -1431,10 +1437,10 @@ public class UploadFragment extends Fragment {
                         }
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataCMD(aid);
-                            if(chk.equals("yes")) {
+                            if (level6listCMD.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -1470,10 +1476,10 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
                             fetchLevel7dataCMD(aid);
-                            if(chk.equals("yes")) {
+                            if (level7listCMD.size()>0){
                                 level7txtlayout.setHint(valLevel5);
                                 cardlevel7.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel7.setVisibility(View.GONE);
                             }
                         }
@@ -1509,16 +1515,17 @@ public class UploadFragment extends Fragment {
             });
         } else if(loginId.equalsIgnoreCase("cs") && password.equalsIgnoreCase("password")) {
 
-            headLev2.setText("Type (Level 2)");
-            headLev3.setText("TypeDesc (Level 3)");
-            headLev4.setText("Level 4");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
 
 //            headLev5.setVisibility(View.GONE);
 //            headLev6.setVisibility(View.GONE);
 //            headLev7.setVisibility(View.GONE);
-            headLev5.setText("Level 5");
-            headLev6.setText("Level 6");
-            headLev7.setText("Level 7");
+
+//            headLev7.setText("Level 7");
 
             fetchLevel2dataCS();
             txtL2.setHint("Type");
@@ -1609,11 +1616,11 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel3 != null && valLevel3.length() > 0) {
                             fetchLevel4dataCS(aid);
-                            if(chk.equals("no")) {
-                                cardlevel4.setVisibility(View.GONE);
-                            } else {
+                            if (level4listCS.size()>0){
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                            }else {
+                                cardlevel4.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -1654,14 +1661,15 @@ public class UploadFragment extends Fragment {
             });
         } else if(loginId.equalsIgnoreCase("marketing") && password.equalsIgnoreCase("password")) {
 
-            headLev2.setText("Level 2");
-            headLev3.setText("Level 3");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
-            headLev4.setText("Type (Level 4)");
-            headLev5.setText("TypeDesc (Level 5)");
-            headLev6.setText("Level 6");
-            headLev7.setText("Level 7");
+
+//            headLev7.setText("Level 7");
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
 
@@ -1704,13 +1712,12 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataMAR(aid);
-                            if(chk.equals("yes")) {
+                            if (level5listMAR.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel5.setVisibility(View.GONE);
                             }
-
                         }
                     }
                 }
@@ -1747,10 +1754,10 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataMAR(aid);
-                            if(chk.equals("yes")) {
+                            if (level6listMAR.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -1786,10 +1793,10 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
                             fetchLevel7dataMAR(aid);
-                            if(chk.equals("yes")) {
+                            if (level7listMAR.size()>0){
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel7.setVisibility(View.GONE);
                             }
                         }
@@ -1825,13 +1832,14 @@ public class UploadFragment extends Fragment {
             });
 
         } else if(loginId.equalsIgnoreCase("Personal") && password.equalsIgnoreCase("password")) {
-            headLev2.setText("Level 2");
+
 //            headLev2.setVisibility(View.GONE);
-            headLev3.setText("Type (Level 3)");
-            headLev4.setText("TypeDesc (Level 4)");
-            headLev5.setText("Level 5");
-            headLev6.setText("Level 6");
-            headLev7.setText("Level 7");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
+//            headLev7.setText("Level 7");
             /*headLev6.setVisibility(View.GONE);
             headLev7.setVisibility(View.GONE);*/
 
@@ -1880,11 +1888,11 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel3 != null && valLevel3.length() > 0) {
                             fetchLevel4dataPER(aid);
-                            if(chk.equals("no")) {
-                                cardlevel4.setVisibility(View.GONE);
-                            } else {
+                            if (level4listPER.size()>0){
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                            }else {
+                                cardlevel4.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -1927,14 +1935,13 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel4 != null && valLevel4.length() > 0) {
                             fetchLevel5dataPER(aid);
-                            if(chk.equals("no")) {
-                                cardlevel5.setVisibility(View.GONE);
-                            } else if(chk.equals("yes")) {
+                            if (level5listPER.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                            }else {
+                                cardlevel5.setVisibility(View.GONE);
                             }
                         }
-
                     }
                 }
             });
@@ -1970,14 +1977,15 @@ public class UploadFragment extends Fragment {
                 }
             });
         } else if(loginId.equalsIgnoreCase("legal") && password.equalsIgnoreCase("password")) {
-            headLev2.setText("Level 2");
-            headLev3.setText("Level 3");
+            headLev2.setText("Type of Document");
+            headLev3.setText("Selected Document");
+            headLev4.setText("Supporting Document");
+            headLev5.setText("ANNEXURE");
+            headLev6.setText("Licenses");
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
-            headLev4.setText("Type (Level 4)");
-            headLev5.setText("TypeDesc (Level 5)");
-            headLev6.setText("Level 6");
-            headLev7.setText("Level 7");
+
+//            headLev7.setText("Level 7");
 
             cardlevel2.setVisibility(View.GONE);
             cardlevel3.setVisibility(View.GONE);
@@ -2055,10 +2063,10 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel5 != null && valLevel5.length() > 0) {
                             fetchLevel6dataLEGAL(aid);
-                            if(chk.equals("yes")) {
+                            if (level6listLEGAL.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
                         }
@@ -2094,10 +2102,10 @@ public class UploadFragment extends Fragment {
 
                         if (valLevel6 != null && valLevel6.length() > 0) {
                             fetchLevel7dataLEGAL(aid);
-                            if(chk.equals("yes")) {
+                            if (level7listLEGAL.size()>0){
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
-                            } else if(chk.equals("no")) {
+                            }else {
                                 cardlevel7.setVisibility(View.GONE);
                             }
                         }
@@ -2425,7 +2433,7 @@ public class UploadFragment extends Fragment {
             fileUp = fileUp+"_"+txtL7Id;
         }
 
-        fileUp = fileUp+fileName;
+        fileUp = fileUp+"_"+fileName;
         String strLastSync = "0";
         String selection = "id = ?";
         String id = "";
@@ -2457,7 +2465,7 @@ public class UploadFragment extends Fragment {
         uploadModelList.clear();
         uploadModel = new UploadModel();
 
-        String where = " where user_id = '" + loginId + "'";
+        String where = " where user_id = '" + loginId + "'"+"and last_sync = 0";
         cursor = KHIL.dbCon.fetchFromSelect(DbHelper.TABLE_UPLOAD, where);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -2705,7 +2713,7 @@ public class UploadFragment extends Fragment {
         try {
 
             level3list = new ArrayList<>();
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "2" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "2" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -2757,7 +2765,7 @@ public class UploadFragment extends Fragment {
         try {
             level4list = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "3" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -2768,16 +2776,9 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
 
             Collections.sort(level4list);
             if (level4list.size() > 0) {
-                chk = "yes";
                 strLevel4Array = new String[level4list.size()];
                 for (int i = 0; i < level4list.size(); i++) {
                     strLevel4Array[i] = level4list.get(i);
@@ -2818,7 +2819,7 @@ public class UploadFragment extends Fragment {
 
             level5list = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "4" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -2829,12 +2830,6 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
             Collections.sort(level5list);
             if (level5list.size() > 0) {
                 strLevel5Array = new String[level5list.size()];
@@ -2877,7 +2872,7 @@ public class UploadFragment extends Fragment {
 
             level6list = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";//"'" + "and data_level = "+ "'" + "5" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -2888,12 +2883,6 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
             Collections.sort(level6list);
             if (level6list.size() > 0) {
                 strLevel6Array = new String[level6list.size()];
@@ -2987,7 +2976,7 @@ public class UploadFragment extends Fragment {
 
             level5listHR = new ArrayList<>();
             String level5 = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "4" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3040,7 +3029,7 @@ public class UploadFragment extends Fragment {
 
             level6listHR = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";//"'" + "and data_level = "+ "'" + "5" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3049,13 +3038,6 @@ public class UploadFragment extends Fragment {
                     level6listHR.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
-            }
-
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
             }
             Collections.sort(level6listHR);
             if (level6listHR.size() > 0) {
@@ -3150,7 +3132,7 @@ public class UploadFragment extends Fragment {
         try {
             level5listCMD = new ArrayList<>();
             String temp = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "5" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3160,14 +3142,6 @@ public class UploadFragment extends Fragment {
                 } while (cursor1.moveToNext());
                 cursor1.close();
             }
-
-            if(level5.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
-
             Collections.sort(level5listCMD);
             if (level5listCMD.size() > 0) {
                 strLevel5ArrayCMD = new String[level5listCMD.size()];
@@ -3210,7 +3184,7 @@ public class UploadFragment extends Fragment {
 
             level6listCMD = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "6" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "6" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
 
             if (cursor1 != null && cursor1.getCount() > 0) {
@@ -3220,13 +3194,6 @@ public class UploadFragment extends Fragment {
                     level6listCMD.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
-            }
-
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
             }
             Collections.sort(level6listCMD);
             if (level6listCMD.size() > 0) {
@@ -3270,7 +3237,7 @@ public class UploadFragment extends Fragment {
 
             level7listCMD = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "7" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "7" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3281,12 +3248,6 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
             Collections.sort(level7listCMD);
             if (level7listCMD.size() > 0) {
                 strLevel7ArrayCMD = new String[level7listCMD.size()];
@@ -3380,7 +3341,7 @@ public class UploadFragment extends Fragment {
         try {
             level3listCS = new ArrayList<>();
 
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "2" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//"and data_level = "+ "'" + "2" +
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3432,7 +3393,7 @@ public class UploadFragment extends Fragment {
         try {
             level4listCS = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "3"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3443,16 +3404,8 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
-
             Collections.sort(level4listCS);
             if (level4listCS.size() > 0) {
-                chk = "yes";
                 strLevel4ArrayCS = new String[level4listCS.size()];
                 for (int i = 0; i < level4listCS.size(); i++) {
                     strLevel4ArrayCS[i] = level4listCS.get(i);
@@ -3546,7 +3499,7 @@ public class UploadFragment extends Fragment {
 
             level5listMAR = new ArrayList<>();
             String temp = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "4" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3555,13 +3508,6 @@ public class UploadFragment extends Fragment {
                     level5listMAR.add(temp);
                 } while (cursor1.moveToNext());
                 cursor1.close();
-            }
-
-            if(level5.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
             }
 
             Collections.sort(level5listMAR);
@@ -3605,7 +3551,7 @@ public class UploadFragment extends Fragment {
         try {
             level6listMAR = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "5" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
 
             if (cursor1 != null && cursor1.getCount() > 0) {
@@ -3615,13 +3561,6 @@ public class UploadFragment extends Fragment {
                     level6listMAR.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
-            }
-
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
             }
             Collections.sort(level6listMAR);
             if (level6listMAR.size() > 0) {
@@ -3665,7 +3604,7 @@ public class UploadFragment extends Fragment {
 
             level7listMAR = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "6" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "6" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -3674,13 +3613,6 @@ public class UploadFragment extends Fragment {
                     level7listMAR.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
-            }
-
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
             }
             Collections.sort(level7listMAR);
             if (level7listMAR.size() > 0) {
@@ -3776,7 +3708,7 @@ public class UploadFragment extends Fragment {
         try {
             level4listPER = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "4" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
 
             if (cursor1 != null && cursor1.getCount() > 0) {
@@ -3788,16 +3720,8 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
-
             Collections.sort(level4listPER);
             if (level4listPER.size() > 0) {
-                chk = "yes";
                 strLevel4ArrayPer = new String[level4listPER.size()];
                 for (int i = 0; i < level4listPER.size(); i++) {
                     strLevel4ArrayPer[i] = level4listPER.get(i);
@@ -3837,7 +3761,7 @@ public class UploadFragment extends Fragment {
         try {
             level5listPER = new ArrayList<>();
             String branch = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "5" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
 
             if (cursor1 != null && cursor1.getCount() > 0) {
@@ -3847,13 +3771,6 @@ public class UploadFragment extends Fragment {
                     level5listPER.add(branch);
                 } while (cursor1.moveToNext());
                 cursor1.close();
-            }
-
-            if(branch.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
             }
             Collections.sort(level5listPER);
             if (level5listPER.size() > 0) {
@@ -3950,7 +3867,7 @@ public class UploadFragment extends Fragment {
 
             level5listLEGAL = new ArrayList<>();
             String temp = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "4" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
 
             if (cursor1 != null && cursor1.getCount() > 0) {
@@ -4003,7 +3920,7 @@ public class UploadFragment extends Fragment {
         try {
             level6listLEGAL = new ArrayList<>();
             String temp = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "5" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "5" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -4014,12 +3931,6 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(temp.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
             Collections.sort(level6listLEGAL);
             if (level6listLEGAL.size() > 0) {
                 strLevel6ArrayLEGAL = new String[level6listLEGAL.size()];
@@ -4061,7 +3972,7 @@ public class UploadFragment extends Fragment {
         try {
             level7listLEGAL = new ArrayList<>();
             String temp = "";
-            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "6" + "'"+ "and parent_Ref = "+ "'" + aID + "'";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "6" + "'"
             Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
             if (cursor1 != null && cursor1.getCount() > 0) {
                 cursor1.moveToFirst();
@@ -4072,12 +3983,6 @@ public class UploadFragment extends Fragment {
                 cursor1.close();
             }
 
-            if(temp.equals("null")) {
-                chk = "no";
-                return;
-            } else {
-                chk = "yes";
-            }
             Collections.sort(level7listLEGAL);
             if (level7listLEGAL.size() > 0) {
                 strLevel7ArrayLEGAL = new String[level7listLEGAL.size()];
@@ -4295,15 +4200,17 @@ public class UploadFragment extends Fragment {
 
         SOAPWebservice webService = new SOAPWebservice(getActivity());
         for (int k =0;k<submitDatalist.size();k++){
+            String base64 = "";
             uploadModel = submitDatalist.get(k);
+             base64 = getBase64Image(uploadModel.getFilePath());
             objLead = webService.Insert_upload(uploadModel.getRoleID(),uploadModel.getLegalEntityID(),uploadModel.getPropertyID(),
                     uploadModel.getLocationID(),uploadModel.getDoc_no(),uploadModel.getLoginId(), uploadModel.getLoginId(),uploadModel.getDate(),uploadModel.getDate(),
                     uploadModel.getIndividualID(),uploadModel.getNewProposal(),"",uploadModel.getTxtL2Id(),uploadModel.getTxtL3Id(),
                     uploadModel.getTxtL4Id(),uploadModel.getTxtL5Id(),uploadModel.getTxtL6Id(),uploadModel.getTxtL7Id(),
                     uploadModel.getYear(),uploadModel.getQuarter(),uploadModel.getMonth(),uploadModel.getFileUp(),uploadModel.getFilePath(),
-                    uploadModel.getFilePath()+uploadModel.getFileUp(), uploadModel.getFileExtension());
+                    uploadModel.getFilePath()+uploadModel.getFileUp(), uploadModel.getFileExtension(),base64);
             String id =  String.valueOf(objLead);
-            if (id.equalsIgnoreCase("null") || id.equals(null) || id.contains("ERROR")){
+            if (id.equalsIgnoreCase("null") || id.equals(null) || id.equals("0")){
                 String strLastSync = "0";
                 String selection = "file = ?";
                 String[] selectionArgs = {uploadModel.getFileUp()};
@@ -4355,8 +4262,35 @@ public class UploadFragment extends Fragment {
         protected void onPostExecute(SoapPrimitive soapObject) {
             super.onPostExecute(soapObject);
 //            progress.dismiss();
+            getUploadData();
 
 
         }
+    }
+    private String getBase64Image(String imgPath) {
+        String base64Img = "";
+        InputStream inputStream = null;//You can get an inputStream using any IO API
+
+        try {
+            inputStream = new FileInputStream(imgPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Base64OutputStream output64 = new Base64OutputStream(output, Base64.DEFAULT);
+        try {
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output64.write(buffer, 0, bytesRead);
+            }
+            output64.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        base64Img = output.toString();
+        return base64Img;
     }
 }

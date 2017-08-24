@@ -122,7 +122,7 @@ public class UploadAdapter extends BaseAdapter {
 //            AutofitHelper.create(viewHolder.txtLevel5);
             viewHolder.txtLevel6 = (TextView) convertView.findViewById(R.id.txtLevel6);
 //            AutofitHelper.create(viewHolder.txtLevel6);
-            viewHolder.txtLevel7 = (TextView) convertView.findViewById(R.id.txtLevel7);
+//            viewHolder.txtLevel7 = (TextView) convertView.findViewById(R.id.txtLevel7);
 //            AutofitHelper.create(viewHolder.txtLevel7);
             viewHolder.txtFileName = (TextView) convertView.findViewById(R.id.txtFilenName);
             viewHolder.txtDelete = (TextView) convertView.findViewById(R.id.txtDelete);
@@ -355,8 +355,6 @@ public class UploadAdapter extends BaseAdapter {
 
         uploadModel = uploadModelList.get(position);
         viewHolder.txtSrNo.setText(uploadModel.getId());
-        viewHolder.txtLevel4.setText(uploadModel.getLevel4());
-        viewHolder.txtLevel4.setTag(position);
         viewHolder.txtFileName.setText(uploadModel.getFileName());
         viewHolder.txtFileName.setTag(position);
         viewHolder.txtDelete.setTag(position);
@@ -364,12 +362,14 @@ public class UploadAdapter extends BaseAdapter {
 
         if (sharedPref.getLoginId().equalsIgnoreCase("finance")) {
 //            viewHolder.txtLevel7.setVisibility(View.GONE);
-            viewHolder.txtLevel7.setText("");
-            viewHolder.txtLevel7.setTag(position);
+//            viewHolder.txtLevel7.setText("");
+//            viewHolder.txtLevel7.setTag(position);
             viewHolder.txtLevel2.setText(uploadModel.getLevel2());
             viewHolder.txtLevel2.setTag(position);
             viewHolder.txtLevel3.setText(uploadModel.getLevel3());
             viewHolder.txtLevel3.setTag(position);
+            viewHolder.txtLevel4.setText(uploadModel.getLevel4());
+            viewHolder.txtLevel4.setTag(position);
             viewHolder.txtLevel5.setText(uploadModel.getLevel5());
             viewHolder.txtLevel5.setTag(position);
             viewHolder.txtLevel6.setText(uploadModel.getLevel6());
@@ -378,60 +378,69 @@ public class UploadAdapter extends BaseAdapter {
 //            viewHolder.txtLevel2.setVisibility(View.GONE);
 //            viewHolder.txtLevel3.setVisibility(View.GONE);
 //            viewHolder.txtLevel7.setVisibility(View.GONE);
-            viewHolder.txtLevel2.setText("");
+            viewHolder.txtLevel2.setText(uploadModel.getLevel4());
             viewHolder.txtLevel2.setTag(position);
-            viewHolder.txtLevel3.setText("");
+            viewHolder.txtLevel3.setText(uploadModel.getLevel5());
             viewHolder.txtLevel3.setTag(position);
-            viewHolder.txtLevel7.setText("");
-            viewHolder.txtLevel7.setTag(position);
-            viewHolder.txtLevel5.setText(uploadModel.getLevel5());
+            viewHolder.txtLevel4.setText(uploadModel.getLevel6());
+            viewHolder.txtLevel4.setTag(position);
+            viewHolder.txtLevel5.setText("");
             viewHolder.txtLevel5.setTag(position);
-            viewHolder.txtLevel6.setText(uploadModel.getLevel6());
+            viewHolder.txtLevel6.setText("");
             viewHolder.txtLevel6.setTag(position);
+//            viewHolder.txtLevel7.setText("");
+//            viewHolder.txtLevel7.setTag(position);
+
         } else if (sharedPref.getLoginId().equalsIgnoreCase("cmd") ||
                 sharedPref.getLoginId().equalsIgnoreCase("legal") ||
                 sharedPref.getLoginId().equalsIgnoreCase("marketing")) {
 //            viewHolder.txtLevel2.setVisibility(View.GONE);
 //            viewHolder.txtLevel3.setVisibility(View.GONE);
-            viewHolder.txtLevel2.setText("");
+            viewHolder.txtLevel2.setText(uploadModel.getLevel4());
             viewHolder.txtLevel2.setTag(position);
-            viewHolder.txtLevel3.setText("");
+            viewHolder.txtLevel3.setText(uploadModel.getLevel5());
             viewHolder.txtLevel3.setTag(position);
-            viewHolder.txtLevel5.setText(uploadModel.getLevel5());
-            viewHolder.txtLevel5.setTag(position);
-            viewHolder.txtLevel6.setText(uploadModel.getLevel6());
-            viewHolder.txtLevel6.setTag(position);
-            viewHolder.txtLevel7.setText(uploadModel.getLevel7());
-            viewHolder.txtLevel7.setTag(position);
-        } else if (sharedPref.getLoginId().equalsIgnoreCase("cs")) {
-//            viewHolder.txtLevel5.setVisibility(View.GONE);
-//            viewHolder.txtLevel6.setVisibility(View.GONE);
-//            viewHolder.txtLevel7.setVisibility(View.GONE);
+            viewHolder.txtLevel4.setText(uploadModel.getLevel6());
+            viewHolder.txtLevel4.setTag(position);
             viewHolder.txtLevel5.setText("");
             viewHolder.txtLevel5.setTag(position);
             viewHolder.txtLevel6.setText("");
             viewHolder.txtLevel6.setTag(position);
-            viewHolder.txtLevel7.setText("");
-            viewHolder.txtLevel7.setTag(position);
+//            viewHolder.txtLevel7.setText(uploadModel.getLevel7());
+//            viewHolder.txtLevel7.setTag(position);
+        } else if (sharedPref.getLoginId().equalsIgnoreCase("cs")) {
             viewHolder.txtLevel2.setText(uploadModel.getLevel2());
             viewHolder.txtLevel2.setTag(position);
             viewHolder.txtLevel3.setText(uploadModel.getLevel3());
             viewHolder.txtLevel3.setTag(position);
-
-        } else if (sharedPref.getLoginId().equalsIgnoreCase("Personal")) {
-//            viewHolder.txtLevel2.setVisibility(View.GONE);
-//            viewHolder.txtLevel6.setVisibility(View.GONE);
-//            viewHolder.txtLevel7.setVisibility(View.GONE);
-            viewHolder.txtLevel2.setText("");
-            viewHolder.txtLevel2.setTag(position);
+            viewHolder.txtLevel4.setText(uploadModel.getLevel4());
+            viewHolder.txtLevel4.setTag(position);
+            viewHolder.txtLevel5.setText("");
+            viewHolder.txtLevel5.setTag(position);
             viewHolder.txtLevel6.setText("");
             viewHolder.txtLevel6.setTag(position);
-            viewHolder.txtLevel7.setText("");
-            viewHolder.txtLevel7.setTag(position);
-            viewHolder.txtLevel5.setText(uploadModel.getLevel5());
-            viewHolder.txtLevel5.setTag(position);
-            viewHolder.txtLevel3.setText(uploadModel.getLevel3());
+//            viewHolder.txtLevel7.setText("");
+//            viewHolder.txtLevel7.setTag(position);
+            //            viewHolder.txtLevel5.setVisibility(View.GONE);
+//            viewHolder.txtLevel6.setVisibility(View.GONE);
+//            viewHolder.txtLevel7.setVisibility(View.GONE);
+
+        } else if (sharedPref.getLoginId().equalsIgnoreCase("Personal")) {
+            viewHolder.txtLevel2.setText(uploadModel.getLevel3());
+            viewHolder.txtLevel2.setTag(position);
+            viewHolder.txtLevel3.setText(uploadModel.getLevel4());
             viewHolder.txtLevel3.setTag(position);
+            viewHolder.txtLevel4.setText(uploadModel.getLevel5());
+            viewHolder.txtLevel4.setTag(position);
+            viewHolder.txtLevel5.setText("");
+            viewHolder.txtLevel5.setTag(position);
+            viewHolder.txtLevel6.setText("");
+            viewHolder.txtLevel6.setTag(position);
+//            viewHolder.txtLevel7.setText("");
+//            viewHolder.txtLevel7.setTag(position);
+            //            viewHolder.txtLevel2.setVisibility(View.GONE);
+//            viewHolder.txtLevel6.setVisibility(View.GONE);
+//            viewHolder.txtLevel7.setVisibility(View.GONE);
         }
         /*viewHolder.plan_view.setTag(position);
         viewHolder.plan_view.setOnClickListener(new View.OnClickListener() {

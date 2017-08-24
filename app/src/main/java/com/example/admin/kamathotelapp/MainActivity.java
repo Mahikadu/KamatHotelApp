@@ -937,7 +937,7 @@ public class MainActivity extends AppCompatActivity {
 //                    displayMessage(responseId2);
                 } else {
 
-//                    boolean deletAll = KHIL.dbCon.alterTable(DbHelper.M_Level_Data);
+                    boolean deletAll = KHIL.dbCon.alterTable(DbHelper.M_Level_Data);
 
                     try {
                         int id = 0;
