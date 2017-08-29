@@ -158,5 +158,67 @@ public class SOAPWebservice {
 		}
 	}
 
+	// DashboardData
+	public SoapObject Dashboarddata(String username) {
+		SoapObject result = null;
+
+		try {
+			SoapObject request = new SoapObject("http://tempuri.org/",
+					"Dashboarddata");// soap object
+			request.addProperty("Param", username);
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);// soap envelop with version
+			envelope.setOutputSoapObject(request); // set request object
+			envelope.dotNet = true;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);// http
+			// transport
+			// call
+			androidHttpTransport.call("http://tempuri.org/IService1/Dashboarddata",
+					envelope);
+
+			// response soap object
+			result = (SoapObject) envelope.getResponse();
+			Log.e("result", result.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+	}
+
+	public SoapObject chartdata(String EmpCode, String item) {
+		SoapObject result = null;
+
+		try {
+			SoapObject request = new SoapObject("http://tempuri.org/",
+					"chartdata");// soap object
+			request.addProperty("EmpCode", EmpCode);
+			request.addProperty("item", item);
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);// soap envelop with version
+			envelope.setOutputSoapObject(request); // set request object
+			envelope.dotNet = true;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);// http
+			// transport
+			// call
+			androidHttpTransport.call("http://tempuri.org/IService1/chartdata",
+					envelope);
+
+			// response soap object
+			result = (SoapObject) envelope.getResponse();
+			Log.e("result", result.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+	}
+
 
 }

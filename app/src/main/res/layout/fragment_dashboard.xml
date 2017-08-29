@@ -17,18 +17,45 @@
         android:textColor="@android:color/white"
          />
 
+    <LinearLayout
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:background="@color/black"
+        android:layout_below="@+id/btnSearch">
+
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/tvFooter"
-        android:layout_below="@+id/btnSearch"
-        android:layout_marginBottom="15dp"
-        android:orientation="vertical">
+        android:layout_above="@+id/footer"
+        android:layout_below="@+id/line"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:id="@+id/bargraph"
+                />
+
+            <LinearLayout
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                android:background="@color/black"
+                >
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/detailsLayout"
@@ -426,6 +453,13 @@
                    </LinearLayout>
                </HorizontalScrollView>-->
 
+            <LinearLayout
+                android:id="@+id/dashboardlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -499,15 +533,82 @@
                     </ScrollView>
                 </LinearLayout>
             </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/chartdatalayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/chartdash_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/layout_header1"
+                            layout="@layout/dashchart_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+
+                        </include>
+
+                        <ListView
+                            android:id="@+id/listDashchart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TableLayout
+                                android:id="@+id/tableLaout_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:shrinkColumns="*"
+                                android:stretchColumns="*">
+                            </TableLayout>
+                        </ScrollView>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
 
     <TextView
         android:id="@+id/tvFooter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvFooter1"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:fontFamily="@string/font_lightl"
@@ -520,7 +621,6 @@
         android:id="@+id/tvFooter1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:fontFamily="@string/font_lightl"
@@ -528,5 +628,7 @@
         android:text="@string/text_footer1"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black" />
+
+    </LinearLayout>
 
 </RelativeLayout>

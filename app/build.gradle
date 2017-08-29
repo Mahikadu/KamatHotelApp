@@ -20,6 +20,10 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     compile project(':scanlibrary')
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -37,4 +41,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile files('libs/ksoap2-android-assembly-3.0.0-RC.4-jar-with-dependencies.jar')
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }

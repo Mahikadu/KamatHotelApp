@@ -16,6 +16,7 @@ public class Utils {
     public String[] columnNamesM_Quater = new String[50];
     public String[] columnNamesM_Month = new String[50];
     public String[] columnNamesM_Level_Data = new String[50];
+    public String[] columnNames_Dashboard_Data = new String[50];
 
     private Context mContext;
 
@@ -47,5 +48,8 @@ public class Utils {
 
         String[] master7Array = {"id","value","text","parent_Ref","aID","role_ID","data_level","quater_Id","updated_date"};
         columnNamesM_Level_Data = Arrays.copyOf(master7Array, master7Array.length);
+
+        String[] master8Array = {"id","inv_count", "status"};
+        columnNames_Dashboard_Data = Arrays.copyOf(master8Array, master8Array.length);
     }
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black">
+
+           <LinearLayout
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtLegal_Entity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Legal Entitiy"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtProperty"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Property"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtLocation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Location"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+s
+
+            <TextView
+                android:id="@+id/txtType_Of_Document"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Type Of Document"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtSelected_Document"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Selected Document"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtSupporting_Document"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Supporting Document"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtAnnexure"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Annexure"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+
+        </LinearLayout>
+
+</LinearLayout>

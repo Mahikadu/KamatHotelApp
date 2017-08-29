@@ -23,6 +23,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.admin.kamathotelapp.Model.DashBoardDataModel;
+import com.example.admin.kamathotelapp.Model.PropertyModel;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
@@ -30,6 +32,7 @@ import com.example.admin.kamathotelapp.dbConfig.DatabaseCopy;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 import com.example.admin.kamathotelapp.libs.SOAPWebservice;
 import com.example.admin.kamathotelapp.libs.UtilityClass;
+import com.github.mikephil.charting.data.BarEntry;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -64,8 +67,11 @@ public class MainActivity extends AppCompatActivity {
     SOAPWebservice ws;
     ProgressDialog progress;
     private String strUpdatedDate = "";
-    private String value, text, parent_Ref, updated_date,date,roleId,property_id;
+    private String value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status;
     private SimpleDateFormat dateFormatter;
+    DashBoardDataModel dashboarddatamodel;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1031,6 +1037,82 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                DashboardData dashboardData = new DashboardData();
+                dashboardData.execute();
+            }
+        }
+    }
+
+    public class DashboardData extends AsyncTask<Void, Void, SoapObject> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected SoapObject doInBackground(Void... params) {
+            SoapObject object2 = null;
+            try {
+                object2 = ws.Dashboarddata(uname);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return object2;
+        }
+
+        @Override
+        protected void onPostExecute(SoapObject soapObject) {
+            super.onPostExecute(soapObject);
+            try {
+
+                String response = String.valueOf(soapObject);
+                System.out.println("Response =>: " + response);
+
+                int id = 0;
+                dashboarddatamodel = new DashBoardDataModel();
+                for (int i = 0; i < soapObject.getPropertyCount(); i++) {
+                    SoapObject root = (SoapObject) soapObject.getProperty(i);
+
+
+                    if (root.getProperty("Inv_count") != null) {
+
+                        if (!root.getProperty("Inv_count").toString().equalsIgnoreCase("anyType{}")) {
+                            Inv_count = root.getProperty("Inv_count").toString();
+
+                        } else {
+                            Inv_count = "";
+                        }
+                    } else {
+                        Inv_count = "";
+                    }
+                    //barEntries.add(new BarEntry(Float.valueOf(Inv_count),i));
+
+                    if (root.getProperty("status") != null) {
+
+                        if (!root.getProperty("status").toString().equalsIgnoreCase("anyType{}")) {
+                            status = root.getProperty("status").toString();
+
+                        } else {
+                            status = "";
+                        }
+                    } else {
+                        status = "";
+                    }
+
+                    String selection = "id = ?";
+                    id = id+1;
+                    // WHERE clause arguments
+                    String[] selectionArgs = {id+""};
+                    //            "id","value", "text", "parent_Ref", "updated_date"
+                    String valuesArray[] = {id+"", Inv_count, status};
+                    boolean output = KHIL.dbCon.updateBulk(DbHelper.DASHBOARD_DATA, selection, valuesArray, utils.columnNames_Dashboard_Data, selectionArgs);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }finally {
                 progress.dismiss();
