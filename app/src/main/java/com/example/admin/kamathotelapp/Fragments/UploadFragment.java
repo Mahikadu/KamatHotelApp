@@ -3,12 +3,17 @@ package com.example.admin.kamathotelapp.Fragments;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursorDriver;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
@@ -57,6 +63,7 @@ import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 import com.example.admin.kamathotelapp.libs.SOAPWebservice;
+import com.example.admin.kamathotelapp.libs.UtilityClass;
 
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -79,6 +86,7 @@ import java.util.Queue;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import in.gauriinfotech.commons.Commons;
 
 public class UploadFragment extends Fragment {
 
@@ -192,6 +200,8 @@ public class UploadFragment extends Fragment {
     private String date;
     public String fileExtension = "";
     private ArrayList<UploadModel> submitDatalist;
+    ProgressDialog progress;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -210,6 +220,7 @@ public class UploadFragment extends Fragment {
         ButterKnife.inject(this, view);
         layout_edit = (LinearLayout) view.findViewById(R.id.layout_edit);
         btnUpload = (Button) view.findViewById(R.id.btnUpload);
+        progress = new ProgressDialog(getContext());
         initView(view);
         return view;
     }
@@ -2362,6 +2373,15 @@ public class UploadFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               /* try {
+                    if (progress != null && !progress.isShowing()) {
+                        progress.setMessage("Data is Submiting to server ...");
+                        progress.show();
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
                 int size = getAllSubmitData();
                 if (size > 0) {
                     new SaveInsertUpdate().execute();
@@ -2382,8 +2402,9 @@ public class UploadFragment extends Fragment {
         switch(requestCode) {
             case PICKFILE_RESULT_CODE:
                 if(resultCode == getActivity().RESULT_OK) {
-                    filePath = data.getData().getPath();
-
+//                    filePath = data.getData().getPath();
+                    Uri uri = data.getData();
+                    filePath = Commons.getPath(uri, getContext());
                     if(filePath.contains("/external/images/media/")) {
                         Uri selectedImageURI = data.getData();
                         File imageFile = new File(getRealPathFromURI(selectedImageURI));
@@ -4210,6 +4231,7 @@ public class UploadFragment extends Fragment {
                     uploadModel.getYear(),uploadModel.getQuarter(),uploadModel.getMonth(),uploadModel.getFileUp(),uploadModel.getFilePath(),
                     uploadModel.getFilePath()+uploadModel.getFileUp(), uploadModel.getFileExtension(),base64);
             String id =  String.valueOf(objLead);
+
             if (id.equalsIgnoreCase("null") || id.equals(null) || id.equals("0")){
                 String strLastSync = "0";
                 String selection = "file = ?";
@@ -4261,8 +4283,9 @@ public class UploadFragment extends Fragment {
         @Override
         protected void onPostExecute(SoapPrimitive soapObject) {
             super.onPostExecute(soapObject);
-//            progress.dismiss();
-            getUploadData();
+            progress.dismiss();
+
+//            getUploadData();
 
 
         }
@@ -4293,4 +4316,10 @@ public class UploadFragment extends Fragment {
         base64Img = output.toString();
         return base64Img;
     }
+
+
+
+
+
+
 }

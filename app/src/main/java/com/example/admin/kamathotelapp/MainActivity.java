@@ -153,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if((uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
                         uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
-                        uname.equalsIgnoreCase("personal")) && pwd.equals("password")) {
+                        uname.equalsIgnoreCase("personal") || uname.equalsIgnoreCase("QC1finance") || uname.equalsIgnoreCase("csQC1") || uname.equalsIgnoreCase("cmdQC1") ||
+                        uname.equalsIgnoreCase("hrQC1") || uname.equalsIgnoreCase("legalQC1") || uname.equalsIgnoreCase("marketingQC1") ||
+                        uname.equalsIgnoreCase("personalQC1")) && pwd.equals("password")) {
 
                     if (UtilityClass.isConnectingToInternet(MainActivity.this)) {
                         UserLogin login = new UserLogin();
@@ -168,7 +170,9 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if(!(uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
                         uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
-                        uname.equalsIgnoreCase("personal"))) {
+                        uname.equalsIgnoreCase("personal") || uname.equalsIgnoreCase("QC1finance") || uname.equalsIgnoreCase("csQC1") || uname.equalsIgnoreCase("cmdQC1") ||
+                        uname.equalsIgnoreCase("hrQC1") || uname.equalsIgnoreCase("legalQC1") || uname.equalsIgnoreCase("marketingQC1") ||
+                        uname.equalsIgnoreCase("personalQC1"))) {
                     etUserName.setError("Wrong Username");
                     focusView=etUserName;
                     focusView.requestFocus();
