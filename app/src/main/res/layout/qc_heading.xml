@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/tvDept"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Dept"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvDocno"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Doc No"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvCreatedby"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Created By"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvCreateddt"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Created Dt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvyear"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Year"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvquter"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Quarter"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvmonth"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Month"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvstatus"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Status"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/tvs1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@drawable/table_row_item"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+
+
+</LinearLayout>

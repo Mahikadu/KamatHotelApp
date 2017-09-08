@@ -129,6 +129,7 @@ public class UploadFragment extends Fragment {
     AutoCompleteTextView autoLoc;
     public static AutoCompleteTextView txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
     public String txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,monthID;
+    public String valuel2,valuel3,valuel4,valuel5,valuel6,valuel7;
     public String legalEntityID,propertyID,individualID,locationID;
     public String legalEntityValue,propertyValue,individualValue,locationValue;
     String[] strLegalArray = null;
@@ -1030,7 +1031,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel2)) {
                                 aid = leveldataModel.getaID();
-                                txtL2Id = leveldataModel.getValue();
+                                txtL2Id = aid;
+                                valuel2 = leveldataModel.getValue();
 
                             }
                         }
@@ -1079,7 +1081,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel3)) {
                                 aid = leveldataModel.getaID();
-                                txtL3Id = leveldataModel.getValue();
+                                txtL3Id = aid;
+                                valuel3 = leveldataModel.getValue();
                             }
                         }
                         if (valLevel3 != null && valLevel3.length() > 0) {
@@ -1127,7 +1130,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                                txtL4Id = leveldataModel.getValue();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
                         if (valLevel4 != null && valLevel4.length() > 0) {
@@ -1173,7 +1177,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel5)) {
                                 aid = leveldataModel.getaID();
-                                txtL5Id = leveldataModel.getValue();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
                             }
                         }
                         if (valLevel5 != null && valLevel5.length() > 0) {
@@ -1209,7 +1214,7 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (strLevel6Array != null && strLevel6Array.length > 0) {
-                        String aid;
+                        String aid = "";
                         valLevel6 = parent.getItemAtPosition(position).toString();
 
                         for(int i=0; i<listLevelData.size(); i++) {
@@ -1217,7 +1222,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel6)) {
                                 aid = leveldataModel.getaID();
-                                txtL6Id = leveldataModel.getValue();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
                             }
                         }
                     }
@@ -1271,7 +1277,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                                txtL4Id = leveldataModel.getValue();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
                         if (valLevel4 != null && valLevel4.length() > 0) {
@@ -1308,7 +1315,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel5)) {
                                 aid = leveldataModel.getaID();
-                                txtL5Id = leveldataModel.getValue();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
                             }
                         }
                         if (valLevel5 != null && valLevel5.length() > 0) {
@@ -1347,7 +1355,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel6)) {
                                 aid = leveldataModel.getaID();
-                                txtL6Id = leveldataModel.getValue();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
                             }
                         }
                     }
@@ -1401,7 +1410,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                                txtL4Id = leveldataModel.getValue();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
 
@@ -1443,7 +1453,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel5)) {
                                 aid = leveldataModel.getaID();
-                                txtL5Id = leveldataModel.getValue();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
                             }
                         }
                         if (valLevel5 != null && valLevel5.length() > 0) {
@@ -1481,7 +1492,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel6)) {
                                 aid = leveldataModel.getaID();
-                               txtL6Id = leveldataModel.getValue();
+                               txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
                             }
                         }
 
@@ -1518,7 +1530,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel7)) {
                                 aid = leveldataModel.getaID();
-                                txtL7Id = leveldataModel.getValue();
+                                txtL7Id = aid;
+                                valuel7 = leveldataModel.getValue();
                             }
                         }
                     }
@@ -1576,7 +1589,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel2)) {
                                 aid = leveldataModel.getaID();
-                                txtL2Id = leveldataModel.getValue();
+                                txtL2Id = aid;
+                                valuel2 = leveldataModel.getValue();
                             }
                         }
 
@@ -1621,7 +1635,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel3)) {
                                 aid = leveldataModel.getaID();
-                                txtL3Id = leveldataModel.getValue();
+                                txtL3Id = aid;
+                                valuel3 = leveldataModel.getValue();
                             }
                         }
 
@@ -1663,7 +1678,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                                txtL4Id = leveldataModel.getValue();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
 
@@ -1717,7 +1733,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                                txtL4Id = leveldataModel.getValue();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
 
@@ -1759,7 +1776,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel5)) {
                                 aid = leveldataModel.getaID();
-                                txtL5Id = leveldataModel.getValue();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
                             }
                         }
 
@@ -1798,7 +1816,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel6)) {
                                 aid = leveldataModel.getaID();
-                                txtL6Id = leveldataModel.getValue();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
                             }
                         }
 
@@ -1835,7 +1854,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel7)) {
                                 aid = leveldataModel.getaID();
-                                txtL7Id = leveldataModel.getValue();
+                                txtL7Id = aid;
+                                valuel7 = leveldataModel.getValue();
                             }
                         }
                     }
@@ -1893,7 +1913,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel3)) {
                                 aid = leveldataModel.getaID();
-                                txtL3Id = leveldataModel.getValue();
+                                txtL3Id = aid;
+                                valuel3 = leveldataModel.getValue();
                             }
                         }
 
@@ -1940,7 +1961,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                               txtL4Id = leveldataModel.getValue();
+                               txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
 
@@ -1981,7 +2003,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel5)) {
                                 aid = leveldataModel.getaID();
-                                txtL5Id = leveldataModel.getValue();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
                             }
                         }
                     }
@@ -2032,7 +2055,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel4)) {
                                 aid = leveldataModel.getaID();
-                                txtL4Id = leveldataModel.getValue();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
                             }
                         }
 
@@ -2068,7 +2092,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel5)) {
                                 aid = leveldataModel.getaID();
-                                txtL5Id = leveldataModel.getValue();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
                             }
                         }
 
@@ -2107,7 +2132,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel6)) {
                                 aid = leveldataModel.getaID();
-                                txtL6Id = leveldataModel.getValue();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
                             }
                         }
 
@@ -2144,7 +2170,8 @@ public class UploadFragment extends Fragment {
                             String text = leveldataModel.getText();
                             if (text.equalsIgnoreCase(valLevel7)) {
                                 aid = leveldataModel.getaID();
-                                txtL7Id = leveldataModel.getValue();
+                                txtL7Id = aid;
+                                valuel7 = leveldataModel.getValue();
                             }
                         }
                     }
@@ -2440,18 +2467,18 @@ public class UploadFragment extends Fragment {
 
         String Doc_no = roleID+"_"+legalEntityValue+"_"+propertyValue+"_"+locationValue+"_"+year+"_"+quarter+"_"+monthID;
         String fileUp = Doc_no;
-        if (txtL2Id != null && txtL2Id.length()>0){
-            fileUp = fileUp+"_"+txtL2Id;
-        }if (txtL3Id != null && txtL3Id.length()>0){
-            fileUp = fileUp+"_"+txtL3Id;
-        }if (txtL4Id != null && txtL4Id.length()>0){
-            fileUp = fileUp+"_"+txtL4Id;
-        }if (txtL5Id != null && txtL5Id.length()>0){
-            fileUp = fileUp+"_"+txtL5Id;
-        }if (txtL6Id != null && txtL6Id.length()>0){
-            fileUp = fileUp+"_"+txtL6Id;
-        }if (txtL7Id != null && txtL7Id.length()>0){
-            fileUp = fileUp+"_"+txtL7Id;
+        if (valuel2 != null && valuel2.length()>0){
+            fileUp = fileUp+"_"+valuel2;
+        }if (valuel3 != null && valuel3.length()>0){
+            fileUp = fileUp+"_"+valuel3;
+        }if (valuel4 != null && valuel4.length()>0){
+            fileUp = fileUp+"_"+valuel4;
+        }if (valuel5 != null && valuel5.length()>0){
+            fileUp = fileUp+"_"+valuel5;
+        }if (valuel6 != null && valuel6.length()>0){
+            fileUp = fileUp+"_"+valuel6;
+        }if (valuel7 != null && valuel7.length()>0){
+            fileUp = fileUp+"_"+valuel7;
         }
 
         fileUp = fileUp+"_"+fileName;

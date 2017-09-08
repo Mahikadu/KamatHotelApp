@@ -25,6 +25,7 @@ import android.widget.EditText;
 
 import com.example.admin.kamathotelapp.Model.DashBoardDataModel;
 import com.example.admin.kamathotelapp.Model.PropertyModel;
+import com.example.admin.kamathotelapp.Model.UploadModel;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
@@ -67,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
     SOAPWebservice ws;
     ProgressDialog progress;
     private String strUpdatedDate = "";
-    private String value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status;
+    private String value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
+            Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,
+            Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Location_Id,Month,Property_Id,Quarter,Role_Id,
+            Status,Year,type;
     private SimpleDateFormat dateFormatter;
     DashBoardDataModel dashboarddatamodel;
 
@@ -1119,9 +1123,523 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }finally {
+              /*  progress.dismiss();
+                Intent intent = new Intent(MainActivity.this, NavigationDrawerActivity.class);
+                startActivity(intent);*/
+                QC1Data qc1Data = new QC1Data();
+                qc1Data.execute();
+            }
+        }
+    }
+
+    public class QC1Data extends AsyncTask<Void, Void, SoapObject> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected SoapObject doInBackground(Void... params) {
+            SoapObject object2 = null;
+            try {
+                object2 = ws.QC1_Grid_APK(uname);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return object2;
+        }
+
+        @Override
+        protected void onPostExecute(SoapObject soapObject) {
+            super.onPostExecute(soapObject);
+            try {
+
+                String response = String.valueOf(soapObject);
+                System.out.println("Response =>: " + response);
+
+                int id = 0;
+                for (int i = 0; i < soapObject.getPropertyCount(); i++) {
+                    SoapObject root = (SoapObject) soapObject.getProperty(i);
+
+
+                    if (root.getProperty("Created_By") != null) {
+
+                        if (!root.getProperty("Created_By").toString().equalsIgnoreCase("anyType{}")) {
+                            Created_By = root.getProperty("Created_By").toString();
+
+                        } else {
+                            Created_By = "";
+                        }
+                    } else {
+                        Created_By = "";
+                    }
+
+                    if (root.getProperty("Created_Date") != null) {
+
+                        if (!root.getProperty("Created_Date").toString().equalsIgnoreCase("anyType{}")) {
+                            Created_Date = root.getProperty("Created_Date").toString();
+
+                        } else {
+                            Created_Date = "";
+                        }
+                    } else {
+                        Created_Date = "";
+                    }
+                    if (root.getProperty("Document_No") != null) {
+
+                        if (!root.getProperty("Document_No").toString().equalsIgnoreCase("anyType{}")) {
+                            Document_No = root.getProperty("Document_No").toString();
+
+                        } else {
+                            Document_No = "";
+                        }
+                    } else {
+                        Document_No = "";
+                    }
+                    if (root.getProperty("File_Exten") != null) {
+
+                        if (!root.getProperty("File_Exten").toString().equalsIgnoreCase("anyType{}")) {
+                            File_Exten = root.getProperty("File_Exten").toString();
+
+                        } else {
+                            File_Exten = "";
+                        }
+                    } else {
+                        File_Exten = "";
+                    }
+                    if (root.getProperty("File_Name") != null) {
+
+                        if (!root.getProperty("File_Name").toString().equalsIgnoreCase("anyType{}")) {
+                            File_Name = root.getProperty("File_Name").toString();
+
+                        } else {
+                            File_Name = "";
+                        }
+                    } else {
+                        File_Name = "";
+                    }
+                    if (root.getProperty("File_Path") != null) {
+
+                        if (!root.getProperty("File_Path").toString().equalsIgnoreCase("anyType{}")) {
+                            File_Path = root.getProperty("File_Path").toString();
+
+                        } else {
+                            File_Path = "";
+                        }
+                    } else {
+                        File_Path = "";
+                    }
+                    if (root.getProperty("File_Path_File_Name") != null) {
+
+                        if (!root.getProperty("File_Path_File_Name").toString().equalsIgnoreCase("anyType{}")) {
+                            File_Path_File_Name = root.getProperty("File_Path_File_Name").toString();
+
+                        } else {
+                            File_Path_File_Name = "";
+                        }
+                    } else {
+                        File_Path_File_Name = "";
+                    }
+                    if (root.getProperty("Id") != null) {
+
+                        if (!root.getProperty("Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Id = root.getProperty("Id").toString();
+
+                        } else {
+                            Id = "";
+                        }
+                    } else {
+                        Id = "";
+                    }
+                    if (root.getProperty("Is_Download") != null) {
+
+                        if (!root.getProperty("Is_Download").toString().equalsIgnoreCase("anyType{}")) {
+                            Is_Download = root.getProperty("Is_Download").toString();
+
+                        } else {
+                            Is_Download = "";
+                        }
+                    } else {
+                        Is_Download = "";
+                    }
+                    if (root.getProperty("Is_Edit") != null) {
+
+                        if (!root.getProperty("Is_Edit").toString().equalsIgnoreCase("anyType{}")) {
+                            Is_Edit = root.getProperty("Is_Edit").toString();
+
+                        } else {
+                            Is_Edit = "";
+                        }
+                    } else {
+                        Is_Edit = "";
+                    }
+                    if (root.getProperty("Is_View") != null) {
+
+                        if (!root.getProperty("Is_View").toString().equalsIgnoreCase("anyType{}")) {
+                            Is_View = root.getProperty("Is_View").toString();
+
+                        } else {
+                            Is_View = "";
+                        }
+                    } else {
+                        Is_View = "";
+                    }
+                    if (root.getProperty("Legal_Entity_Id") != null) {
+
+                        if (!root.getProperty("Legal_Entity_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Legal_Entity_Id = root.getProperty("Legal_Entity_Id").toString();
+
+                        } else {
+                            Legal_Entity_Id = "";
+                        }
+                    } else {
+                        Legal_Entity_Id = "";
+                    }
+                    try {
+                        Cursor cursorlegal = null;
+                        String where = " where id = '" + Legal_Entity_Id + "'";
+                        cursorlegal = KHIL.dbCon.fetchFromSelect(DbHelper.M_Legal_Entity, where);
+                        if (cursorlegal != null && cursorlegal.getCount() > 0) {
+                            cursorlegal.moveToFirst();
+                            do {
+                                Legal_Entity_Id = cursorlegal.getString(cursorlegal.getColumnIndex("text"));
+                            } while (cursorlegal.moveToNext());
+                            cursorlegal.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Level2_Id") != null) {
+
+                        if (!root.getProperty("Level2_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level2_Id = root.getProperty("Level2_Id").toString();
+
+                        } else {
+                            Level2_Id = "";
+                        }
+                    } else {
+                        Level2_Id = "";
+                    }
+                    try {
+                        Cursor cursorlevel2 = null;
+                        String where = " where id = '" + Level2_Id + "'";
+                        cursorlevel2 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+                        if (cursorlevel2 != null && cursorlevel2.getCount() > 0) {
+                            cursorlevel2.moveToFirst();
+                            do {
+                                Level2_Id = cursorlevel2.getString(cursorlevel2.getColumnIndex("text"));
+                            } while (cursorlevel2.moveToNext());
+                            cursorlevel2.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Level3_Id") != null) {
+
+                        if (!root.getProperty("Level3_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level3_Id = root.getProperty("Level3_Id").toString();
+
+                        } else {
+                            Level3_Id = "";
+                        }
+                    } else {
+                        Level3_Id = "";
+                    }
+                    try {
+                        Cursor cursorlevel3 = null;
+                        String where = " where id = '" + Level3_Id + "'";
+                        cursorlevel3 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+                        if (cursorlevel3 != null && cursorlevel3.getCount() > 0) {
+                            cursorlevel3.moveToFirst();
+                            do {
+                                Level3_Id = cursorlevel3.getString(cursorlevel3.getColumnIndex("text"));
+                            } while (cursorlevel3.moveToNext());
+                            cursorlevel3.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Level4_Id") != null) {
+
+                        if (!root.getProperty("Level4_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level4_Id = root.getProperty("Level4_Id").toString();
+
+                        } else {
+                            Level4_Id = "";
+                        }
+                    } else {
+                        Level4_Id = "";
+                    }
+                    try {
+                        Cursor cursorlevel4 = null;
+                        String where = " where id = '" + Level4_Id + "'";
+                        cursorlevel4 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+                        if (cursorlevel4 != null && cursorlevel4.getCount() > 0) {
+                            cursorlevel4.moveToFirst();
+                            do {
+                                Level4_Id = cursorlevel4.getString(cursorlevel4.getColumnIndex("text"));
+                            } while (cursorlevel4.moveToNext());
+                            cursorlevel4.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Level5_Id") != null) {
+
+                        if (!root.getProperty("Level5_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level5_Id = root.getProperty("Level5_Id").toString();
+
+                        } else {
+                            Level5_Id = "";
+                        }
+                    } else {
+                        Level5_Id = "";
+                    }
+                    try {
+                        Cursor cursorlevel5 = null;
+                        String where = " where id = '" + Level5_Id + "'";
+                        cursorlevel5 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+                        if (cursorlevel5 != null && cursorlevel5.getCount() > 0) {
+                            cursorlevel5.moveToFirst();
+                            do {
+                                Level5_Id = cursorlevel5.getString(cursorlevel5.getColumnIndex("text"));
+                            } while (cursorlevel5.moveToNext());
+                            cursorlevel5.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Level6_Id") != null) {
+
+                        if (!root.getProperty("Level6_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level6_Id = root.getProperty("Level6_Id").toString();
+
+                        } else {
+                            Level6_Id = "";
+                        }
+                    } else {
+                        Level6_Id = "";
+                    }
+                    try {
+                        Cursor cursorlevel6 = null;
+                        String where = " where id = '" + Level6_Id + "'";
+                        cursorlevel6 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+                        if (cursorlevel6 != null && cursorlevel6.getCount() > 0) {
+                            cursorlevel6.moveToFirst();
+                            do {
+                                Level6_Id = cursorlevel6.getString(cursorlevel6.getColumnIndex("text"));
+                            } while (cursorlevel6.moveToNext());
+                            cursorlevel6.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Level7_Id") != null) {
+
+                        if (!root.getProperty("Level7_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level7_Id = root.getProperty("Level7_Id").toString();
+
+                        } else {
+                            Level7_Id = "";
+                        }
+                    } else {
+                        Level7_Id = "";
+                    }
+                    try {
+                        Cursor cursorlevel7 = null;
+                        String where = " where id = '" + Level7_Id + "'";
+                        cursorlevel7 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+                        if (cursorlevel7 != null && cursorlevel7.getCount() > 0) {
+                            cursorlevel7.moveToFirst();
+                            do {
+                                Level7_Id = cursorlevel7.getString(cursorlevel7.getColumnIndex("text"));
+                            } while (cursorlevel7.moveToNext());
+                            cursorlevel7.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Location_Id") != null) {
+
+                        if (!root.getProperty("Location_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Location_Id = root.getProperty("Location_Id").toString();
+
+                        } else {
+                            Location_Id = "";
+                        }
+                    } else {
+                        Location_Id = "";
+                    }
+                    try {
+                        Cursor cursorloc = null;
+                        String where = " where id = '" + Location_Id + "'";
+                        cursorloc = KHIL.dbCon.fetchFromSelect(DbHelper.M_Location, where);
+                        if (cursorloc != null && cursorloc.getCount() > 0) {
+                            cursorloc.moveToFirst();
+                            do {
+                                Location_Id = cursorloc.getString(cursorloc.getColumnIndex("text"));
+                            } while (cursorloc.moveToNext());
+                            cursorloc.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Month") != null) {
+
+                        if (!root.getProperty("Month").toString().equalsIgnoreCase("anyType{}")) {
+                            Month = root.getProperty("Month").toString();
+
+                        } else {
+                            Month = "";
+                        }
+                    } else {
+                        Month = "";
+                    }
+                    try {
+                        Cursor cursorMonth = null;
+                        String where = " where id = '" + Month + "'";
+                        cursorMonth = KHIL.dbCon.fetchFromSelect(DbHelper.M_Month, where);
+                        if (cursorMonth != null && cursorMonth.getCount() > 0) {
+                            cursorMonth.moveToFirst();
+                            do {
+                                Month = cursorMonth.getString(cursorMonth.getColumnIndex("text"));
+                            } while (cursorMonth.moveToNext());
+                            cursorMonth.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Property_Id") != null) {
+
+                        if (!root.getProperty("Property_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Property_Id = root.getProperty("Property_Id").toString();
+
+                        } else {
+                            Property_Id = "";
+                        }
+                    } else {
+                        Property_Id = "";
+                    }
+                    try {
+                        Cursor cursorpro = null;
+                        String where = " where id = '" + Property_Id + "'";
+                        cursorpro = KHIL.dbCon.fetchFromSelect(DbHelper.M_Property, where);
+                        if (cursorpro != null && cursorpro.getCount() > 0) {
+                            cursorpro.moveToFirst();
+                            do {
+                                Property_Id = cursorpro.getString(cursorpro.getColumnIndex("text"));
+                            } while (cursorpro.moveToNext());
+                            cursorpro.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("Quarter") != null) {
+
+                        if (!root.getProperty("Quarter").toString().equalsIgnoreCase("anyType{}")) {
+                            Quarter = root.getProperty("Quarter").toString();
+
+                        } else {
+                            Quarter = "";
+                        }
+                    } else {
+                        Quarter = "";
+                    }
+                    try {
+                        Cursor cursorQuter = null;
+                        String where = " where id = '" + Quarter + "'";
+                        cursorQuter = KHIL.dbCon.fetchFromSelect(DbHelper.M_Quater, where);
+                        if (cursorQuter != null && cursorQuter.getCount() > 0) {
+                            cursorQuter.moveToFirst();
+                            do {
+                                Quarter = cursorQuter.getString(cursorQuter.getColumnIndex("text"));
+                            } while (cursorQuter.moveToNext());
+                            cursorQuter.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    if (root.getProperty("Role_Id") != null) {
+
+                        if (!root.getProperty("Role_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Role_Id = root.getProperty("Role_Id").toString();
+
+                        } else {
+                            Role_Id = "";
+                        }
+                    } else {
+                        Role_Id = "";
+                    }
+                    if (root.getProperty("Status") != null) {
+
+                        if (!root.getProperty("Status").toString().equalsIgnoreCase("anyType{}")) {
+                            Status = root.getProperty("Status").toString();
+
+                        } else {
+                            Status = "";
+                        }
+                    } else {
+                        Status = "";
+                    }
+                    if (root.getProperty("Year") != null) {
+
+                        if (!root.getProperty("Year").toString().equalsIgnoreCase("anyType{}")) {
+                            Year = root.getProperty("Year").toString();
+
+                        } else {
+                            Year = "";
+                        }
+                    } else {
+                        Year = "";
+                    }
+                    try {
+                        Cursor cursoryear = null;
+                        String where = " where id = '" + Year + "'";
+                        cursoryear = KHIL.dbCon.fetchFromSelect(DbHelper.M_Year, where);
+                        if (cursoryear != null && cursoryear.getCount() > 0) {
+                            cursoryear.moveToFirst();
+                            do {
+                                Year = cursoryear.getString(cursoryear.getColumnIndex("text"));
+                            } while (cursoryear.moveToNext());
+                            cursoryear.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if (root.getProperty("type") != null) {
+
+                        if (!root.getProperty("type").toString().equalsIgnoreCase("anyType{}")) {
+                            type = root.getProperty("type").toString();
+
+                        } else {
+                            type = "";
+                        }
+                    } else {
+                        type = "";
+                    }
+
+
+                    String selection = "id = ?";
+                    id = id+1;
+                    // WHERE clause arguments
+                    String[] selectionArgs = {id+""};
+
+                    String valuesArray[] = {id+"",Created_By,Created_Date,Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,
+                            Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,
+                            Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type};
+                    boolean output = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, utils.columnNames_QC1_Data, selectionArgs);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
                 progress.dismiss();
                 Intent intent = new Intent(MainActivity.this, NavigationDrawerActivity.class);
                 startActivity(intent);
+
             }
         }
     }

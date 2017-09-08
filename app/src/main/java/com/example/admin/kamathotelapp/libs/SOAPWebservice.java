@@ -220,5 +220,36 @@ public class SOAPWebservice {
 		}
 	}
 
+	// DashboardData
+	public SoapObject QC1_Grid_APK(String userid) {
+		SoapObject result = null;
+
+		try {
+			SoapObject request = new SoapObject("http://tempuri.org/",
+					"QC1_Grid_APK");// soap object
+			request.addProperty("created_by", userid);
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);// soap envelop with version
+			envelope.setOutputSoapObject(request); // set request object
+			envelope.dotNet = true;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);// http
+			// transport
+			// call
+			androidHttpTransport.call("http://tempuri.org/IService1/QC1_Grid_APK",
+					envelope);
+
+			// response soap object
+			result = (SoapObject) envelope.getResponse();
+			Log.e("result", result.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+	}
+
 
 }

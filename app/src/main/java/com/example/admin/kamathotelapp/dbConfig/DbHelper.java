@@ -37,6 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String M_Month = "M_Month";
     public static final String M_Level_Data = "M_Level_Data";
     public static final String DASHBOARD_DATA = "dashboard_data";
+    public static final String QC1_DATA = "qc1_data";
 
     public static final int DATABASE_VERSION = 1;
     private static DbHelper dbInstance = null;

@@ -6,16 +6,72 @@
     tools:context="com.example.admin.kamathotelapp.Fragments.QC1">
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/tvFooter"
-        android:layout_marginBottom="15dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/qclayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/black">
+
+                <TextView
+                    android:id="@+id/Documentlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/table_row_item"
+                    android:fontFamily="@string/font_lightl"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Document List"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/qc_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/layout_header"
+                        layout="@layout/qc_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp">
+
+                    </include>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -324,6 +380,13 @@
             </LinearLayout>
 
         </LinearLayout>
-        </LinearLayout>
+        </LinearLayout>-->
     </ScrollView>
+
+    <ListView
+        android:id="@+id/listqc"
+        android:layout_below="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </RelativeLayout>

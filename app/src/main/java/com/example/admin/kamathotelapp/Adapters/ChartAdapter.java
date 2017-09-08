@@ -21,9 +21,8 @@ public class ChartAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<ChartDataModel> chartModelList;
-    private static LayoutInflater inflater = null;
-    ChartAdapter adapter;
-    private ChartDataModel chartDataModel;
+    //private static LayoutInflater inflater = null;
+    // private ChartDataModel chartDataModel;
 
     public ChartAdapter(Context mContext, List<ChartDataModel> chartDataModel) {
         this.mContext = mContext;
@@ -45,7 +44,7 @@ public class ChartAdapter extends BaseAdapter {
         return position;
     }
 
-    @Override
+    /*@Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 
@@ -67,7 +66,7 @@ public class ChartAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        chartDataModel = chartModelList.get(position);
+        ChartDataModel chartDataModel = chartModelList.get(position);
         viewHolder.txtLegal_Entity.setText(chartDataModel.getLegalEntity());
         viewHolder.txtProperty.setText(chartDataModel.getProperty());
         viewHolder.txtLocation.setText(chartDataModel.getLocation());
@@ -78,9 +77,40 @@ public class ChartAdapter extends BaseAdapter {
 
 
         return convertView;
+    }*/
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
+        convertView = null;
+        if (convertView == null) {
+            LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = mInflater.inflate(R.layout.chart_adpter_item, null);
+            TextView txtLegal_Entity = (TextView) convertView.findViewById(R.id.txtLegal_Entity);
+            TextView txtProperty = (TextView) convertView.findViewById(R.id.txtProperty);
+            TextView txtLocation = (TextView) convertView.findViewById(R.id.txtLocation);
+            TextView txtType_Of_Document = (TextView) convertView.findViewById(R.id.txtType_Of_Document);
+            TextView txtSelected_Document = (TextView) convertView.findViewById(R.id.txtSelected_Document);
+            TextView txtSupporting_Document = (TextView) convertView.findViewById(R.id.txtSupporting_Document);
+            TextView txtAnnexure = (TextView) convertView.findViewById(R.id.txtAnnexure);
+
+
+            ChartDataModel chartDataModel = chartModelList.get(position);
+
+            txtLegal_Entity.setText(chartDataModel.getLegalEntity());
+            txtProperty.setText(chartDataModel.getProperty());
+            txtLocation.setText(chartDataModel.getLocation());
+            txtType_Of_Document.setText(chartDataModel.getType_Of_Document());
+            txtSelected_Document.setText(chartDataModel.getSelected_Document());
+            txtSupporting_Document.setText(chartDataModel.getSupporting_Document());
+            txtAnnexure.setText(chartDataModel.getAnnexure());
+
+
+        }
+        return convertView;
     }
 
-    public class ViewHolder {
+   /* public class ViewHolder {
         private TextView txtLegal_Entity, txtProperty, txtLocation, txtType_Of_Document, txtSelected_Document, txtSupporting_Document, txtAnnexure;
-    }
+    }*/
 }

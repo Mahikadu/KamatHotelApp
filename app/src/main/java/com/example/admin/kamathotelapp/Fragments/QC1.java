@@ -1,6 +1,7 @@
 package com.example.admin.kamathotelapp.Fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,9 @@ public class QC1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        getActivity().setTitle("QC1");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_qc1, container, false);
     }

@@ -3,6 +3,7 @@ package com.example.admin.kamathotelapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -48,8 +49,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
             selectFragmentAsDefault();
         }
 
+        String userloged = sharedPref.getLoginId();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if(userloged.equalsIgnoreCase("QC1finance") || userloged.equalsIgnoreCase("csQC1") ||
+                userloged.equalsIgnoreCase("cmdQC1") || userloged.equalsIgnoreCase("hrQC1") ||
+                userloged.equalsIgnoreCase("legalQC1") || userloged.equalsIgnoreCase("marketingQC1") ||
+                userloged.equalsIgnoreCase("personalQC1")){
+
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.qc1).setVisible(true);
+        }
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

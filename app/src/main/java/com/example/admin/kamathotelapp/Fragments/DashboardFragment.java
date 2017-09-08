@@ -137,6 +137,33 @@ public class DashboardFragment extends Fragment {
         listDashboard = (ListView) view.findViewById(R.id.listDashboard);
         listDashchart = (ListView) view.findViewById(R.id.listDashchart);
 
+
+        listDashchart.setOnTouchListener(new ListView.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                int action = event.getAction();
+                switch (action)
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+
+                // Handle ListView touch events.
+                v.onTouchEvent(event);
+                return true;
+            }
+        });
+        listDashchart.setClickable(true);
+
         sharedPref = new SharedPref(getActivity());
         ws = new SOAPWebservice(getActivity());
         progress = new ProgressDialog(getActivity());

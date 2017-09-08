@@ -539,7 +539,7 @@
             <LinearLayout
                 android:id="@+id/chartdatalayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="gone"
                 android:layout_marginTop="10dp">
@@ -553,7 +553,7 @@
                     <LinearLayout
                         android:id="@+id/chartdash_header"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:orientation="vertical">
@@ -569,11 +569,11 @@
                         <ListView
                             android:id="@+id/listDashchart"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             />
                     </LinearLayout>
 
-                    <LinearLayout
+                   <!-- <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -591,7 +591,7 @@
                                 android:stretchColumns="*">
                             </TableLayout>
                         </ScrollView>
-                    </LinearLayout>
+                    </LinearLayout>-->
                 </LinearLayout>
             </LinearLayout>
 
