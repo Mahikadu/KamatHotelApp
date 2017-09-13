@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_upload_1"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/qc1srNo"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:maxLines="2"
+        android:padding="10dp"
+        android:text="SrNo"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/qc1level2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="Type of Document"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="1.4"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/qc1level3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="Selected Document"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="1.4"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/qc1level4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="Supporting Document"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="1.4"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/qc1level5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="ANNEXURE"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="1.4"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/qc1level6"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="Licenses"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="1.4"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+    <!-- <TextView
+         android:id="@+id/level7"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="3sp"
+         android:layout_marginRight="3sp"
+         android:layout_weight="9"
+         android:maxLines="2"
+         android:textSize="15sp"
+         android:textColor="@color/white" />-->
+
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="File Name"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="1.6"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/action"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:text="Action"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_weight="0.8"
+        android:background="@drawable/table_row_item"
+        android:fontFamily="@string/font_lightl"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"/>
+
+</LinearLayout>

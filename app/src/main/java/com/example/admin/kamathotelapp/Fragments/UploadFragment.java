@@ -55,7 +55,9 @@ import com.example.admin.kamathotelapp.Model.LeveldataModel;
 import com.example.admin.kamathotelapp.Model.LocationModel;
 import com.example.admin.kamathotelapp.Model.MonthModel;
 import com.example.admin.kamathotelapp.Model.PropertyModel;
+import com.example.admin.kamathotelapp.Model.QuaterModel;
 import com.example.admin.kamathotelapp.Model.UploadModel;
+import com.example.admin.kamathotelapp.Model.YearModel;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
@@ -128,7 +130,7 @@ public class UploadFragment extends Fragment {
     @InjectView(R.id.spinLoc)
     AutoCompleteTextView autoLoc;
     public static AutoCompleteTextView txtL2,txtL3,txtL4,txtL5,txtL6,txtL7;
-    public String txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,monthID;
+    public String txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,monthID,yearID,quaterID;
     public String valuel2,valuel3,valuel4,valuel5,valuel6,valuel7;
     public String legalEntityID,propertyID,individualID,locationID;
     public String legalEntityValue,propertyValue,individualValue,locationValue;
@@ -186,7 +188,11 @@ public class UploadFragment extends Fragment {
     private String legalEntity,individuals = "",newProposal = "",property, year, quarter, month, location, file="", level2="", level3="", level4="", level5="", level6="", level7="";
     public static LinearLayout layout_edit;
     public static int ID = 0;
-    private ArrayList<String> listIndividuals,listYear,listQuarter;
+    private ArrayList<String> listIndividuals;
+    private ArrayList<YearModel> listYear;
+    YearModel yearModel;
+    private ArrayList<QuaterModel> listQuarter;
+    QuaterModel quaterModel;
     LegalEntityModel legalEntityModel;
     private ArrayList<LegalEntityModel> listLegal,listLegalAll;
     private ArrayList<LeveldataModel> listLevelData;
@@ -781,13 +787,14 @@ public class UploadFragment extends Fragment {
         });
 
 
-
-
-        if (listYear.size() > 0) {
-            strYearArray = new String[listYear.size()];
-            //   strLeadArray[0] = "Select Source Lead";
-            for (int i = 0; i < listYear.size(); i++) {
-                strYearArray[i] = listYear.get(i);
+        if (listYear != null) {
+            if (listYear.size() > 0) {
+                strYearArray = new String[listYear.size()];
+                //   strLeadArray[0] = "Select Source Lead";
+                for (int i = 0; i < listYear.size(); i++) {
+                    yearModel  = listYear.get(i);
+                    strYearArray[i] = yearModel.getText();
+                }
             }
         }
         if (listYear != null && listYear.size() > 0) {
@@ -833,7 +840,15 @@ public class UploadFragment extends Fragment {
                 if (strYearArray != null && strYearArray.length > 0) {
                     strYear = autoYear.getText().toString();
                     yearString = parent.getItemAtPosition(position).toString();
+                    for (int i = 0; i < listYear.size(); i++) {
+                        yearModel = listYear.get(i);
+                        String text = yearModel.getText();
+                        if (text.equalsIgnoreCase(yearString)) {
+                            yearID = yearModel.getValue();
+                        }
+                    }
                 }
+
             }
         });
         ///////////////////////////////
@@ -841,7 +856,8 @@ public class UploadFragment extends Fragment {
         if (listQuarter.size() > 0) {
             strQuarterArray = new String[listQuarter.size()];
             for (int i = 0; i < listQuarter.size(); i++) {
-                strQuarterArray[i] = listQuarter.get(i);
+                quaterModel = listQuarter.get(i);
+                strQuarterArray[i] = quaterModel.getText();
             }
         }
         if (listQuarter != null && listQuarter.size() > 0) {
@@ -885,6 +901,13 @@ public class UploadFragment extends Fragment {
                 if (strQuarterArray != null && strQuarterArray.length > 0) {
                     strQuarter = autoQuarter.getText().toString();
                     quarterString = parent.getItemAtPosition(position).toString();
+                    for (int i = 0; i < listQuarter.size(); i++) {
+                        quaterModel = listQuarter.get(i);
+                        String text = quaterModel.getText();
+                        if (text.equalsIgnoreCase(quarterString)) {
+                            quaterID = quaterModel.getValue();
+                        }
+                    }
                 }
                 listMonth = new ArrayList<>();
                 String month = "";
@@ -2492,8 +2515,8 @@ public class UploadFragment extends Fragment {
         }
         id = String.valueOf(ID);
         String[] selectionArgs = {id};
-        String valuesArray[] = {id, loginId, legalEntity,individuals,newProposal,property, year, quarter, month,
-                location, file, level2, level3, level4, level5, level6, level7,txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,
+        String valuesArray[] = {id, loginId, legalEntity,individuals,newProposal,property, year, quarter, month, yearID,
+                quaterID,monthID,location, file, level2, level3, level4, level5, level6, level7,txtL2Id,txtL3Id,txtL4Id,txtL5Id,txtL6Id,txtL7Id,
                 roleID,legalEntityID,propertyID,individualID,locationID,Doc_no,fileUp,filePath,fileExtension,"",date,strLastSync};
 
         boolean result = KHIL.dbCon.updateBulk(DbHelper.TABLE_UPLOAD, selection, valuesArray, utils.columnNamesUpload, selectionArgs);
@@ -2684,6 +2707,9 @@ public class UploadFragment extends Fragment {
             uploadModel.setYear(cursor.getString(cursor.getColumnIndex("col_year")));
             uploadModel.setQuarter(cursor.getString(cursor.getColumnIndex("quarter")));
             uploadModel.setMonth(cursor.getString(cursor.getColumnIndex("col_month")));
+            uploadModel.setYearID(cursor.getString(cursor.getColumnIndex("yearID")));
+            uploadModel.setQuarterID(cursor.getString(cursor.getColumnIndex("quarterID")));
+            uploadModel.setMonthID(cursor.getString(cursor.getColumnIndex("monthID")));
             uploadModel.setFileUp(cursor.getString(cursor.getColumnIndex("file")));
             uploadModel.setFilePath(cursor.getString(cursor.getColumnIndex("file_path")));
             uploadModel.setFileExtension(cursor.getString(cursor.getColumnIndex("file_extension")));
@@ -4165,24 +4191,33 @@ public class UploadFragment extends Fragment {
 
         listYear = new ArrayList<>();
         String year = "";
-        Cursor cursor2 = KHIL.dbCon.fetchFromSelectDistinct(text,DbHelper.M_Year);
+        Cursor cursor2 = KHIL.dbCon.fetchAlldata(DbHelper.M_Year);
         if (cursor2 != null && cursor2.getCount() > 0) {
             cursor2.moveToFirst();
             do {
-                year = cursor2.getString(cursor2.getColumnIndex("text"));
-                listYear.add(year);
+//                year = cursor2.getString(cursor2.getColumnIndex("text"));
+                yearModel = new YearModel();
+                yearModel.setId(cursor2.getString(cursor2.getColumnIndex("id")));
+                yearModel.setText(cursor2.getString(cursor2.getColumnIndex("text")));
+                yearModel.setValue(cursor2.getString(cursor2.getColumnIndex("value")));
+                listYear.add(yearModel);
             } while (cursor2.moveToNext());
             cursor2.close();
         }
 
         listQuarter = new ArrayList<>();
         String quater = "";
-        Cursor cursor3 = KHIL.dbCon.fetchFromSelectDistinct(text,DbHelper.M_Quater);
+        Cursor cursor3 = KHIL.dbCon.fetchAlldata(DbHelper.M_Quater);
         if (cursor3 != null && cursor3.getCount() > 0) {
             cursor3.moveToFirst();
             do {
-                quater = cursor3.getString(cursor3.getColumnIndex("text"));
-                listQuarter.add(quater);
+//                quater = cursor3.getString(cursor3.getColumnIndex("text"));
+                quaterModel = new QuaterModel();
+                quaterModel.setId(cursor3.getString(cursor3.getColumnIndex("id")));
+                quaterModel.setText(cursor3.getString(cursor3.getColumnIndex("text")));
+                quaterModel.setValue(cursor3.getString(cursor3.getColumnIndex("value")));
+
+                listQuarter.add(quaterModel);
             } while (cursor3.moveToNext());
             cursor3.close();
         }
@@ -4255,7 +4290,7 @@ public class UploadFragment extends Fragment {
                     uploadModel.getLocationID(),uploadModel.getDoc_no(),uploadModel.getLoginId(), uploadModel.getLoginId(),uploadModel.getDate(),uploadModel.getDate(),
                     uploadModel.getIndividualID(),uploadModel.getNewProposal(),"",uploadModel.getTxtL2Id(),uploadModel.getTxtL3Id(),
                     uploadModel.getTxtL4Id(),uploadModel.getTxtL5Id(),uploadModel.getTxtL6Id(),uploadModel.getTxtL7Id(),
-                    uploadModel.getYear(),uploadModel.getQuarter(),uploadModel.getMonth(),uploadModel.getFileUp(),uploadModel.getFilePath(),
+                    uploadModel.getYearID(),uploadModel.getQuarterID(),uploadModel.getMonthID(),uploadModel.getFileUp(),uploadModel.getFilePath(),
                     uploadModel.getFilePath()+uploadModel.getFileUp(), uploadModel.getFileExtension(),base64);
             String id =  String.valueOf(objLead);
 

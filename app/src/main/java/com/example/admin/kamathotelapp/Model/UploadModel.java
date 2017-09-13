@@ -5,9 +5,56 @@ package com.example.admin.kamathotelapp.Model;
  */
 public class UploadModel {
     String id, level2, level3, level4, level5, level6, level7, fileName;
-  String  roleID, legalEntityID, propertyID, locationID, Doc_no,
-    loginId,  date, individualID, newProposal,txtL2Id,txtL3Id,txtL4Id,
-    txtL5Id,txtL6Id,txtL7Id, year, quarter, month, fileUp, filePath, fileExtension;
+    String roleID;
+    String legalEntityID;
+    String propertyID;
+    String locationID;
+    String Doc_no;
+    String loginId;
+    String date;
+    String individualID;
+    String newProposal;
+    String txtL2Id;
+    String txtL3Id;
+    String txtL4Id;
+    String txtL5Id;
+    String txtL6Id;
+    String txtL7Id;
+    String year;
+    String quarter;
+    String month;
+    String yearID;
+    String quarterID;
+    String monthID;
+    String fileUp;
+    String filePath;
+    String fileExtension;
+
+
+    public String getYearID() {
+        return yearID;
+    }
+
+    public void setYearID(String yearID) {
+        this.yearID = yearID;
+    }
+
+    public String getQuarterID() {
+        return quarterID;
+    }
+
+    public void setQuarterID(String quarterID) {
+        this.quarterID = quarterID;
+    }
+
+    public String getMonthID() {
+        return monthID;
+    }
+
+    public void setMonthID(String monthID) {
+        this.monthID = monthID;
+    }
+
 
     public String getRoleID() {
         return roleID;

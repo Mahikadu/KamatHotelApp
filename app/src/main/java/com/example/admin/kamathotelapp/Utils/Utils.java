@@ -23,7 +23,7 @@ public class Utils {
 
     public Utils(Context mContext) {
         this.mContext = mContext;
-        String[] uploadArray = {"id","user_id", "legal_entity","individuals","new_proposal", "property", "col_year", "quarter", "col_month", "location", "fileName",
+        String[] uploadArray = {"id","user_id", "legal_entity","individuals","new_proposal", "property", "col_year", "quarter", "col_month","yearID","quarterID","monthID","location", "fileName",
                 "level2", "level3", "level4", "level5", "level6", "level7","level2Id", "level3Id", "level4Id", "level5Id", "level6Id", "level7Id","role_Id",
                 "legalEntityID","propertyID","individualID","locationID","doc_no","file","file_path","file_extension","trans_id","updated_date","last_sync"};
         columnNamesUpload = Arrays.copyOf(uploadArray, uploadArray.length);

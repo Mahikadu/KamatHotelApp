@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black">
+
+           <LinearLayout
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtDept"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Dept"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtDocumentNo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Doc No"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtCreby"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Created By"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+
+            <TextView
+                android:id="@+id/txtCredt"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Created Dt"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtYear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Year"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtQuater"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Quarter"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtMonth"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Month"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Status"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtDetails"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="Details"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+            <TextView
+                android:id="@+id/txtQC1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/table_row_item"
+                android:gravity="center"
+                android:text="QC1"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:fontFamily="@string/font_lightl"/>
+
+
+
+           <!-- <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.55"
+                android:gravity="center"
+                android:background="@drawable/table_row_item"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:fontFamily="@string/font_lightl"
+                    android:text="Details"/>
+
+                <TextView
+                    android:id="@+id/txtView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:fontFamily="@string/font_lightl"
+                    android:text="View"/>
+
+                <TextView
+                    android:id="@+id/txtDownload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:fontFamily="@string/font_lightl"
+                    android:text="Download"/>
+            </LinearLayout>-->
+
+        </LinearLayout>
+</LinearLayout>
