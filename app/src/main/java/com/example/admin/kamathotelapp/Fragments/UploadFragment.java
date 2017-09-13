@@ -27,7 +27,10 @@ import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Base64OutputStream;
 import android.view.LayoutInflater;
@@ -209,6 +212,13 @@ public class UploadFragment extends Fragment {
     private ArrayList<UploadModel> submitDatalist;
     ProgressDialog progress;
 
+    private boolean lev3 = false;
+    private boolean lev4 = false;
+    private boolean lev5 = false;
+    private boolean lev6 = false;
+    private boolean lev7 = false;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -278,6 +288,239 @@ public class UploadFragment extends Fragment {
         viewFile = (TextView) view.findViewById(R.id.txtViewFile);
 
         listUpload = (ListView) view.findViewById(R.id.listViewUpload);
+
+        autoLegalEntity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(autoLegalEntity.length()>0) {
+                    autoLegalEntity.setError(null);
+                }
+
+            }
+        });
+
+        autoProperty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(autoProperty.length()>0){
+                    autoProperty.setError(null);
+                }
+
+            }
+        });
+        autoYear.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(autoYear.length()>0){
+                    autoYear.setError(null);
+                }
+
+            }
+        });
+
+
+        autoQuarter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(autoQuarter.length()>0){
+                    autoQuarter.setError(null);
+                }
+
+            }
+        });
+
+        autoMonth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(autoMonth.length()>0){
+                    autoMonth.setError(null);
+                }
+
+            }
+        });
+
+        autoLoc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(autoLoc.length()>0){
+                    autoLoc.setError(null);
+                }
+            }
+        });
+
+        txtL2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txtL2.length()>0){
+                    txtL2.setError(null);
+                }
+            }
+        });
+
+        txtL3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txtL3.length()>0){
+                    txtL3.setError(null);
+                }
+            }
+        });
+
+        txtL4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txtL4.length()>0){
+                    txtL4.setError(null);
+                }
+            }
+        });
+
+        txtL5.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txtL5.length()>0){
+                    txtL5.setError(null);
+                }
+            }
+        });
+
+        txtL6.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txtL6.length()>0){
+                    txtL6.setError(null);
+                }
+            }
+        });
+
+        txtL7.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(txtL7.length()>0){
+                    txtL7.setError(null);
+                }
+            }
+        });
 
 
        // autoLegalEntity = (TextView) view.findViewById(R.id.autoLegalEntity);
@@ -1064,6 +1307,7 @@ public class UploadFragment extends Fragment {
                             level3txtlayout.setHint(valLevel2);
                             cardlevel3.setVisibility(View.VISIBLE);
                             txtL3.setVisibility(View.VISIBLE);
+                            lev3 = true;
                         }
                     }
                 }
@@ -1113,6 +1357,7 @@ public class UploadFragment extends Fragment {
                             if(level4list.size()>0){
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                                lev4 = true;
                             }else {
                                 cardlevel4.setVisibility(View.GONE);
                             }
@@ -1162,6 +1407,7 @@ public class UploadFragment extends Fragment {
                             if (level5list.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                lev5 = true;
                             }else {
                                 cardlevel5.setVisibility(View.GONE);
                             }
@@ -1209,6 +1455,7 @@ public class UploadFragment extends Fragment {
                             if (level6list.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                lev6 = true;
                             }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
@@ -1308,6 +1555,7 @@ public class UploadFragment extends Fragment {
                             fetchLevel5dataHR(aid);
                             level5txtlayout.setHint(valLevel4);
                             cardlevel5.setVisibility(View.VISIBLE);
+                            lev5 = true;
                         }
                     }
                 }
@@ -1347,6 +1595,7 @@ public class UploadFragment extends Fragment {
                             if (level6listHR.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                lev6 = true;
                             }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
@@ -1443,6 +1692,7 @@ public class UploadFragment extends Fragment {
                             if (level5listCMD.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                lev5 = true;
                             }else {
                                 cardlevel5.setVisibility(View.GONE);
                             }
@@ -1485,6 +1735,7 @@ public class UploadFragment extends Fragment {
                             if (level6listCMD.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                lev6 = true;
                             }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
@@ -1525,6 +1776,7 @@ public class UploadFragment extends Fragment {
                             if (level7listCMD.size()>0){
                                 level7txtlayout.setHint(valLevel5);
                                 cardlevel7.setVisibility(View.VISIBLE);
+                                lev7 = true;
                             }else {
                                 cardlevel7.setVisibility(View.GONE);
                             }
@@ -1621,6 +1873,7 @@ public class UploadFragment extends Fragment {
                             fetchLevel3dataCS(aid);
                             level3txtlayout.setHint(valLevel2);
                             cardlevel3.setVisibility(View.VISIBLE);
+                            lev3 = true;
                         }
                     }
                 }
@@ -1668,6 +1921,7 @@ public class UploadFragment extends Fragment {
                             if (level4listCS.size()>0){
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                                lev4 = true;
                             }else {
                                 cardlevel4.setVisibility(View.GONE);
                             }
@@ -1766,6 +2020,7 @@ public class UploadFragment extends Fragment {
                             if (level5listMAR.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                lev5 = true;
                             }else {
                                 cardlevel5.setVisibility(View.GONE);
                             }
@@ -1809,6 +2064,7 @@ public class UploadFragment extends Fragment {
                             if (level6listMAR.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                lev6 = true;
                             }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
@@ -1849,6 +2105,7 @@ public class UploadFragment extends Fragment {
                             if (level7listMAR.size()>0){
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
+                                lev7 = true;
                             }else {
                                 cardlevel7.setVisibility(View.GONE);
                             }
@@ -1946,6 +2203,7 @@ public class UploadFragment extends Fragment {
                             if (level4listPER.size()>0){
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                                lev4 = true;
                             }else {
                                 cardlevel4.setVisibility(View.GONE);
                             }
@@ -1994,6 +2252,7 @@ public class UploadFragment extends Fragment {
                             if (level5listPER.size()>0){
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                lev5 = true;
                             }else {
                                 cardlevel5.setVisibility(View.GONE);
                             }
@@ -2087,6 +2346,7 @@ public class UploadFragment extends Fragment {
                             fetchLevel5dataLEGAL(aid);
                             level5txtlayout.setHint(valLevel4);
                             cardlevel5.setVisibility(View.VISIBLE);
+                            lev5 = true;
                         }
                     }
                 }
@@ -2125,6 +2385,7 @@ public class UploadFragment extends Fragment {
                             if (level6listLEGAL.size()>0){
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                lev6 = true;
                             }else {
                                 cardlevel6.setVisibility(View.GONE);
                             }
@@ -2165,6 +2426,7 @@ public class UploadFragment extends Fragment {
                             if (level7listLEGAL.size()>0){
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
+                                lev7 = true;
                             }else {
                                 cardlevel7.setVisibility(View.GONE);
                             }
@@ -2206,6 +2468,131 @@ public class UploadFragment extends Fragment {
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View focusView = null;
+                autoLegalEntity.setError(null);
+                autoProperty.setError(null);
+                autoQuarter.setError(null);
+                autoMonth.setError(null);
+                autoLoc.setError(null);
+                txtL2.setError(null);
+                txtL3.setError(null);
+                txtL4.setError(null);
+                txtL5.setError(null);
+                txtL6.setError(null);
+                txtL7.setError(null);
+
+
+                if(TextUtils.isEmpty(autoLegalEntity.getText().toString())){
+                    autoLegalEntity.setError("This field is required");
+                    focusView = autoLegalEntity;
+                    focusView.requestFocus();
+                    autoLegalEntity.setFocusable(true);
+                    autoLegalEntity.requestFocusFromTouch();
+                    return;
+                }else  if(TextUtils.isEmpty(autoProperty.getText().toString())){
+                    autoProperty.setError("This field is required");
+                    focusView = autoProperty;
+                    focusView.requestFocus();
+                    autoProperty.setFocusable(true);
+                    autoProperty.requestFocusFromTouch();
+                    return;
+                }else  if(TextUtils.isEmpty(autoYear.getText().toString())){
+                    autoYear.setError("This field is required");
+                    focusView = autoYear;
+                    focusView.requestFocus();
+                    autoYear.setFocusable(true);
+                    autoYear.requestFocusFromTouch();
+                    return;
+                }else if(TextUtils.isEmpty(autoQuarter.getText().toString())){
+                    autoQuarter.setError("This field is required");
+                    focusView = autoQuarter;
+                    focusView.requestFocus();
+                    autoQuarter.setFocusable(true);
+                    autoQuarter.requestFocusFromTouch();
+                    return;
+                }else  if(TextUtils.isEmpty(autoMonth.getText().toString())){
+                    autoMonth.setError("This field is required");
+                    focusView = autoMonth;
+                    focusView.requestFocus();
+                    autoMonth.setFocusable(true);
+                    autoMonth.requestFocusFromTouch();
+                    return;
+                }else  if(TextUtils.isEmpty(autoLoc.getText().toString())){
+                    autoLoc.setError("This field is required");
+                    focusView = autoLoc;
+                    focusView.requestFocus();
+                    autoLoc.setFocusable(true);
+                    autoLoc.requestFocusFromTouch();
+                    return;
+                }
+
+                else if(TextUtils.isEmpty(txtL2.getText().toString())){
+
+                    txtL2.setFocusable(true);
+                    txtL2.setError("This field is required");
+                    focusView = txtL2;
+                    focusView.requestFocus();
+                    txtL2.requestFocusFromTouch();
+                    return;
+                }
+
+                else if(TextUtils.isEmpty(txtL3.getText().toString())){
+                    if(lev3){
+                        txtL3.setFocusable(true);
+                        txtL3.setError("This field is required");
+                        focusView = txtL3;
+                        focusView.requestFocus();
+                        txtL3.requestFocusFromTouch();
+                        return;
+                    }
+
+                }
+
+                else if(TextUtils.isEmpty(txtL4.getText().toString())){
+                    if(lev4){
+                        txtL4.setFocusable(true);
+                        txtL4.setError("This field is required");
+                        focusView = txtL4;
+                        focusView.requestFocus();
+                        txtL4.requestFocusFromTouch();
+                        return;
+                    }
+
+                }
+
+                else if(TextUtils.isEmpty(txtL5.getText().toString())){
+                    if(lev5){
+                        txtL5.setFocusable(true);
+                        focusView = txtL5;
+                        focusView.requestFocus();
+                        txtL5.setError("This field is required");
+                        txtL5.requestFocusFromTouch();
+                        return;
+                    }
+
+                }
+
+                else if(TextUtils.isEmpty(txtL6.getText().toString())){
+                    if(lev6){
+                        txtL6.setFocusable(true);
+                        focusView = txtL6;
+                        focusView.requestFocus();
+                        txtL6.setError("This field is required");
+                        txtL6.requestFocusFromTouch();
+                        return;
+                    }
+                }
+
+                else if(TextUtils.isEmpty(txtL7.getText().toString())){
+                    if(lev7){
+                        txtL7.setFocusable(true);
+                        txtL7.setError("This field is required");
+                        focusView = txtL7;
+                        focusView.requestFocus();
+                        txtL7.requestFocusFromTouch();
+                        return;
+                    }
+                }
                 if(txtNoFile.getText().toString().equalsIgnoreCase("No file chosen")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(
                             getActivity()).create();
