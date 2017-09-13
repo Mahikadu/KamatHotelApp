@@ -198,7 +198,7 @@ public class QC1 extends Fragment {
         cardlevel5 = (CardView) view.findViewById(R.id.qc1level5cardview);
         cardlevel6 = (CardView) view.findViewById(R.id.qc1level6cardview);
         cardlevel7 = (CardView) view.findViewById(R.id.qc1level7cardview);
-        
+
 
         level2txtlayout = (TextInputLayout)view.findViewById(R.id.qc1level2txtlayout);
         level3txtlayout = (TextInputLayout)view.findViewById(R.id.qc1level3txtlayout);
