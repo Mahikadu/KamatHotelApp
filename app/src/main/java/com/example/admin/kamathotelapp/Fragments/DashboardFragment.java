@@ -180,81 +180,87 @@ public class DashboardFragment extends Fragment {
        /* barEntries.add(new BarEntry(50f,0));
         barEntries.add(new BarEntry(40f,1));
         barEntries.add(new BarEntry(20f,2));*/
+       try {
+           if (barEntries.size() > 0) {
+               BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
+               int[] Colors = {Color.rgb(193, 37, 82),
+                       Color.rgb(255, 102, 0),
+                       Color.rgb(245, 199, 0),};
+               barDataSet.setColors(Colors);
+               //barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
-       if(barEntries.size()> 0) {
-           BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
-           int[] Colors = {Color.rgb(193, 37, 82),
-                   Color.rgb(255, 102, 0),
-                   Color.rgb(245, 199, 0),};
-           barDataSet.setColors(Colors);
-           //barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+               barDataSet.setValueFormatter(new ValueFormatter() {
+                   @Override
+                   public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                       return Math.round(value) + "";
+                   }
+               });
+               barDataSet.setDrawValues(true);//above heading in bar
 
-           barDataSet.setValueFormatter(new ValueFormatter() {
-               @Override
-               public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                   return Math.round(value) + "";
-               }
-           });
-           barDataSet.setDrawValues(true);//above heading in bar
+
 
 
         /*lables.add("QC1Approved");
         lables.add("QC1Pending");
         lables.add("QC1Rejected");*/
 
-           BarData theData = new BarData(lables, barDataSet);
-           barChart.setData(theData);
-           barChart.setTouchEnabled(true);
-           barChart.setDragEnabled(true);
-           barChart.setScaleEnabled(true);// when long tuch to screen it zooms
-           barChart.animateY(3000);
-           barChart.getData().setHighlightEnabled(false);   // when click on bar chart high light is false
+               BarData theData = new BarData(lables, barDataSet);
+               barChart.setData(theData);
+               barChart.setTouchEnabled(true);
+               barChart.setDragEnabled(true);
+               barChart.setScaleEnabled(true);// when long tuch to screen it zooms
+               barChart.animateY(3000);
+               barChart.getData().setHighlightEnabled(false);   // when click on bar chart high light is false
 
-           YAxis y = barChart.getAxisLeft();
-           y.setAxisMaxValue(100);
-           y.setAxisMinValue(0);
-           y.setDrawAxisLine(true);
+               YAxis y = barChart.getAxisLeft();
+               y.setAxisMaxValue(100);
+               y.setAxisMinValue(0);
+               y.setDrawAxisLine(true);
 
-           XAxis xAxis = barChart.getXAxis();
-           xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+               XAxis xAxis = barChart.getXAxis();
+               xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
-           YAxis Right = barChart.getAxisRight();
-           Right.setEnabled(false);
+               YAxis Right = barChart.getAxisRight();
+               Right.setEnabled(false);
 
-           Legend legend = barChart.getLegend();
-           legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
-           legend.setWordWrapEnabled(true);  ///wrap the leget
-           legend.setCustom(Colors, new String[]{"Set1", "Set2", "set3",});
-           legend.setTextSize(10);
+               Legend legend = barChart.getLegend();
+               legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
+               legend.setWordWrapEnabled(true);  ///wrap the leget
+               legend.setCustom(Colors, new String[]{"Set1", "Set2", "set3",});
+               legend.setTextSize(10);
 
-           barChart.getXAxis().setDrawGridLines(false);  //vertical grid lines visibility false
-           barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-               @Override
-               public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+               barChart.getXAxis().setDrawGridLines(false);  //vertical grid lines visibility false
+               barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                   @Override
+                   public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
 
-                   if (e.getXIndex() == 0) {
-                       String approved = "QC1Approved";
-                       chartdatalayout.setVisibility(View.VISIBLE);
-                       ChartData chartData = new ChartData();
-                       chartData.execute(approved);
-                   } else if (e.getXIndex() == 1) {
-                       String pending = "QC1Pending";
-                       chartdatalayout.setVisibility(View.VISIBLE);
-                       ChartData chartData = new ChartData();
-                       chartData.execute(pending);
-                   } else if (e.getXIndex() == 2) {
-                       String rejected = "QC1Rejected";
-                       chartdatalayout.setVisibility(View.VISIBLE);
-                       ChartData chartData = new ChartData();
-                       chartData.execute(rejected);
+                       if (e.getXIndex() == 0) {
+                           String approved = "QC1Approved";
+                           chartdatalayout.setVisibility(View.VISIBLE);
+                           ChartData chartData = new ChartData();
+                           chartData.execute(approved);
+                       } else if (e.getXIndex() == 1) {
+                           String pending = "QC1Pending";
+                           chartdatalayout.setVisibility(View.VISIBLE);
+                           ChartData chartData = new ChartData();
+                           chartData.execute(pending);
+                       } else if (e.getXIndex() == 2) {
+                           String rejected = "QC1Rejected";
+                           chartdatalayout.setVisibility(View.VISIBLE);
+                           ChartData chartData = new ChartData();
+                           chartData.execute(rejected);
+                       }
                    }
-               }
 
-               @Override
-               public void onNothingSelected() {
+                   @Override
+                   public void onNothingSelected() {
 
-               }
-           });
+                   }
+               });
+
+           }
+       }catch (Exception e){
+           e.printStackTrace();
        }
         ////////////////////////////////////////////
 

@@ -1,7 +1,9 @@
 package com.example.admin.kamathotelapp.Fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -11,11 +13,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import com.itextpdf.text.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,6 +30,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.Html;
@@ -33,6 +38,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Base64OutputStream;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,6 +57,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.admin.kamathotelapp.Adapters.UploadAdapter;
 import com.example.admin.kamathotelapp.KHIL;
 import com.example.admin.kamathotelapp.Model.LegalEntityModel;
@@ -69,6 +76,7 @@ import com.example.admin.kamathotelapp.dbConfig.DataBaseCon;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 import com.example.admin.kamathotelapp.libs.SOAPWebservice;
 import com.example.admin.kamathotelapp.libs.UtilityClass;
+import com.gun0912.tedpicker.ImagePickerActivity;
 
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -78,6 +86,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -92,6 +101,11 @@ import java.util.Queue;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import in.gauriinfotech.commons.Commons;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class UploadFragment extends Fragment {
 
@@ -101,7 +115,7 @@ public class UploadFragment extends Fragment {
     ArrayAdapter<String> dataAdapter;
     private SharedPref sharedPref;
     List<String> listL2, listL3, listL4, listL5, listL6;
-    public static Button btnUpload;
+    public static Button btnUpload,btnImage;
     @InjectView(R.id.btnFile)
     Button  btnAttach;
     @InjectView(R.id.btnUpdate)
@@ -219,6 +233,11 @@ public class UploadFragment extends Fragment {
     private boolean lev7 = false;
 
 
+    private static final int INTENT_REQUEST_GET_IMAGES = 13;
+    List<String> imagesUri;
+    String imageFilename,imagePath;
+    Image pickimage;
+    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE_RESULT = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -237,6 +256,8 @@ public class UploadFragment extends Fragment {
         ButterKnife.inject(this, view);
         layout_edit = (LinearLayout) view.findViewById(R.id.layout_edit);
         btnUpload = (Button) view.findViewById(R.id.btnUpload);
+        btnImage = (Button)view.findViewById(R.id.btnImage);
+        imagesUri = new ArrayList<>();
         progress = new ProgressDialog(getContext());
         initView(view);
         return view;
@@ -1249,7 +1270,7 @@ public class UploadFragment extends Fragment {
             }
         });
 
-        if(loginId.equalsIgnoreCase("finance") && password.equalsIgnoreCase("password")) {
+        if((loginId.equalsIgnoreCase("finance")||loginId.equalsIgnoreCase("QC1finance")) && password.equalsIgnoreCase("password")) {
 
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
@@ -1499,7 +1520,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if(loginId.equalsIgnoreCase("hr") && password.equalsIgnoreCase("password")) {
+        } else if((loginId.equalsIgnoreCase("hr")||loginId.equalsIgnoreCase("hrQC1")) && password.equalsIgnoreCase("password")) {
 
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
@@ -1634,7 +1655,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if(loginId.equalsIgnoreCase("cmd") && password.equalsIgnoreCase("password")) {
+        } else if((loginId.equalsIgnoreCase("cmd")||loginId.equalsIgnoreCase("cmdQC1")) && password.equalsIgnoreCase("password")) {
 
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
@@ -1812,7 +1833,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if(loginId.equalsIgnoreCase("cs") && password.equalsIgnoreCase("password")) {
+        } else if((loginId.equalsIgnoreCase("cs")||loginId.equalsIgnoreCase("csQC1")) && password.equalsIgnoreCase("password")) {
 
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
@@ -1963,7 +1984,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if(loginId.equalsIgnoreCase("marketing") && password.equalsIgnoreCase("password")) {
+        } else if((loginId.equalsIgnoreCase("marketing")||loginId.equalsIgnoreCase("marketingQC1")) && password.equalsIgnoreCase("password")) {
 
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
@@ -2142,7 +2163,7 @@ public class UploadFragment extends Fragment {
                 }
             });
 
-        } else if(loginId.equalsIgnoreCase("Personal") && password.equalsIgnoreCase("password")) {
+        } else if((loginId.equalsIgnoreCase("Personal")||loginId.equalsIgnoreCase("personalQC1")) && password.equalsIgnoreCase("password")) {
 
 //            headLev2.setVisibility(View.GONE);
             headLev2.setText("Type of Document");
@@ -2292,7 +2313,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if(loginId.equalsIgnoreCase("legal") && password.equalsIgnoreCase("password")) {
+        } else if((loginId.equalsIgnoreCase("legal")||loginId.equalsIgnoreCase("legalQC1")) && password.equalsIgnoreCase("password")) {
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
             headLev4.setText("Supporting Document");
@@ -2829,6 +2850,13 @@ public class UploadFragment extends Fragment {
             }
         });
 
+        btnImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAddingImages();
+            }
+        });
+
     }
 
 
@@ -2856,6 +2884,19 @@ public class UploadFragment extends Fragment {
                     viewFile.setVisibility(View.VISIBLE);
                 }
                 break;
+            case INTENT_REQUEST_GET_IMAGES:
+                if (resultCode == Activity.RESULT_OK) {
+
+                    ArrayList<Uri> image_uris = data.getParcelableArrayListExtra(ImagePickerActivity.EXTRA_IMAGE_URIS);
+                    for (int i = 0; i < image_uris.size(); i++) {
+                        imagesUri.add(image_uris.get(i).getPath());
+                    }
+                    Toast.makeText(getContext(), "Images added", Toast.LENGTH_LONG).show();
+//            morphToSquare(createPdf, integer(R.integer.mb_animation));
+                    createPdf();
+
+
+                }
         }
     }
 
@@ -2912,6 +2953,22 @@ public class UploadFragment extends Fragment {
             System.out.println("Upload details are added");
            /* SaveInsertUpdate saveInsertUpdate = new SaveInsertUpdate();
             saveInsertUpdate.execute();*/
+           String base64 = getBase64Image(filePath);
+
+            final File dwldsPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/" + fileName + ".pdf");
+            byte[] pdfAsBytes = Base64.decode(base64, 0);
+            FileOutputStream os;
+            try {
+                os = new FileOutputStream(dwldsPath, false);
+                os.write(pdfAsBytes);
+                os.flush();
+                os.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             getUploadData();
         } else {
             System.out.println("FAILURE..!!");
@@ -4766,9 +4823,162 @@ public class UploadFragment extends Fragment {
         return base64Img;
     }
 
+    void startAddingImages() {
+        // Check if permissions are granted
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA},
+                        PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE_RESULT);
+            } else {
+                selectImages();
+            }
+        } else {
+            selectImages();
+        }
+    }
+
+    public void selectImages() {
+        Intent intent = new Intent(getContext(), ImagePickerActivity.class);
+        startActivityForResult(intent, INTENT_REQUEST_GET_IMAGES);
+    }
+
+    void createPdf() {
+        if (imagesUri.size() == 0) {
+            Toast.makeText(getContext(), "No Images selected", Toast.LENGTH_LONG).show();
+        } else {
+            new MaterialDialog.Builder(getContext())
+                    .title("Creating PDF")
+                    .content("Enter file name")
+                    .input("Example : abc", null, new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(MaterialDialog dialog, CharSequence input) {
+                            if (input == null) {
+                                Toast.makeText(getContext(), "Name cannot be blank", Toast.LENGTH_LONG).show();
+                            } else {
+                                imageFilename = input.toString();
+
+                                new creatingPDF().execute();
+
+                            }
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    public class creatingPDF extends AsyncTask<String, String, String> {
+
+        // Progress dialog
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext())
+                .title("Please Wait")
+                .content("Creating PDF. This may take a while.")
+                .cancelable(false)
+                .progress(true, 0);
+        MaterialDialog dialog = builder.build();
 
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
 
 
+            File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/");
+            boolean success = true;
+            if (!folder.exists()) {
+                success = folder.mkdir();
+            }
+
+
+            filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/";
+
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/");
+
+            filePath = filePath + imageFilename + ".pdf";
+
+            Log.v("stage 1", "store the pdf in sd card");
+
+            Document document = new Document(PageSize.A4, 38, 38, 50, 38);
+
+            Log.v("stage 2", "Document Created");
+
+            Rectangle documentRect = document.getPageSize();
+
+
+            try {
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+
+                Log.v("Stage 3", "Pdf writer");
+
+                document.open();
+
+                Log.v("Stage 4", "Document opened");
+
+                for (int i = 0; i < imagesUri.size(); i++) {
+
+
+                    Bitmap bmp = BitmapFactory.decodeFile(imagesUri.get(i));
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 70, stream);
+
+
+                    pickimage = Image.getInstance(imagesUri.get(i));
+
+
+                    if (bmp.getWidth() > documentRect.getWidth() || bmp.getHeight() > documentRect.getHeight()) {
+                        //bitmap is larger than page,so set bitmap's size similar to the whole page
+                        pickimage.scaleAbsolute(documentRect.getWidth(), documentRect.getHeight());
+                    } else {
+                        //bitmap is smaller than page, so add bitmap simply.[note: if you want to fill page by stretching image, you may set size similar to page as above]
+                        pickimage.scaleAbsolute(bmp.getWidth(), bmp.getHeight());
+                    }
+
+
+                    Log.v("Stage 6", "Image path adding");
+
+                    pickimage.setAbsolutePosition((documentRect.getWidth() - pickimage.getScaledWidth()) / 2, (documentRect.getHeight() - pickimage.getScaledHeight()) / 2);
+                    Log.v("Stage 7", "Image Alignments");
+
+                    pickimage.setBorder(Image.BOX);
+
+                    pickimage.setBorderWidth(15);
+
+                    document.add(pickimage);
+
+                    document.newPage();
+                }
+
+                Log.v("Stage 8", "Image adding");
+
+                document.close();
+
+                Log.v("Stage 7", "Document Closed" + filePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            document.close();
+            imagesUri.clear();
+
+            return filePath;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+            fileName = s.substring(s.lastIndexOf("/")+1);
+            txtNoFile.setText(fileName);
+            viewFile.setVisibility(View.VISIBLE);
+        }
+    }
 
 }

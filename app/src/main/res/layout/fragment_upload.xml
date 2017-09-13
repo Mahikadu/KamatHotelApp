@@ -709,6 +709,14 @@
                         android:text="view" />
                 </LinearLayout>
 
+            <Button
+                android:id="@+id/btnImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textColor="@android:color/black"
+                android:text="Images upload" />
+
                 <Button
                     android:id="@+id/btnUpload"
                     android:layout_width="wrap_content"
