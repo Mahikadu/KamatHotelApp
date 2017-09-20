@@ -123,6 +123,7 @@
                 android:background="@drawable/table_row_item"
                 android:gravity="center"
                 android:text="QC1"
+                android:textColor="@color/purpal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:fontFamily="@string/font_lightl"/>
 

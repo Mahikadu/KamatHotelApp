@@ -718,7 +718,7 @@
                 android:text="Images upload" />
 
                 <Button
-                    android:id="@+id/btnUpload"
+                    android:id="@+id/btnAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -727,7 +727,7 @@
                     android:padding="15dp"
                     android:textSize="16dp"
                     android:textColor="@android:color/white"
-                    android:text="Upload" />
+                    android:text="Add" />
 
                 <LinearLayout
                     android:id="@+id/layout_edit"

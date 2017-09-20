@@ -1314,7 +1314,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (root.getProperty("Level2_Id") != null) {
 
-                        if (!root.getProperty("Level2_Id").toString().equalsIgnoreCase("anyType{}")) {
+                        if (!root.getProperty("Level2_Id").toString().equalsIgnoreCase("anyType{}")&&
+                                !root.getProperty("Level2_Id").toString().equalsIgnoreCase("0")) {
                             Level2_Id = root.getProperty("Level2_Id").toString();
 
                         } else {
@@ -1339,7 +1340,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (root.getProperty("Level3_Id") != null) {
 
-                        if (!root.getProperty("Level3_Id").toString().equalsIgnoreCase("anyType{}")) {
+                        if (!root.getProperty("Level3_Id").toString().equalsIgnoreCase("anyType{}")&&
+                                !root.getProperty("Level3_Id").toString().equalsIgnoreCase("0")) {
                             Level3_Id = root.getProperty("Level3_Id").toString();
 
                         } else {
@@ -1364,7 +1366,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (root.getProperty("Level4_Id") != null) {
 
-                        if (!root.getProperty("Level4_Id").toString().equalsIgnoreCase("anyType{}")) {
+                        if (!root.getProperty("Level4_Id").toString().equalsIgnoreCase("anyType{}")&&
+                                !root.getProperty("Level4_Id").toString().equalsIgnoreCase("0")) {
                             Level4_Id = root.getProperty("Level4_Id").toString();
 
                         } else {
@@ -1389,7 +1392,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (root.getProperty("Level5_Id") != null) {
 
-                        if (!root.getProperty("Level5_Id").toString().equalsIgnoreCase("anyType{}")) {
+                        if (!root.getProperty("Level5_Id").toString().equalsIgnoreCase("anyType{}")&&
+                                !root.getProperty("Level5_Id").toString().equalsIgnoreCase("0")) {
                             Level5_Id = root.getProperty("Level5_Id").toString();
 
                         } else {
@@ -1414,7 +1418,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (root.getProperty("Level6_Id") != null) {
 
-                        if (!root.getProperty("Level6_Id").toString().equalsIgnoreCase("anyType{}")) {
+                        if (!root.getProperty("Level6_Id").toString().equalsIgnoreCase("anyType{}")&&
+                                !root.getProperty("Level6_Id").toString().equalsIgnoreCase("0")) {
                             Level6_Id = root.getProperty("Level6_Id").toString();
 
                         } else {
@@ -1439,7 +1444,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (root.getProperty("Level7_Id") != null) {
 
-                        if (!root.getProperty("Level7_Id").toString().equalsIgnoreCase("anyType{}")) {
+                        if (!root.getProperty("Level7_Id").toString().equalsIgnoreCase("anyType{}")&&
+                                !root.getProperty("Level7_Id").toString().equalsIgnoreCase("0")) {
                             Level7_Id = root.getProperty("Level7_Id").toString();
 
                         } else {
@@ -1622,7 +1628,7 @@ public class MainActivity extends AppCompatActivity {
                         type = "";
                     }
 
-
+                    String strLastSync = "1";
                     String selection = "id = ?";
                     id = id+1;
                     // WHERE clause arguments
@@ -1630,7 +1636,7 @@ public class MainActivity extends AppCompatActivity {
 
                     String valuesArray[] = {id+"",Created_By,Created_Date,Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,
                             Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,
-                            Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type};
+                            Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type,strLastSync};
                     boolean output = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, utils.columnNames_QC1_Data, selectionArgs);
                 }
             } catch (Exception e) {

@@ -143,7 +143,7 @@ public class UploadAdapter extends BaseAdapter {
                 @SuppressLint("WrongConstant")
                 @Override
                 public void onClick(View v) {
-                    UploadFragment.btnUpload.setVisibility(View.GONE);
+                    UploadFragment.btnAdd.setVisibility(View.GONE);
                     UploadFragment.layout_edit.setVisibility(View.VISIBLE);
 
                     uploadModel = uploadModelList.get(position);
@@ -153,7 +153,8 @@ public class UploadAdapter extends BaseAdapter {
                         UploadFragment.txtNoFile.setText(uploadModel.getFileName());
                     }
 
-                    if(sharedPref.getLoginId().equalsIgnoreCase("finance")) {
+                    if(sharedPref.getLoginId().equalsIgnoreCase("finance")||
+                            sharedPref.getLoginId().equalsIgnoreCase("financeQC1")) {
 
                         UploadFragment.cardlevel4.setVisibility(View.GONE);
                         UploadFragment.txtL4.setVisibility(View.GONE);
@@ -193,7 +194,8 @@ public class UploadAdapter extends BaseAdapter {
                         fetchLevel6data(uploadModel.getLevel5());
 
 
-                    } else if(sharedPref.getLoginId().equalsIgnoreCase("cs")) {
+                    } else if(sharedPref.getLoginId().equalsIgnoreCase("cs")||
+                            sharedPref.getLoginId().equalsIgnoreCase("csQC1")) {
 
                         UploadFragment.cardlevel4.setVisibility(View.GONE);
                         UploadFragment.txtL4.setVisibility(View.GONE);
@@ -215,7 +217,8 @@ public class UploadAdapter extends BaseAdapter {
 
                         fetchLevel4dataCS(uploadModel.getLevel3());
 
-                    } else if(sharedPref.getLoginId().equalsIgnoreCase("cmd")) {
+                    } else if(sharedPref.getLoginId().equalsIgnoreCase("cmd")||
+                            sharedPref.getLoginId().equalsIgnoreCase("cmdQC1")) {
 
                         UploadFragment.cardlevel6.setVisibility(View.GONE);
                         UploadFragment.txtL7.setVisibility(View.GONE);
@@ -243,7 +246,8 @@ public class UploadAdapter extends BaseAdapter {
                         fetchLevel6dataCMD(uploadModel.getLevel5());
                         fetchLevel7dataCMD(uploadModel.getLevel6());
 
-                    } else if(sharedPref.getLoginId().equalsIgnoreCase("legal")) {
+                    } else if(sharedPref.getLoginId().equalsIgnoreCase("legal")||
+                            sharedPref.getLoginId().equalsIgnoreCase("legalQC1")) {
 
                         UploadFragment.cardlevel6.setVisibility(View.GONE);
                         UploadFragment.txtL6.setVisibility(View.GONE);
@@ -273,7 +277,8 @@ public class UploadAdapter extends BaseAdapter {
                         fetchLevel6dataLEGAL(uploadModel.getLevel5());
                         fetchLevel7dataLEGAL(uploadModel.getLevel6());
 
-                    } else if(sharedPref.getLoginId().equalsIgnoreCase("marketing")) {
+                    } else if(sharedPref.getLoginId().equalsIgnoreCase("marketing")||
+                            sharedPref.getLoginId().equalsIgnoreCase("marketingQC1")) {
                         UploadFragment.cardlevel6.setVisibility(View.GONE);
                         UploadFragment.txtL6.setVisibility(View.GONE);
                         UploadFragment.txtL6.setText("");
@@ -304,7 +309,8 @@ public class UploadAdapter extends BaseAdapter {
                         fetchLevel7dataMAR(uploadModel.getLevel6());
 
 
-                    } else if(sharedPref.getLoginId().equalsIgnoreCase("hr")) {
+                    } else if(sharedPref.getLoginId().equalsIgnoreCase("hr")||
+                            sharedPref.getLoginId().equalsIgnoreCase("hrQC1")) {
 
                         UploadFragment.cardlevel6.setVisibility(View.GONE);
                         UploadFragment.txtL6.setVisibility(View.GONE);
@@ -324,7 +330,9 @@ public class UploadAdapter extends BaseAdapter {
                             UploadFragment.txtL6.setText(uploadModel.getLevel6());
                         }
                         fetchLevel6dataHR(uploadModel.getLevel5());
-                    } else if(sharedPref.getLoginId().equalsIgnoreCase("Personal")) {
+                    } else if(sharedPref.getLoginId().equalsIgnoreCase("Personal")||
+                            sharedPref.getLoginId().equalsIgnoreCase("PersonalQC1")) {
+
 
                         UploadFragment.cardlevel5.setVisibility(View.GONE);
                         UploadFragment.txtL5.setVisibility(View.GONE);
@@ -360,7 +368,8 @@ public class UploadAdapter extends BaseAdapter {
         viewHolder.txtDelete.setTag(position);
         viewHolder.txtEdit.setTag(position);
 
-        if (sharedPref.getLoginId().equalsIgnoreCase("finance")) {
+        if (sharedPref.getLoginId().equalsIgnoreCase("finance")||
+                sharedPref.getLoginId().equalsIgnoreCase("financeQC1")) {
 //            viewHolder.txtLevel7.setVisibility(View.GONE);
 //            viewHolder.txtLevel7.setText("");
 //            viewHolder.txtLevel7.setTag(position);
@@ -374,7 +383,8 @@ public class UploadAdapter extends BaseAdapter {
             viewHolder.txtLevel5.setTag(position);
             viewHolder.txtLevel6.setText(uploadModel.getLevel6());
             viewHolder.txtLevel6.setTag(position);
-        } else if (sharedPref.getLoginId().equalsIgnoreCase("hr")) {
+        } else if (sharedPref.getLoginId().equalsIgnoreCase("hr")||
+                sharedPref.getLoginId().equalsIgnoreCase("hrQC1")) {
 //            viewHolder.txtLevel2.setVisibility(View.GONE);
 //            viewHolder.txtLevel3.setVisibility(View.GONE);
 //            viewHolder.txtLevel7.setVisibility(View.GONE);
@@ -393,7 +403,10 @@ public class UploadAdapter extends BaseAdapter {
 
         } else if (sharedPref.getLoginId().equalsIgnoreCase("cmd") ||
                 sharedPref.getLoginId().equalsIgnoreCase("legal") ||
-                sharedPref.getLoginId().equalsIgnoreCase("marketing")) {
+                sharedPref.getLoginId().equalsIgnoreCase("marketing")||
+                sharedPref.getLoginId().equalsIgnoreCase("cmdQC1") ||
+                sharedPref.getLoginId().equalsIgnoreCase("legalQC1") ||
+                sharedPref.getLoginId().equalsIgnoreCase("marketingQC1")) {
 //            viewHolder.txtLevel2.setVisibility(View.GONE);
 //            viewHolder.txtLevel3.setVisibility(View.GONE);
             viewHolder.txtLevel2.setText(uploadModel.getLevel4());
@@ -408,7 +421,8 @@ public class UploadAdapter extends BaseAdapter {
             viewHolder.txtLevel6.setTag(position);
 //            viewHolder.txtLevel7.setText(uploadModel.getLevel7());
 //            viewHolder.txtLevel7.setTag(position);
-        } else if (sharedPref.getLoginId().equalsIgnoreCase("cs")) {
+        } else if (sharedPref.getLoginId().equalsIgnoreCase("cs")||
+                sharedPref.getLoginId().equalsIgnoreCase("csQC1")) {
             viewHolder.txtLevel2.setText(uploadModel.getLevel2());
             viewHolder.txtLevel2.setTag(position);
             viewHolder.txtLevel3.setText(uploadModel.getLevel3());
@@ -425,7 +439,8 @@ public class UploadAdapter extends BaseAdapter {
 //            viewHolder.txtLevel6.setVisibility(View.GONE);
 //            viewHolder.txtLevel7.setVisibility(View.GONE);
 
-        } else if (sharedPref.getLoginId().equalsIgnoreCase("Personal")) {
+        } else if (sharedPref.getLoginId().equalsIgnoreCase("Personal")||
+                sharedPref.getLoginId().equalsIgnoreCase("PersonalQC1")) {
             viewHolder.txtLevel2.setText(uploadModel.getLevel3());
             viewHolder.txtLevel2.setTag(position);
             viewHolder.txtLevel3.setText(uploadModel.getLevel4());
