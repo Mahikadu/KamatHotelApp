@@ -56,7 +56,11 @@ public class Utils {
         String[] master9Array = {"id","Created_By", "Created_Date","Document_No","File_Exten","File_Name","File_Path",
                 "File_Path_File_Name","Q_Id","Is_Download","Is_Edit","Is_View","Legal_Entity_Id","Level2_Id","Level3_Id",
                 "Level4_Id","Level5_Id","Level6_Id","Level7_Id","Location_Id","Month","Property_Id","Quarter","Role_Id",
-                "Status","Year","type","last_sync"};
+                "Status","Year","type","last_sync","yearvalue","quartervalue","monthvalue","Legal_Entity_value","Level2_value",
+                "Level3_value","Level4_value","Level5_value","Level6_value","Level7_value","Location_value","Property_value",
+                "yeartext","quartertext","monthtext","Legal_Entity_text","Level2_text","Level3_text","Level4_text","Level5_text",
+                "Level6_text","Level7_text","Location_text","Property_text"};
+
         columnNames_QC1_Data = Arrays.copyOf(master9Array, master9Array.length);
     }
 }

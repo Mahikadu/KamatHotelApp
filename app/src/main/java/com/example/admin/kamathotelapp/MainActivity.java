@@ -71,7 +71,10 @@ public class MainActivity extends AppCompatActivity {
     private String value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
             Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,
             Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Location_Id,Month,Property_Id,Quarter,Role_Id,
-            Status,Year,type;
+            Status,Year,type,yearvalue,quartervalue,monthvalue,Legal_Entity_value,Level2_value,
+            Level3_value,Level4_value,Level5_value,Level6_value,Level7_value,Location_value,Property_value,
+            yeartext,quartertext,monthtext,Legal_Entity_text,Level2_text,Level3_text,Level4_text,Level5_text,
+            Level6_text,Level7_text,Location_text,Property_text;
     private SimpleDateFormat dateFormatter;
     DashBoardDataModel dashboarddatamodel;
 
@@ -1305,7 +1308,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlegal != null && cursorlegal.getCount() > 0) {
                             cursorlegal.moveToFirst();
                             do {
-                                Legal_Entity_Id = cursorlegal.getString(cursorlegal.getColumnIndex("text"));
+                                Legal_Entity_Id = cursorlegal.getString(cursorlegal.getColumnIndex("id"));
+                                Legal_Entity_text = cursorlegal.getString(cursorlegal.getColumnIndex("text"));
+                                Legal_Entity_value = cursorlegal.getString(cursorlegal.getColumnIndex("value"));
                             } while (cursorlegal.moveToNext());
                             cursorlegal.close();
                         }
@@ -1331,7 +1336,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlevel2 != null && cursorlevel2.getCount() > 0) {
                             cursorlevel2.moveToFirst();
                             do {
-                                Level2_Id = cursorlevel2.getString(cursorlevel2.getColumnIndex("text"));
+                                Level2_Id = cursorlevel2.getString(cursorlevel2.getColumnIndex("id"));
+                                Level2_text = cursorlevel2.getString(cursorlevel2.getColumnIndex("text"));
+                                Level2_value = cursorlevel2.getString(cursorlevel2.getColumnIndex("value"));
                             } while (cursorlevel2.moveToNext());
                             cursorlevel2.close();
                         }
@@ -1357,7 +1364,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlevel3 != null && cursorlevel3.getCount() > 0) {
                             cursorlevel3.moveToFirst();
                             do {
-                                Level3_Id = cursorlevel3.getString(cursorlevel3.getColumnIndex("text"));
+                                Level3_Id = cursorlevel3.getString(cursorlevel3.getColumnIndex("id"));
+                                Level3_text = cursorlevel3.getString(cursorlevel3.getColumnIndex("text"));
+                                Level3_value = cursorlevel3.getString(cursorlevel3.getColumnIndex("value"));
                             } while (cursorlevel3.moveToNext());
                             cursorlevel3.close();
                         }
@@ -1383,7 +1392,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlevel4 != null && cursorlevel4.getCount() > 0) {
                             cursorlevel4.moveToFirst();
                             do {
-                                Level4_Id = cursorlevel4.getString(cursorlevel4.getColumnIndex("text"));
+                                Level4_Id = cursorlevel4.getString(cursorlevel4.getColumnIndex("id"));
+                                Level4_text = cursorlevel4.getString(cursorlevel4.getColumnIndex("text"));
+                                Level4_value = cursorlevel4.getString(cursorlevel4.getColumnIndex("value"));
                             } while (cursorlevel4.moveToNext());
                             cursorlevel4.close();
                         }
@@ -1409,7 +1420,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlevel5 != null && cursorlevel5.getCount() > 0) {
                             cursorlevel5.moveToFirst();
                             do {
-                                Level5_Id = cursorlevel5.getString(cursorlevel5.getColumnIndex("text"));
+                                Level5_Id = cursorlevel5.getString(cursorlevel5.getColumnIndex("id"));
+                                Level5_text = cursorlevel5.getString(cursorlevel5.getColumnIndex("text"));
+                                Level5_value = cursorlevel5.getString(cursorlevel5.getColumnIndex("value"));
                             } while (cursorlevel5.moveToNext());
                             cursorlevel5.close();
                         }
@@ -1435,7 +1448,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlevel6 != null && cursorlevel6.getCount() > 0) {
                             cursorlevel6.moveToFirst();
                             do {
-                                Level6_Id = cursorlevel6.getString(cursorlevel6.getColumnIndex("text"));
+                                Level6_Id = cursorlevel6.getString(cursorlevel6.getColumnIndex("id"));
+                                Level6_text = cursorlevel6.getString(cursorlevel6.getColumnIndex("text"));
+                                Level6_value = cursorlevel6.getString(cursorlevel6.getColumnIndex("value"));
                             } while (cursorlevel6.moveToNext());
                             cursorlevel6.close();
                         }
@@ -1461,7 +1476,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorlevel7 != null && cursorlevel7.getCount() > 0) {
                             cursorlevel7.moveToFirst();
                             do {
-                                Level7_Id = cursorlevel7.getString(cursorlevel7.getColumnIndex("text"));
+                                Level7_Id = cursorlevel7.getString(cursorlevel7.getColumnIndex("id"));
+                                Level7_text = cursorlevel7.getString(cursorlevel7.getColumnIndex("text"));
+                                Level7_value = cursorlevel7.getString(cursorlevel7.getColumnIndex("value"));
                             } while (cursorlevel7.moveToNext());
                             cursorlevel7.close();
                         }
@@ -1486,7 +1503,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorloc != null && cursorloc.getCount() > 0) {
                             cursorloc.moveToFirst();
                             do {
-                                Location_Id = cursorloc.getString(cursorloc.getColumnIndex("text"));
+                                Location_Id = cursorloc.getString(cursorloc.getColumnIndex("id"));
+                                Location_text = cursorloc.getString(cursorloc.getColumnIndex("text"));
+                                Location_value = cursorloc.getString(cursorloc.getColumnIndex("value"));
                             } while (cursorloc.moveToNext());
                             cursorloc.close();
                         }
@@ -1511,7 +1530,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorMonth != null && cursorMonth.getCount() > 0) {
                             cursorMonth.moveToFirst();
                             do {
-                                Month = cursorMonth.getString(cursorMonth.getColumnIndex("text"));
+                                Month = cursorMonth.getString(cursorMonth.getColumnIndex("id"));
+                                monthtext = cursorMonth.getString(cursorMonth.getColumnIndex("text"));
+                                monthvalue = cursorMonth.getString(cursorMonth.getColumnIndex("value"));
                             } while (cursorMonth.moveToNext());
                             cursorMonth.close();
                         }
@@ -1536,7 +1557,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorpro != null && cursorpro.getCount() > 0) {
                             cursorpro.moveToFirst();
                             do {
-                                Property_Id = cursorpro.getString(cursorpro.getColumnIndex("text"));
+                                Property_Id = cursorpro.getString(cursorpro.getColumnIndex("id"));
+                                Property_text = cursorpro.getString(cursorpro.getColumnIndex("text"));
+                                Property_value = cursorpro.getString(cursorpro.getColumnIndex("value"));
                             } while (cursorpro.moveToNext());
                             cursorpro.close();
                         }
@@ -1561,7 +1584,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursorQuter != null && cursorQuter.getCount() > 0) {
                             cursorQuter.moveToFirst();
                             do {
-                                Quarter = cursorQuter.getString(cursorQuter.getColumnIndex("text"));
+                                Quarter = cursorQuter.getString(cursorQuter.getColumnIndex("id"));
+                                quartertext = cursorQuter.getString(cursorQuter.getColumnIndex("text"));
+                                quartervalue = cursorQuter.getString(cursorQuter.getColumnIndex("value"));
                             } while (cursorQuter.moveToNext());
                             cursorQuter.close();
                         }
@@ -1609,7 +1634,9 @@ public class MainActivity extends AppCompatActivity {
                         if (cursoryear != null && cursoryear.getCount() > 0) {
                             cursoryear.moveToFirst();
                             do {
-                                Year = cursoryear.getString(cursoryear.getColumnIndex("text"));
+                                Year = cursoryear.getString(cursoryear.getColumnIndex("id"));
+                                yeartext = cursoryear.getString(cursoryear.getColumnIndex("text"));
+                                yearvalue = cursoryear.getString(cursoryear.getColumnIndex("value"));
                             } while (cursoryear.moveToNext());
                             cursoryear.close();
                         }
@@ -1628,7 +1655,7 @@ public class MainActivity extends AppCompatActivity {
                         type = "";
                     }
 
-                    String strLastSync = "1";
+                    String strLastSync = "0";
                     String selection = "id = ?";
                     id = id+1;
                     // WHERE clause arguments
@@ -1636,7 +1663,11 @@ public class MainActivity extends AppCompatActivity {
 
                     String valuesArray[] = {id+"",Created_By,Created_Date,Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,
                             Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,
-                            Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type,strLastSync};
+                            Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type,strLastSync,yearvalue,
+                            quartervalue,monthvalue,Legal_Entity_value,Level2_value,
+                            Level3_value,Level4_value,Level5_value,Level6_value,Level7_value,Location_value,Property_value,
+                            yeartext,quartertext,monthtext,Legal_Entity_text,Level2_text,Level3_text,Level4_text,Level5_text,
+                            Level6_text,Level7_text,Location_text,Property_text};
                     boolean output = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, utils.columnNames_QC1_Data, selectionArgs);
                 }
             } catch (Exception e) {

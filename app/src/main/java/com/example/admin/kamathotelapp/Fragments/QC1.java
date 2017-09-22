@@ -107,11 +107,21 @@ public class QC1 extends Fragment {
     private boolean qc1lev5 = false;
     private boolean qc1lev6 = false;
     private boolean qc1lev7 = false;
+    private boolean qc1legalEntity = false;
+    private boolean qc1property = false;
+    private boolean qc1month = false;
+    private boolean qc1quarter = false;
+    private boolean qc1year = false;
+    private boolean qc1loc = false;
+
 
     private String value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
             Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,
             Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Location_Id,Month,Property_Id,Quarter,Role_Id,
-            Status,Year,type;
+            Status,Year,type,yearvalue,quartervalue,monthvalue,Legal_Entity_value,Level2_value,
+            Level3_value,Level4_value,Level5_value,Level6_value,Level7_value,Location_value,Property_value,
+            yeartext,quartertext,monthtext,Legal_Entity_text,Level2_text,Level3_text,Level4_text,Level5_text,
+            Level6_text,Level7_text,Location_text,Property_text;
 
     private Utils utils;
 
@@ -313,6 +323,8 @@ public class QC1 extends Fragment {
         qc1listUpload = (ListView) view.findViewById(R.id.qc1listViewUpload);
         qc1Model = new QC1Model();
 
+        fetchQC1Details(roleID);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             clickflag = bundle.getBoolean("Click");
@@ -324,12 +336,12 @@ public class QC1 extends Fragment {
             qclayout.setVisibility(View.GONE);
             qc1datalayout.setVisibility(View.VISIBLE);
 
-            autoLegalEntity.setText(qc1Model.getLegal_Entity_Id());
-            autoProperty.setText(qc1Model.getProperty_Id());
-            autoMonth.setText(qc1Model.getMonth());
-            autoYear.setText(qc1Model.getYear());
-            autoQuarter.setText(qc1Model.getQuarter());
-            autoLoc.setText(qc1Model.getLocation_Id());
+            autoLegalEntity.setText(qc1Model.getLegal_Entity_text());
+            autoProperty.setText(qc1Model.getProperty_text());
+            autoMonth.setText(qc1Model.getMonthtext());
+            autoYear.setText(qc1Model.getYeartext());
+            autoQuarter.setText(qc1Model.getQuartertext());
+            autoLoc.setText(qc1Model.getLocation_text());
 
             qc1no_files.setVisibility(View.GONE);
             qc1listUpload.setVisibility(View.VISIBLE);
@@ -338,7 +350,7 @@ public class QC1 extends Fragment {
             setValues(qc1uploadModelList);
         }
 
-        fetchQC1Details(roleID);
+
         fetchLegalEntity();
         FetchLeveldata();
 
@@ -399,6 +411,7 @@ public class QC1 extends Fragment {
                             ID = legalEntityModel.getId();
                             legalEntityID = ID;
                             legalEntityValue = legalEntityModel.getValue();
+                            qc1legalEntity = true;
                         }
                     }
                     autoProperty.setText("");
@@ -552,6 +565,7 @@ public class QC1 extends Fragment {
                                                             String propid = propertyModel.getId();
                                                             propertyID = propid;
                                                             propertyValue = propertyModel.getValue();
+                                                            qc1property = true;
 
                                                             listLoc = new ArrayList<>();
                                                             String location = "";
@@ -625,6 +639,7 @@ public class QC1 extends Fragment {
                                                                             if (text.equalsIgnoreCase(locString)) {
                                                                                 locationID = locationModel.getId();
                                                                                 locationValue = locationModel.getValue();
+                                                                                qc1loc = true;
                                                                             }
                                                                         }
                                                                     }
@@ -725,6 +740,7 @@ public class QC1 extends Fragment {
                                             String propid = propertyModel.getId();
                                             propertyID = propid;
                                             propertyValue = propertyModel.getValue();
+                                            qc1property = true;
 
 
                                             listLoc = new ArrayList<>();
@@ -799,6 +815,7 @@ public class QC1 extends Fragment {
                                                             if (text.equalsIgnoreCase(locString)) {
                                                                 locationID = locationModel.getId();
                                                                 locationValue = locationModel.getValue();
+                                                                qc1loc = true;
                                                             }
                                                         }
                                                     }
@@ -874,6 +891,7 @@ public class QC1 extends Fragment {
                         String text = yearModel.getText();
                         if (text.equalsIgnoreCase(yearString)) {
                             yearID = yearModel.getValue();
+                            qc1year = true;
                         }
                     }
                 }
@@ -935,6 +953,7 @@ public class QC1 extends Fragment {
                         String text = quaterModel.getText();
                         if (text.equalsIgnoreCase(quarterString)) {
                             quaterID = quaterModel.getValue();
+                            qc1quarter = true;
                         }
                     }
                 }
@@ -1009,6 +1028,7 @@ public class QC1 extends Fragment {
                                 String text = monthModel.getText();
                                 if (text.equalsIgnoreCase(monthString)) {
                                     monthID = monthModel.getValue();
+                                    qc1month = true;
                                 }
                             }
                         }
@@ -1088,6 +1108,10 @@ public class QC1 extends Fragment {
                             level3txtlayout.setHint(valLevel2);
                             cardlevel3.setVisibility(View.VISIBLE);
                             qc1txtL3.setVisibility(View.VISIBLE);
+                            qc1lev3 = true;
+                        }else {
+                            cardlevel3.setVisibility(View.GONE);
+                            qc1lev3 = false;
                         }
                     }
                 }
@@ -1137,8 +1161,10 @@ public class QC1 extends Fragment {
                             if (level4list.size() > 0) {
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                                qc1lev4 = true;
                             } else {
                                 cardlevel4.setVisibility(View.GONE);
+                                qc1lev4 = false;
                             }
                         }
                     }
@@ -1186,8 +1212,10 @@ public class QC1 extends Fragment {
                             if (level5list.size() > 0) {
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                qc1lev5 = true;
                             } else {
                                 cardlevel5.setVisibility(View.GONE);
+                                qc1lev5 = false;
                             }
                         }
 
@@ -1233,8 +1261,10 @@ public class QC1 extends Fragment {
                             if (level6list.size() > 0) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                qc1lev6 = true;
                             } else {
                                 cardlevel6.setVisibility(View.GONE);
+                                qc1lev6 = false;
                             }
                         }
                     }
@@ -1322,6 +1352,10 @@ public class QC1 extends Fragment {
                             fetchLevel5dataHR(aid);
                             level5txtlayout.setHint(valLevel4);
                             cardlevel5.setVisibility(View.VISIBLE);
+                            qc1lev5 = true;
+                        }else {
+                            cardlevel5.setVisibility(View.GONE);
+                            qc1lev5 = false;
                         }
                     }
                 }
@@ -1361,8 +1395,10 @@ public class QC1 extends Fragment {
                             if (level6listHR.size() > 0) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                qc1lev6 = true;
                             } else {
                                 cardlevel6.setVisibility(View.GONE);
+                                qc1lev6 = false;
                             }
                         }
                     }
@@ -1448,8 +1484,10 @@ public class QC1 extends Fragment {
                             if (level5listCMD.size() > 0) {
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                qc1lev5 = true;
                             } else {
                                 cardlevel5.setVisibility(View.GONE);
+                                qc1lev5 = false;
                             }
                         }
                     }
@@ -1490,8 +1528,10 @@ public class QC1 extends Fragment {
                             if (level6listCMD.size() > 0) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                qc1lev6 = true;
                             } else {
                                 cardlevel6.setVisibility(View.GONE);
+                                qc1lev6 = false;
                             }
                         }
                     }
@@ -1530,8 +1570,10 @@ public class QC1 extends Fragment {
                             if (level7listCMD.size() > 0) {
                                 level7txtlayout.setHint(valLevel5);
                                 cardlevel7.setVisibility(View.VISIBLE);
+                                qc1lev7 = true;
                             } else {
                                 cardlevel7.setVisibility(View.GONE);
+                                qc1lev7 = false;
                             }
                         }
                     }
@@ -1614,6 +1656,10 @@ public class QC1 extends Fragment {
                             fetchLevel3dataCS(aid);
                             level3txtlayout.setHint(valLevel2);
                             cardlevel3.setVisibility(View.VISIBLE);
+                            qc1lev3 = true;
+                        }else {
+                            cardlevel3.setVisibility(View.GONE);
+                            qc1lev3 = false;
                         }
                     }
                 }
@@ -1661,8 +1707,10 @@ public class QC1 extends Fragment {
                             if (level4listCS.size() > 0) {
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                                qc1lev4 = true;
                             } else {
                                 cardlevel4.setVisibility(View.GONE);
+                                qc1lev4 = false;
                             }
                         }
                     }
@@ -1750,8 +1798,10 @@ public class QC1 extends Fragment {
                             if (level5listMAR.size() > 0) {
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                qc1lev5 = true;
                             } else {
                                 cardlevel5.setVisibility(View.GONE);
+                                qc1lev5 = false;
                             }
                         }
                     }
@@ -1793,8 +1843,10 @@ public class QC1 extends Fragment {
                             if (level6listMAR.size() > 0) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                qc1lev6 = true;
                             } else {
                                 cardlevel6.setVisibility(View.GONE);
+                                qc1lev6 = false;
                             }
                         }
                     }
@@ -1833,8 +1885,10 @@ public class QC1 extends Fragment {
                             if (level7listMAR.size() > 0) {
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
+                                qc1lev7 = true;
                             } else {
                                 cardlevel7.setVisibility(View.GONE);
+                                qc1lev7 = false;
                             }
                         }
                     }
@@ -1920,8 +1974,10 @@ public class QC1 extends Fragment {
                             if (level4listPER.size() > 0) {
                                 cardlevel4.setVisibility(View.VISIBLE);
                                 level4txtlayout.setHint(valLevel3);
+                                qc1lev4 = true;
                             } else {
                                 cardlevel4.setVisibility(View.GONE);
+                                qc1lev4 = false;
                             }
                         }
                     }
@@ -1968,8 +2024,10 @@ public class QC1 extends Fragment {
                             if (level5listPER.size() > 0) {
                                 level5txtlayout.setHint(valLevel4);
                                 cardlevel5.setVisibility(View.VISIBLE);
+                                qc1lev5 = true;
                             } else {
                                 cardlevel5.setVisibility(View.GONE);
+                                qc1lev5 = false;
                             }
                         }
                     }
@@ -2052,6 +2110,10 @@ public class QC1 extends Fragment {
                             fetchLevel5dataLEGAL(aid);
                             level5txtlayout.setHint(valLevel4);
                             cardlevel5.setVisibility(View.VISIBLE);
+                            qc1lev5 = true;
+                        }else {
+                            cardlevel6.setVisibility(View.GONE);
+                            qc1lev5 = false;
                         }
                     }
                 }
@@ -2090,8 +2152,10 @@ public class QC1 extends Fragment {
                             if (level6listLEGAL.size() > 0) {
                                 level6txtlayout.setHint(valLevel5);
                                 cardlevel6.setVisibility(View.VISIBLE);
+                                qc1lev6 = true;
                             } else {
                                 cardlevel6.setVisibility(View.GONE);
+                                qc1lev6 = false;
                             }
                         }
                     }
@@ -2130,8 +2194,10 @@ public class QC1 extends Fragment {
                             if (level7listLEGAL.size() > 0) {
                                 level7txtlayout.setHint(valLevel6);
                                 cardlevel7.setVisibility(View.VISIBLE);
+                                qc1lev7 = true;
                             } else {
                                 cardlevel7.setVisibility(View.GONE);
+                                qc1lev7 = false;
                             }
                         }
                     }
@@ -2340,20 +2406,98 @@ public class QC1 extends Fragment {
                 qc1no_files.setVisibility(View.GONE);
                 qc1listUpload.setVisibility(View.VISIBLE);
 
-                legalEntity = autoLegalEntity.getText().toString();
-                individuals = autoIndividuals.getText().toString();
-                newProposal = etNewProposal.getText().toString();
-                property = autoProperty.getText().toString();
-                year = autoYear.getText().toString();
-                quarter = autoQuarter.getText().toString();
-                month = autoMonth.getText().toString();
-                location = autoLoc.getText().toString();
-                level2 = qc1txtL2.getText().toString();
-                level3 = qc1txtL3.getText().toString();
-                level4 = qc1txtL4.getText().toString();
-                level5 = qc1txtL5.getText().toString();
-                level6 = qc1txtL6.getText().toString();
-                level7 = qc1txtL7.getText().toString();
+                Created_By = sharedPref.getLoginId();
+                Role_Id = sharedPref.getRoleID();
+                Created_Date = qc1Model.getCreatedDate();
+                Is_Download = "True";
+                Is_Edit = "True";
+                Is_View = "True";
+
+                if(!qc1legalEntity){
+                    Legal_Entity_Id = qc1Model.getLegal_Entity_Id();
+                    Legal_Entity_text = qc1Model.getLegal_Entity_text();
+                    Legal_Entity_value = qc1Model.getLegal_Entity_value();
+                }else {
+                    Legal_Entity_Id = legalEntityID;
+                    Legal_Entity_text = autoLegalEntity.getText().toString();
+                    Legal_Entity_value = legalEntityValue;
+                }
+
+                if(!qc1property){
+                    Property_Id = qc1Model.getProperty_Id();
+                    Property_text = qc1Model.getProperty_text();
+                    Property_value = qc1Model.getProperty_value();
+                }else {
+                    Property_Id = propertyID;
+                    Property_text = autoProperty.getText().toString();
+                    Property_value = propertyValue;
+                }
+
+                if(!qc1year){
+                    Year = qc1Model.getYear();
+                    yeartext = qc1Model.getYeartext();
+                    yearvalue = qc1Model.getYearvalue();
+                }else {
+                    Year = yearID;
+                    yeartext = autoYear.getText().toString();
+                    yearvalue = yearID;
+                }
+
+                if(!qc1quarter){
+                    Quarter = qc1Model.getQuarter();
+                    quartertext = qc1Model.getQuartertext();
+                    quartervalue = qc1Model.getQuartervalue();
+                }else {
+                    Quarter = quaterID;
+                    quartertext = autoQuarter.getText().toString();
+                    quartervalue = quaterID;
+                }
+
+                if(!qc1month){
+                    Month = qc1Model.getMonth();
+                    monthtext = qc1Model.getMonthtext();
+                    monthvalue = qc1Model.getMonthvalue();
+                }else {
+                    Month = monthID;
+                    monthtext = autoMonth.getText().toString();
+                    monthvalue = monthID;
+                }
+
+                if(!qc1loc){
+                    Location_Id = qc1Model.getLocation_Id();
+                    Location_text = qc1Model.getLocation_text();
+                    Location_value = qc1Model.getLocation_value();
+                }else {
+                    Location_Id = locationID;
+                    Location_text = autoLoc.getText().toString();
+                    Location_value = locationValue;
+                }
+
+//                individuals = autoIndividuals.getText().toString();
+//                newProposal = etNewProposal.getText().toString();
+
+                Level2_Id = txtL2Id;
+                Level3_Id = txtL3Id;
+                Level4_Id = txtL4Id;
+                Level5_Id = txtL5Id;
+                Level6_Id = txtL6Id;
+                Level7_Id = txtL7Id;
+
+                Level2_text = qc1txtL2.getText().toString();
+                Level3_text = qc1txtL3.getText().toString();
+                Level4_text = qc1txtL4.getText().toString();
+                Level5_text = qc1txtL5.getText().toString();
+                Level6_text = qc1txtL6.getText().toString();
+                Level7_text = qc1txtL7.getText().toString();
+
+                Level2_value = valuel2;
+                Level3_value = valuel3;
+                Level4_value = valuel4;
+                Level5_value = valuel5;
+                Level6_value = valuel6;
+                Level7_value = valuel7;
+                Status = "QC1Pending";
+                type = "1";
 
                 insertIntoUploadDb(1);
 
@@ -2419,20 +2563,89 @@ public class QC1 extends Fragment {
                 Is_Download = "True";
                 Is_Edit = "True";
                 Is_View = "True";
-                Legal_Entity_Id = autoLegalEntity.getText().toString();
+                if(!qc1legalEntity){
+                    Legal_Entity_Id = qc1Model.getLegal_Entity_Id();
+                    Legal_Entity_text = qc1Model.getLegal_Entity_text();
+                    Legal_Entity_value = qc1Model.getLegal_Entity_value();
+                }else {
+                    Legal_Entity_Id = legalEntityID;
+                    Legal_Entity_text = autoLegalEntity.getText().toString();
+                    Legal_Entity_value = legalEntityValue;
+                }
+
+                if(!qc1property){
+                    Property_Id = qc1Model.getProperty_Id();
+                    Property_text = qc1Model.getProperty_text();
+                    Property_value = qc1Model.getProperty_value();
+                }else {
+                    Property_Id = propertyID;
+                    Property_text = autoProperty.getText().toString();
+                    Property_value = propertyValue;
+                }
+
+                if(!qc1year){
+                    Year = qc1Model.getYear();
+                    yeartext = qc1Model.getYeartext();
+                    yearvalue = qc1Model.getYearvalue();
+                }else {
+                    Year = yearID;
+                    yeartext = autoYear.getText().toString();
+                    yearvalue = yearID;
+                }
+
+                if(!qc1quarter){
+                    Quarter = qc1Model.getQuarter();
+                    quartertext = qc1Model.getQuartertext();
+                    quartervalue = qc1Model.getQuartervalue();
+                }else {
+                    Quarter = quaterID;
+                    quartertext = autoQuarter.getText().toString();
+                    quartervalue = quaterID;
+                }
+
+                if(!qc1month){
+                    Month = qc1Model.getMonth();
+                    monthtext = qc1Model.getMonthtext();
+                    monthvalue = qc1Model.getMonthvalue();
+                }else {
+                    Month = monthID;
+                    monthtext = autoMonth.getText().toString();
+                    monthvalue = monthID;
+                }
+
+                if(!qc1loc){
+                    Location_Id = qc1Model.getLocation_Id();
+                    Location_text = qc1Model.getLocation_text();
+                    Location_value = qc1Model.getLocation_value();
+                }else {
+                    Location_Id = locationID;
+                    Location_text = autoLoc.getText().toString();
+                    Location_value = locationValue;
+                }
+
 //                individuals = autoIndividuals.getText().toString();
 //                newProposal = etNewProposal.getText().toString();
-                Property_Id = autoProperty.getText().toString();
-                Year = autoYear.getText().toString();
-                Quarter = autoQuarter.getText().toString();
-                Month = autoMonth.getText().toString();
-                Location_Id = autoLoc.getText().toString();
-                Level2_Id = qc1txtL2.getText().toString();
-                Level3_Id = qc1txtL3.getText().toString();
-                Level4_Id = qc1txtL4.getText().toString();
-                Level5_Id = qc1txtL5.getText().toString();
-                Level6_Id = qc1txtL6.getText().toString();
-                Level7_Id = qc1txtL7.getText().toString();
+
+                Level2_Id = txtL2Id;
+                Level3_Id = txtL3Id;
+                Level4_Id = txtL4Id;
+                Level5_Id = txtL5Id;
+                Level6_Id = txtL6Id;
+                Level7_Id = txtL7Id;
+
+                Level2_text = qc1txtL2.getText().toString();
+                Level3_text = qc1txtL3.getText().toString();
+                Level4_text = qc1txtL4.getText().toString();
+                Level5_text = qc1txtL5.getText().toString();
+                Level6_text = qc1txtL6.getText().toString();
+                Level7_text = qc1txtL7.getText().toString();
+
+                Level2_value = valuel2;
+                Level3_value = valuel3;
+                Level4_value = valuel4;
+                Level5_value = valuel5;
+                Level6_value = valuel6;
+                Level7_value = valuel7;
                 Status = "QC1Pending";
                 type = "1";
 
@@ -2759,57 +2972,53 @@ public class QC1 extends Fragment {
             File_Path = qc1Model.getFile_Path();
         }
 
-//        Legal_Entity_Id = autoLegalEntity.getText().toString();
-//                individuals = autoIndividuals.getText().toString();
-//                newProposal = etNewProposal.getText().toString();
-//        Property_Id = autoProperty.getText().toString();
-//        Year = autoYear.getText().toString();
-//        Quarter = autoQuarter.getText().toString();
-//        Month = autoMonth.getText().toString();
-
-        Id = String.valueOf(QID);
         if(flag ==1) {
-            Document_No = roleID + "_" + legalEntityValue + "_" + propertyValue + "_" + locationValue + "_" + yearID + "_" + quaterID + "_" + monthID;
+            Id = String.valueOf(qc1Model.getQ_Id());
+            Document_No = roleID + "_" + Legal_Entity_value + "_" + Property_value + "_" + Location_value + "_" + yeartext + "_" + Quarter + "_" + Month;
             File_Name = Document_No;
-            if (valuel2 != null && valuel2.length() > 0) {
-                File_Name = File_Name + "_" + valuel2;
+            if (Level2_value != null && Level2_value.length() > 0) {
+                File_Name = File_Name + "_" + Level2_value;
             }
-            if (valuel3 != null && valuel3.length() > 0) {
-                File_Name = File_Name + "_" + valuel3;
+            if (Level3_value != null && Level3_value.length() > 0) {
+                File_Name = File_Name + "_" + Level3_value;
             }
-            if (valuel4 != null && valuel4.length() > 0) {
-                File_Name = File_Name + "_" + valuel4;
+            if (Level4_value != null && Level4_value.length() > 0) {
+                File_Name = File_Name + "_" + Level4_value;
             }
-            if (valuel5 != null && valuel5.length() > 0) {
-                File_Name = File_Name + "_" + valuel5;
+            if (Level5_value != null && Level5_value.length() > 0) {
+                File_Name = File_Name + "_" + Level5_value;
             }
-            if (valuel6 != null && valuel6.length() > 0) {
-                File_Name = File_Name + "_" + valuel6;
+            if (Level6_value != null && Level6_value.length() > 0) {
+                File_Name = File_Name + "_" + Level6_value;
             }
-            if (valuel7 != null && valuel7.length() > 0) {
-                File_Name = File_Name + "_" + valuel7;
+            if (Level7_value != null && Level7_value.length() > 0) {
+                File_Name = File_Name + "_" + Level7_value;
             }
         }else{
             Document_No = qc1Model.getDocNo();
             File_Name = Document_No;
+            Id = String.valueOf(QID);
         }
 
         File_Name = File_Name + "_" + fileName;
         File_Path_File_Name = File_Path + File_Name;
-        String strLastSync = "1";
+        String strLastSync = "0";
         String selection = "id = ?";
         String id = "";
 
         if (flag == 1) {
-            strLastSync = "0";
-            String[] args = {loginId};
-            ID = KHIL.dbCon.getCountOfRows(DbHelper.QC1_DATA, " Created_By = ?", args) + 1;
+            //String[] args = {qc1Model.getFile_Name()};
+            ID = KHIL.dbCon.getCountOfRows(DbHelper.QC1_DATA) + 1;
         }
         id = String.valueOf(ID);
         String[] selectionArgs = {id};
         String valuesArray[] = {id,Created_By,Created_Date,Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,
                 Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,
-                Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type,strLastSync};
+                Location_Id,Month,Property_Id,Quarter,Role_Id,Status,Year,type,strLastSync,
+                yearvalue,quartervalue,monthvalue,Legal_Entity_value,Level2_value,
+                Level3_value,Level4_value,Level5_value,Level6_value,Level7_value,Location_value,Property_value,
+                yeartext,quartertext,monthtext,Legal_Entity_text,Level2_text,Level3_text,Level4_text,Level5_text,
+                Level6_text,Level7_text,Location_text,Property_text};
         boolean result = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, utils.columnNames_QC1_Data, selectionArgs);
 
         if (result) {
@@ -2835,28 +3044,26 @@ public class QC1 extends Fragment {
                }
 
            }
-            if(flag == 1) {
+           /* if(flag == 1) {
                 getUploadData(1);
             }else{
                 getUploadData(2);
-            }
+            }*/
+
+            getUploadData();
         } else {
             System.out.println("FAILURE..!!");
         }
     }
 
-    public void getUploadData(int status) {
+    public void getUploadData() {
         Cursor cursor = null;
         qc1uploadModelList.clear();
         qc1Model = new QC1Model();
-        String strLastSynctable = "";
-        if(status == 1){
-            strLastSynctable = "0";
-        }else{
-            strLastSynctable = "1";
-        }
+        String strLastSynctable = "0";
 
-        String where = " where Created_By = '" + loginId + "'" + "and last_sync = '" + strLastSynctable +"'";
+
+        String where = " where Q_id = '" + Id + "'" + "and last_sync = '" + strLastSynctable +"'";
         cursor = KHIL.dbCon.fetchFromSelect(DbHelper.QC1_DATA, where);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -2940,6 +3147,34 @@ public class QC1 extends Fragment {
             qc1Model.setStatus(cursor.getString(cursor.getColumnIndex("Status")));
             qc1Model.setYear(cursor.getString(cursor.getColumnIndex("Year")));
             qc1Model.setType(cursor.getString(cursor.getColumnIndex("type")));
+
+
+            qc1Model.setYearvalue(cursor.getString(cursor.getColumnIndex("yearvalue")));
+            qc1Model.setQuartervalue(cursor.getString(cursor.getColumnIndex("quartervalue")));
+            qc1Model.setMonthvalue(cursor.getString(cursor.getColumnIndex("monthvalue")));
+            qc1Model.setLegal_Entity_value(cursor.getString(cursor.getColumnIndex("Legal_Entity_value")));
+            qc1Model.setLevel2_value(cursor.getString(cursor.getColumnIndex("Level2_value")));
+            qc1Model.setLevel3_value(cursor.getString(cursor.getColumnIndex("Level3_value")));
+            qc1Model.setLevel4_value(cursor.getString(cursor.getColumnIndex("Level4_value")));
+            qc1Model.setLevel5_value(cursor.getString(cursor.getColumnIndex("Level5_value")));
+            qc1Model.setLevel6_value(cursor.getString(cursor.getColumnIndex("Level6_value")));
+            qc1Model.setLevel7_value(cursor.getString(cursor.getColumnIndex("Level7_value")));
+            qc1Model.setLocation_value(cursor.getString(cursor.getColumnIndex("Location_value")));
+            qc1Model.setProperty_value(cursor.getString(cursor.getColumnIndex("Property_value")));
+            qc1Model.setYeartext(cursor.getString(cursor.getColumnIndex("yeartext")));
+            qc1Model.setQuartertext(cursor.getString(cursor.getColumnIndex("quartertext")));
+            qc1Model.setMonthtext(cursor.getString(cursor.getColumnIndex("monthtext")));
+            qc1Model.setLegal_Entity_text(cursor.getString(cursor.getColumnIndex("Legal_Entity_text")));
+            qc1Model.setLevel2_text(cursor.getString(cursor.getColumnIndex("Level2_text")));
+            qc1Model.setLevel3_text(cursor.getString(cursor.getColumnIndex("Level3_text")));
+            qc1Model.setLevel4_text(cursor.getString(cursor.getColumnIndex("Level4_text")));
+            qc1Model.setLevel5_text(cursor.getString(cursor.getColumnIndex("Level5_text")));
+            qc1Model.setLevel6_text(cursor.getString(cursor.getColumnIndex("Level6_text")));
+            qc1Model.setLevel7_text(cursor.getString(cursor.getColumnIndex("Level7_text")));
+            qc1Model.setLocation_text(cursor.getString(cursor.getColumnIndex("Location_text")));
+            qc1Model.setProperty_text(cursor.getString(cursor.getColumnIndex("Property_text")));
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

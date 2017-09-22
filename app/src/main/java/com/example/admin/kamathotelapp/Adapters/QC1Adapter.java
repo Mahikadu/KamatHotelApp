@@ -101,9 +101,9 @@ public class QC1Adapter extends BaseAdapter {
         viewHolder.txtDocumentNo.setText(qc1Model.getDocNo());
         viewHolder.txtCreby.setText(qc1Model.getCreatedBy());
         viewHolder.txtCredt.setText(qc1Model.getCreatedDate());
-        viewHolder.txtYear.setText(qc1Model.getYear());
-        viewHolder.txtQuater.setText(qc1Model.getQuarter());
-        viewHolder.txtMonth.setText(qc1Model.getMonth());
+        viewHolder.txtYear.setText(qc1Model.getYeartext());
+        viewHolder.txtQuater.setText(qc1Model.getQuartertext());
+        viewHolder.txtMonth.setText(qc1Model.getMonthtext());
         viewHolder.txtStatus.setText(qc1Model.getStatus());
 //        viewHolder.txtDetails.setText(qc1Model.getd());
 //        viewHolder.txtQC1.setText(qc1Model.getq());

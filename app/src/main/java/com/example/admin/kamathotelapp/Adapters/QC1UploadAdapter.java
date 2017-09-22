@@ -160,32 +160,37 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL6.setVisibility(View.GONE);
                         QC1.qc1txtL6.setText("");
 
-                        QC1.qc1txtL2.setText(qc1Model.getLevel2_Id());
+                        QC1.qc1txtL2.setText(qc1Model.getLevel2_text());
                         fetchLevel2dataFin();
                         QC1.cardlevel3.setVisibility(View.VISIBLE);
                         QC1.qc1txtL3.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL3.setText(qc1Model.getLevel3_Id());
+                        QC1.qc1txtL3.setText(qc1Model.getLevel3_text());
+                        if(qc1Model.getLevel4_text()!=null) {
+                            if (!qc1Model.getLevel4_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel4.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL4.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
+                            }
+                        }
+                        if(qc1Model.getLevel5_text()!=null) {
+                            if (!qc1Model.getLevel5_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel5.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL5.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL5.setText(qc1Model.getLevel5_text());
+                            }
+                        }
+                        if(qc1Model.getLevel6_text()!=null) {
+                            if (!qc1Model.getLevel6_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setText(qc1Model.getLevel6_text());
+                            }
+                        }
 
-                        if(!qc1Model.getLevel4_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel4.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL4.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
-                        }
-                        if(!qc1Model.getLevel5_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel5.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL5.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL5.setText(qc1Model.getLevel5_Id());
-                        }
-                        if(!qc1Model.getLevel6_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setText(qc1Model.getLevel6_Id());
-                        }
-
-                        fetchLevel3dataFin(qc1Model.getLevel2_Id());
-                        fetchLevel4datafin(qc1Model.getLevel3_Id());
-                        fetchLevel5datafin(qc1Model.getLevel4_Id());
-                        fetchLevel6datafin(qc1Model.getLevel5_Id());
+                        fetchLevel3dataFin(qc1Model.getLevel2_text());
+                        fetchLevel4datafin(qc1Model.getLevel3_text());
+                        fetchLevel5datafin(qc1Model.getLevel4_text());
+                        fetchLevel6datafin(qc1Model.getLevel5_text());
                     } else if(sharedPref.getLoginId().equalsIgnoreCase("cs") ||
                             sharedPref.getLoginId().equalsIgnoreCase("csQC1")) {
 
@@ -193,21 +198,22 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL4.setVisibility(View.GONE);
                         QC1.qc1txtL4.setText("");
 
-                        QC1.qc1txtL2.setText(qc1Model.getLevel2_Id());
+                        QC1.qc1txtL2.setText(qc1Model.getLevel2_text());
                         fetchLevel2dataCS();
                         QC1.cardlevel3.setVisibility(View.VISIBLE);
                         QC1.qc1txtL3.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL3.setText(qc1Model.getLevel3_Id());
+                        QC1.qc1txtL3.setText(qc1Model.getLevel3_text());
 
-                        fetchLevel3dataCS(qc1Model.getLevel2_Id());
-
-                        if(!qc1Model.getLevel4_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel4.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL4.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
+                        fetchLevel3dataCS(qc1Model.getLevel2_text());
+                        if(qc1Model.getLevel4_text()!=null) {
+                            if (!qc1Model.getLevel4_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel4.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL4.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
+                            }
                         }
 
-                        fetchLevel4dataCS(qc1Model.getLevel3_Id());
+                        fetchLevel4dataCS(qc1Model.getLevel3_text());
 
                     } else if(sharedPref.getLoginId().equalsIgnoreCase("cmd")||
                             sharedPref.getLoginId().equalsIgnoreCase("cmdQC1")) {
@@ -216,27 +222,31 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL7.setVisibility(View.GONE);
                         QC1.qc1txtL7.setText("");
 
-                        QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
+                        QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
                         fetchLevel4dataCMD();
                         QC1.cardlevel5.setVisibility(View.VISIBLE);
                         QC1.qc1txtL5.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL5.setText(qc1Model.getLevel5_Id());
+                        QC1.qc1txtL5.setText(qc1Model.getLevel5_text());
                         QC1.qc1txtL6.setVisibility(View.GONE);
                         QC1.cardlevel7.setVisibility(View.GONE);
 
-                        if(!qc1Model.getLevel6_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setText(qc1Model.getLevel6_Id());
+                        if(qc1Model.getLevel6_text()!=null) {
+                            if (!qc1Model.getLevel6_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setText(qc1Model.getLevel6_text());
+                            }
                         }
-                        if(!qc1Model.getLevel7_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel7.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL7.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL7.setText(qc1Model.getLevel7_Id());
+                        if(qc1Model.getLevel7_text()!=null) {
+                            if (!qc1Model.getLevel7_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel7.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL7.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL7.setText(qc1Model.getLevel7_text());
+                            }
                         }
-                        fetchLevel5dataCMD(qc1Model.getLevel4_Id());
-                        fetchLevel6dataCMD(qc1Model.getLevel5_Id());
-                        fetchLevel7dataCMD(qc1Model.getLevel6_Id());
+                        fetchLevel5dataCMD(qc1Model.getLevel4_text());
+                        fetchLevel6dataCMD(qc1Model.getLevel5_text());
+                        fetchLevel7dataCMD(qc1Model.getLevel6_text());
 
                     } else if(sharedPref.getLoginId().equalsIgnoreCase("legal")||
                             sharedPref.getLoginId().equalsIgnoreCase("legalQC1")) {
@@ -248,26 +258,29 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL7.setVisibility(View.GONE);
                         QC1.qc1txtL7.setText("");
 
-                        QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
+                        QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
                         fetchLevel4dataLEGAL();
                         QC1.cardlevel5.setVisibility(View.VISIBLE);
                         QC1.qc1txtL5.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL5.setText(qc1Model.getLevel5_Id());
+                        QC1.qc1txtL5.setText(qc1Model.getLevel5_text());
 
-                        fetchLevel5dataLEGAL(qc1Model.getLevel4_Id());
-
-                        if(!qc1Model.getLevel6_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setText(qc1Model.getLevel6_Id());
+                        fetchLevel5dataLEGAL(qc1Model.getLevel4_text());
+                        if(qc1Model.getLevel6_text()!=null) {
+                            if (!qc1Model.getLevel6_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setText(qc1Model.getLevel6_text());
+                            }
                         }
-                        if(!qc1Model.getLevel7_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel7.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL7.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL7.setText(qc1Model.getLevel7_Id());
+                        if(qc1Model.getLevel7_text()!=null) {
+                            if (!qc1Model.getLevel7_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel7.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL7.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL7.setText(qc1Model.getLevel7_text());
+                            }
                         }
-                        fetchLevel6dataLEGAL(qc1Model.getLevel5_Id());
-                        fetchLevel7dataLEGAL(qc1Model.getLevel6_Id());
+                        fetchLevel6dataLEGAL(qc1Model.getLevel5_text());
+                        fetchLevel7dataLEGAL(qc1Model.getLevel6_text());
 
                     } else if(sharedPref.getLoginId().equalsIgnoreCase("marketing")||
                             sharedPref.getLoginId().equalsIgnoreCase("marketingQC1")) {
@@ -278,27 +291,30 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL7.setVisibility(View.GONE);
                         QC1.qc1txtL7.setText("");
 
-                        QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
+                        QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
                         fetchLevel4dataMAR();
                         QC1.cardlevel5.setVisibility(View.VISIBLE);
                         QC1.qc1txtL5.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL5.setText(qc1Model.getLevel5_Id());
+                        QC1.qc1txtL5.setText(qc1Model.getLevel5_text());
 
-                        fetchLevel5dataMAR(qc1Model.getLevel4_Id());
-
-                        if(!qc1Model.getLevel6_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setText(qc1Model.getLevel6_Id());
+                        fetchLevel5dataMAR(qc1Model.getLevel4_text());
+                        if(qc1Model.getLevel6_text()!=null) {
+                            if (!qc1Model.getLevel6_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setText(qc1Model.getLevel6_text());
+                            }
                         }
-                        if(!qc1Model.getLevel7_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel7.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL7.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL7.setText(qc1Model.getLevel7_Id());
+                        if(qc1Model.getLevel7_text()!=null) {
+                            if (!qc1Model.getLevel7_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel7.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL7.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL7.setText(qc1Model.getLevel7_text());
+                            }
                         }
 
-                        fetchLevel6dataMAR(qc1Model.getLevel5_Id());
-                        fetchLevel7dataMAR(qc1Model.getLevel6_Id());
+                        fetchLevel6dataMAR(qc1Model.getLevel5_text());
+                        fetchLevel7dataMAR(qc1Model.getLevel6_text());
 
 
                     } else if(sharedPref.getLoginId().equalsIgnoreCase("hr")||
@@ -308,20 +324,21 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL6.setVisibility(View.GONE);
                         QC1.qc1txtL6.setText("");
 
-                        QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
+                        QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
                         fetchLevel4dataHR();
                         QC1.cardlevel5.setVisibility(View.VISIBLE);
                         QC1.qc1txtL5.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL5.setText(qc1Model.getLevel5_Id());
+                        QC1.qc1txtL5.setText(qc1Model.getLevel5_text());
 
-                        fetchLevel5dataHR(qc1Model.getLevel4_Id());
-
-                        if(!qc1Model.getLevel6_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL6.setText(qc1Model.getLevel6_Id());
+                        fetchLevel5dataHR(qc1Model.getLevel4_text());
+                        if(qc1Model.getLevel6_text()!=null) {
+                            if (!qc1Model.getLevel6_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL6.setText(qc1Model.getLevel6_text());
+                            }
                         }
-                        fetchLevel6dataHR(qc1Model.getLevel5_Id());
+                        fetchLevel6dataHR(qc1Model.getLevel5_text());
                     } else if(sharedPref.getLoginId().equalsIgnoreCase("Personal")||
                             sharedPref.getLoginId().equalsIgnoreCase("PersonalQC1")) {
 
@@ -329,20 +346,21 @@ public class QC1UploadAdapter extends BaseAdapter {
                         QC1.qc1txtL5.setVisibility(View.GONE);
                         QC1.qc1txtL5.setText("");
 
-                        QC1.qc1txtL3.setText(qc1Model.getLevel3_Id());
+                        QC1.qc1txtL3.setText(qc1Model.getLevel3_text());
                         fetchLevel3dataPER();
                         QC1.cardlevel4.setVisibility(View.VISIBLE);
                         QC1.qc1txtL4.setVisibility(View.VISIBLE);
-                        QC1.qc1txtL4.setText(qc1Model.getLevel4_Id());
+                        QC1.qc1txtL4.setText(qc1Model.getLevel4_text());
 
-                        fetchLevel4dataPER(qc1Model.getLevel3_Id());
-
-                        if(!qc1Model.getLevel5_Id().equalsIgnoreCase("")) {
-                            QC1.cardlevel5.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL5.setVisibility(View.VISIBLE);
-                            QC1.qc1txtL5.setText(qc1Model.getLevel5_Id());
+                        fetchLevel4dataPER(qc1Model.getLevel3_text());
+                        if(qc1Model.getLevel5_text()!=null) {
+                            if (!qc1Model.getLevel5_text().equalsIgnoreCase("")) {
+                                QC1.cardlevel5.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL5.setVisibility(View.VISIBLE);
+                                QC1.qc1txtL5.setText(qc1Model.getLevel5_text());
+                            }
                         }
-                        fetchLevel5dataPER(qc1Model.getLevel4_Id());
+                        fetchLevel5dataPER(qc1Model.getLevel4_text());
                     }
                 }
             });
@@ -353,34 +371,34 @@ public class QC1UploadAdapter extends BaseAdapter {
         }
         qc1Model = qc1uploadModelList.get(position);
         viewHolder.txtSrNoqc1.setText(String.valueOf(position+1));
-        viewHolder.txtLevel2qc1.setText(qc1Model.getLevel2_Id());
-        viewHolder.txtLevel3qc1.setText(qc1Model.getLevel3_Id());
-        viewHolder.txtLevel4qc1.setText(qc1Model.getLevel4_Id());
-        viewHolder.txtLevel5qc1.setText(qc1Model.getLevel5_Id());
-        viewHolder.txtLevel6qc1.setText(qc1Model.getLevel6_Id());
+        viewHolder.txtLevel2qc1.setText(qc1Model.getLevel2_text());
+        viewHolder.txtLevel3qc1.setText(qc1Model.getLevel3_text());
+        viewHolder.txtLevel4qc1.setText(qc1Model.getLevel4_text());
+        viewHolder.txtLevel5qc1.setText(qc1Model.getLevel5_text());
+        viewHolder.txtLevel6qc1.setText(qc1Model.getLevel6_text());
         viewHolder.txtFilenNameqc1.setText(qc1Model.getFile_Name());
 
         if(sharedPref.getLoginId().equalsIgnoreCase("finance") ||
                 sharedPref.getLoginId().equalsIgnoreCase("financeQC1")) {
 
-            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel2_Id());
+            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel2_text());
             viewHolder.txtLevel2qc1.setTag(position);
-            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel3_Id());
+            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel3_text());
             viewHolder.txtLevel3qc1.setTag(position);
-            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel4_Id());
+            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel4_text());
             viewHolder.txtLevel4qc1.setTag(position);
-            viewHolder.txtLevel5qc1.setText(qc1Model.getLevel5_Id());
+            viewHolder.txtLevel5qc1.setText(qc1Model.getLevel5_text());
             viewHolder.txtLevel5qc1.setTag(position);
-            viewHolder.txtLevel6qc1.setText(qc1Model.getLevel6_Id());
+            viewHolder.txtLevel6qc1.setText(qc1Model.getLevel6_text());
             viewHolder.txtLevel6qc1.setTag(position);
         } else if(sharedPref.getLoginId().equalsIgnoreCase("hr")||
                 sharedPref.getLoginId().equalsIgnoreCase("hrQC1")) {
 
-            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel4_Id());
+            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel4_text());
             viewHolder.txtLevel2qc1.setTag(position);
-            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel5_Id());
+            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel5_text());
             viewHolder.txtLevel3qc1.setTag(position);
-            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel6_Id());
+            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel6_text());
             viewHolder.txtLevel4qc1.setTag(position);
             viewHolder.txtLevel5qc1.setText("");
             viewHolder.txtLevel5qc1.setTag(position);
@@ -394,11 +412,11 @@ public class QC1UploadAdapter extends BaseAdapter {
                 sharedPref.getLoginId().equalsIgnoreCase("legalQC1") ||
                 sharedPref.getLoginId().equalsIgnoreCase("marketingQC1")) {
 
-            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel4_Id());
+            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel4_text());
             viewHolder.txtLevel2qc1.setTag(position);
-            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel5_Id());
+            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel5_text());
             viewHolder.txtLevel3qc1.setTag(position);
-            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel6_Id());
+            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel6_text());
             viewHolder.txtLevel4qc1.setTag(position);
             viewHolder.txtLevel5qc1.setText("");
             viewHolder.txtLevel5qc1.setTag(position);
@@ -407,11 +425,11 @@ public class QC1UploadAdapter extends BaseAdapter {
 
         } else if (sharedPref.getLoginId().equalsIgnoreCase("cs")||
                 sharedPref.getLoginId().equalsIgnoreCase("csQC1")) {
-            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel2_Id());
+            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel2_text());
             viewHolder.txtLevel2qc1.setTag(position);
-            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel3_Id());
+            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel3_text());
             viewHolder.txtLevel3qc1.setTag(position);
-            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel4_Id());
+            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel4_text());
             viewHolder.txtLevel4qc1.setTag(position);
             viewHolder.txtLevel5qc1.setText("");
             viewHolder.txtLevel5qc1.setTag(position);
@@ -420,11 +438,11 @@ public class QC1UploadAdapter extends BaseAdapter {
 
         } else if (sharedPref.getLoginId().equalsIgnoreCase("Personal")||
                 sharedPref.getLoginId().equalsIgnoreCase("PersonalQC1")) {
-            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel3_Id());
+            viewHolder.txtLevel2qc1.setText(qc1Model.getLevel3_text());
             viewHolder.txtLevel2qc1.setTag(position);
-            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel4_Id());
+            viewHolder.txtLevel3qc1.setText(qc1Model.getLevel4_text());
             viewHolder.txtLevel3qc1.setTag(position);
-            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel5_Id());
+            viewHolder.txtLevel4qc1.setText(qc1Model.getLevel5_text());
             viewHolder.txtLevel4qc1.setTag(position);
             viewHolder.txtLevel5qc1.setText("");
             viewHolder.txtLevel5qc1.setTag(position);
