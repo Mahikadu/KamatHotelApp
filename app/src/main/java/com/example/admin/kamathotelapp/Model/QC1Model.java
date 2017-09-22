@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 
 public class QC1Model implements Serializable {
+
+
+    String id;
     String dept;
     String docNo;
     String createdBy;
@@ -61,6 +64,14 @@ public class QC1Model implements Serializable {
     String Location_text;
     String Property_text;
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getYearvalue() {
         return yearvalue;
     }

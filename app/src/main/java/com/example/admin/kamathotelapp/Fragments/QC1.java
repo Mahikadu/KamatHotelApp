@@ -3009,6 +3009,8 @@ public class QC1 extends Fragment {
         if (flag == 1) {
             //String[] args = {qc1Model.getFile_Name()};
             ID = KHIL.dbCon.getCountOfRows(DbHelper.QC1_DATA) + 1;
+        }else{
+            ID = Integer.valueOf(qc1Model.getId());
         }
         id = String.valueOf(ID);
         String[] selectionArgs = {id};
@@ -3119,7 +3121,7 @@ public class QC1 extends Fragment {
     private QC1Model createQC1Model(Cursor cursor) {
         qc1Model = new QC1Model();
         try {
-
+            qc1Model.setId(cursor.getString(cursor.getColumnIndex("id")));
             qc1Model.setDept(cursor.getString(cursor.getColumnIndex("Created_By")));
             qc1Model.setCreatedBy(cursor.getString(cursor.getColumnIndex("Created_By")));
             qc1Model.setCreatedDate(cursor.getString(cursor.getColumnIndex("Created_Date")));
