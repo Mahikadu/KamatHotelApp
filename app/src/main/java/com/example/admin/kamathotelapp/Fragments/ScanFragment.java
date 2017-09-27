@@ -163,6 +163,7 @@ public class ScanFragment extends Fragment {
         btnDismissMaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 showMaster.dismiss();
             }
         });

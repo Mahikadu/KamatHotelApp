@@ -47,6 +47,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -1267,6 +1268,7 @@ public class UploadFragment extends Fragment {
         btnAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 Intent intent;
                 if (manufactures.equalsIgnoreCase("samsung")) {
                     intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
@@ -2528,6 +2530,7 @@ public class UploadFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 View focusView = null;
                 autoLegalEntity.setError(null);
                 autoProperty.setError(null);
@@ -2762,6 +2765,7 @@ public class UploadFragment extends Fragment {
             {
                 @Override
                 public void onClick (View v){
+                    v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 file = txtNoFile.getText().toString();
                 txtNoFile.setText("No file chosen");
                 layout_edit.setVisibility(View.GONE);
@@ -2834,6 +2838,7 @@ public class UploadFragment extends Fragment {
             {
                 @Override
                 public void onClick (View v){
+                    v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 txtNoFile.setText("No file chosen");
                 btnAdd.setVisibility(View.VISIBLE);
                 layout_edit.setVisibility(View.GONE);
@@ -2901,6 +2906,7 @@ public class UploadFragment extends Fragment {
             {
                 @Override
                 public void onClick (View v){
+                    v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 try {
                     if (progress != null && !progress.isShowing()) {
                         progress.setMessage("Data is Submiting to server ...");
@@ -2925,6 +2931,7 @@ public class UploadFragment extends Fragment {
             {
                 @Override
                 public void onClick (View v){
+                    v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 startAddingImages();
             }
             });

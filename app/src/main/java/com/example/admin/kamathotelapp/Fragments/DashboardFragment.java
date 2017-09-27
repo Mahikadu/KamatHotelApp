@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -287,6 +288,7 @@ public class DashboardFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
 //                detailsLayout.setVisibility(View.VISIBLE);
 //                search.setVisibility(View.GONE);
 //                dashboardlayout.setVisibility(View.GONE);
@@ -295,6 +297,7 @@ public class DashboardFragment extends Fragment {
         loadRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 detailsLayout.setVisibility(View.GONE);
                 search.setVisibility(View.VISIBLE);
                 dashboardlayout.setVisibility(View.VISIBLE);

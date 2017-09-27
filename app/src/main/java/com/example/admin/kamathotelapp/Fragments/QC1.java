@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -1065,6 +1066,7 @@ public class QC1 extends Fragment {
         btnAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 Intent intent;
                 if (manufactures.equalsIgnoreCase("samsung")) {
                     intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
@@ -2262,6 +2264,7 @@ public class QC1 extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 View focusView = null;
                 autoLegalEntity.setError(null);
                 autoProperty.setError(null);
@@ -2575,6 +2578,7 @@ public class QC1 extends Fragment {
         {
             @Override
             public void onClick (View v){
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 file = qc1txtNoFile.getText().toString();
                 choosefilelayout.setVisibility(View.VISIBLE);
                 qc1txtNoFile.setText("No file chosen");
@@ -2726,6 +2730,7 @@ public class QC1 extends Fragment {
         {
             @Override
             public void onClick (View v){
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 qc1txtNoFile.setText("No file chosen");
                 btnAdd.setVisibility(View.VISIBLE);
                 qc1layout_edit.setVisibility(View.GONE);
@@ -2791,6 +2796,7 @@ public class QC1 extends Fragment {
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 UpdateTrans updateTrans = new UpdateTrans();
                 updateTrans.execute();
 
@@ -2800,6 +2806,7 @@ public class QC1 extends Fragment {
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 UpdateTransReject updateTransReject = new UpdateTransReject();
                 updateTransReject.execute();
             }
