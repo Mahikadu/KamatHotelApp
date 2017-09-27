@@ -1331,7 +1331,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlevel2 = null;
-                        String where = " where id = '" + Level2_Id + "'";
+                        String where = " where aID = '" + Level2_Id + "'";
                         cursorlevel2 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
                         if (cursorlevel2 != null && cursorlevel2.getCount() > 0) {
                             cursorlevel2.moveToFirst();
@@ -1359,7 +1359,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlevel3 = null;
-                        String where = " where id = '" + Level3_Id + "'";
+                        String where = " where aID = '" + Level3_Id + "'";
                         cursorlevel3 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
                         if (cursorlevel3 != null && cursorlevel3.getCount() > 0) {
                             cursorlevel3.moveToFirst();
@@ -1387,7 +1387,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlevel4 = null;
-                        String where = " where id = '" + Level4_Id + "'";
+                        String where = " where aID= '" + Level4_Id + "'";
                         cursorlevel4 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
                         if (cursorlevel4 != null && cursorlevel4.getCount() > 0) {
                             cursorlevel4.moveToFirst();
@@ -1415,7 +1415,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlevel5 = null;
-                        String where = " where id = '" + Level5_Id + "'";
+                        String where = " where aID = '" + Level5_Id + "'";
                         cursorlevel5 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
                         if (cursorlevel5 != null && cursorlevel5.getCount() > 0) {
                             cursorlevel5.moveToFirst();
@@ -1443,7 +1443,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlevel6 = null;
-                        String where = " where id = '" + Level6_Id + "'";
+                        String where = " where aID= '" + Level6_Id + "'";
                         cursorlevel6 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
                         if (cursorlevel6 != null && cursorlevel6.getCount() > 0) {
                             cursorlevel6.moveToFirst();
@@ -1471,7 +1471,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlevel7 = null;
-                        String where = " where id = '" + Level7_Id + "'";
+                        String where = " where aID = '" + Level7_Id + "'";
                         cursorlevel7 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
                         if (cursorlevel7 != null && cursorlevel7.getCount() > 0) {
                             cursorlevel7.moveToFirst();
@@ -1629,7 +1629,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursoryear = null;
-                        String where = " where id = '" + Year + "'";
+                        String where = " where value = '" + Year + "'";
                         cursoryear = KHIL.dbCon.fetchFromSelect(DbHelper.M_Year, where);
                         if (cursoryear != null && cursoryear.getCount() > 0) {
                             cursoryear.moveToFirst();

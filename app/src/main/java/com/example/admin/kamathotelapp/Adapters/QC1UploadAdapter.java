@@ -120,6 +120,7 @@ public class QC1UploadAdapter extends BaseAdapter {
             viewHolder.txtFilenNameqc1 = (TextView) convertView.findViewById(R.id.txtFilenNameqc1);
             viewHolder.txtEditqc1 = (TextView) convertView.findViewById(R.id.txtEditqc1);
             viewHolder.txtViewqc1 = (TextView) convertView.findViewById(R.id.txtViewqc1);
+            viewHolder.txtdeleteqc1 = (TextView) convertView.findViewById(R.id.txtdeleteqc1);
 
             viewHolder.txtViewqc1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2024,6 +2025,6 @@ public class QC1UploadAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        private TextView txtSrNoqc1, txtLevel2qc1, txtLevel3qc1, txtLevel4qc1, txtLevel5qc1, txtLevel6qc1, txtFilenNameqc1, txtEditqc1,txtViewqc1;
+        private TextView txtSrNoqc1, txtLevel2qc1, txtLevel3qc1, txtLevel4qc1, txtLevel5qc1, txtLevel6qc1, txtFilenNameqc1, txtEditqc1,txtViewqc1,txtdeleteqc1;
     }
 }

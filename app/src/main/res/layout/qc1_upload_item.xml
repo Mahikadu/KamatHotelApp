@@ -147,6 +147,15 @@
                     android:layout_marginRight="3sp"
                     android:text="View"/>
 
+                <TextView
+                    android:id="@+id/txtdeleteqc1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3sp"
+                    android:visibility="gone"
+                    android:layout_marginRight="3sp"
+                    android:text="Delete"/>
+
             </LinearLayout>
 
         </LinearLayout>
