@@ -6,7 +6,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +16,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.admin.kamathotelapp.Fragments.QC1;
+import com.example.admin.kamathotelapp.KHIL;
 import com.example.admin.kamathotelapp.Model.DashboardModel;
 import com.example.admin.kamathotelapp.Model.QC1Model;
 import com.example.admin.kamathotelapp.NavigationDrawerActivity;
 import com.example.admin.kamathotelapp.R;
+import com.example.admin.kamathotelapp.dbConfig.DbHelper;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +35,7 @@ public class QC1Adapter extends BaseAdapter {
 
     private Context mContext;
     private List<QC1Model> qc1ModelList;
+    public List<QC1Model> qc1QIDModelList;
     private static LayoutInflater inflater = null;
     QC1Adapter adapter;
     private QC1Model qc1Model;
@@ -37,6 +44,7 @@ public class QC1Adapter extends BaseAdapter {
     public QC1Adapter(Context mContext, List<QC1Model> qc1Modellist) {
         this.mContext = mContext;
         this.qc1ModelList = qc1Modellist;
+
     }
 
     @Override
@@ -78,8 +86,25 @@ public class QC1Adapter extends BaseAdapter {
             viewHolder.txtQC1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                   /* */
+                    qc1QIDModelList = new ArrayList<>();
                     click = true;
+
                     qc1Model = qc1ModelList.get(position);
+                    Cursor cursor = null;
+                    String strLastSynctable = "0";
+                    String where = " where Q_id = '" + qc1Model.getQ_Id() + "'" + "and last_sync = '" + strLastSynctable +"'";
+                    cursor = KHIL.dbCon.fetchFromSelect(DbHelper.QC1_DATA, where);
+                    if (cursor != null && cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        do {
+                            qc1Model = createQC1Model(cursor);
+                            qc1QIDModelList.add(qc1Model);
+                        } while (cursor.moveToNext());
+                        cursor.close();
+                    }
+
                     QC1 fragment = new QC1();
                     android.support.v4.app.FragmentTransaction fragmentTransaction = ((NavigationDrawerActivity)mContext).getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.frame_content,fragment);
@@ -87,7 +112,8 @@ public class QC1Adapter extends BaseAdapter {
 
                     Bundle args = new Bundle();
                     args.putBoolean("Click",click);
-                    args.putSerializable("QC1", qc1Model);
+                    args.putInt("position",position);
+                    args.putSerializable("QC1_QIDlist", (Serializable) qc1QIDModelList);
                     fragment.setArguments(args);
                 }
             });
@@ -109,6 +135,71 @@ public class QC1Adapter extends BaseAdapter {
 //        viewHolder.txtQC1.setText(qc1Model.getq());
 
         return convertView;
+    }
+
+    private QC1Model createQC1Model(Cursor cursor) {
+        qc1Model = new QC1Model();
+        try {
+            qc1Model.setId(cursor.getString(cursor.getColumnIndex("id")));
+            qc1Model.setDept(cursor.getString(cursor.getColumnIndex("Created_By")));
+            qc1Model.setCreatedBy(cursor.getString(cursor.getColumnIndex("Created_By")));
+            qc1Model.setCreatedDate(cursor.getString(cursor.getColumnIndex("Created_Date")));
+            qc1Model.setDocNo(cursor.getString(cursor.getColumnIndex("Document_No")));
+            qc1Model.setFile_Exten(cursor.getString(cursor.getColumnIndex("File_Exten")));
+            qc1Model.setFile_Name(cursor.getString(cursor.getColumnIndex("File_Name")));
+            qc1Model.setFile_Path(cursor.getString(cursor.getColumnIndex("File_Path")));
+            qc1Model.setFile_Path_File_Name(cursor.getString(cursor.getColumnIndex("File_Path_File_Name")));
+            qc1Model.setQ_Id(cursor.getString(cursor.getColumnIndex("Q_Id")));
+            qc1Model.setIs_Download(cursor.getString(cursor.getColumnIndex("Is_Download")));
+            qc1Model.setIs_Edit(cursor.getString(cursor.getColumnIndex("Is_Edit")));
+            qc1Model.setIs_View(cursor.getString(cursor.getColumnIndex("Is_View")));
+            qc1Model.setLegal_Entity_Id(cursor.getString(cursor.getColumnIndex("Legal_Entity_Id")));
+            qc1Model.setLevel2_Id(cursor.getString(cursor.getColumnIndex("Level2_Id")));
+            qc1Model.setLevel3_Id(cursor.getString(cursor.getColumnIndex("Level3_Id")));
+            qc1Model.setLevel4_Id(cursor.getString(cursor.getColumnIndex("Level4_Id")));
+            qc1Model.setLevel5_Id(cursor.getString(cursor.getColumnIndex("Level5_Id")));
+            qc1Model.setLevel6_Id(cursor.getString(cursor.getColumnIndex("Level6_Id")));
+            qc1Model.setLevel7_Id(cursor.getString(cursor.getColumnIndex("Level7_Id")));
+            qc1Model.setLocation_Id(cursor.getString(cursor.getColumnIndex("Location_Id")));
+            qc1Model.setMonth(cursor.getString(cursor.getColumnIndex("Month")));
+            qc1Model.setProperty_Id(cursor.getString(cursor.getColumnIndex("Property_Id")));
+            qc1Model.setQuarter(cursor.getString(cursor.getColumnIndex("Quarter")));
+            qc1Model.setRole_Id(cursor.getString(cursor.getColumnIndex("Role_Id")));
+            qc1Model.setStatus(cursor.getString(cursor.getColumnIndex("Status")));
+            qc1Model.setYear(cursor.getString(cursor.getColumnIndex("Year")));
+            qc1Model.setType(cursor.getString(cursor.getColumnIndex("type")));
+
+
+            qc1Model.setYearvalue(cursor.getString(cursor.getColumnIndex("yearvalue")));
+            qc1Model.setQuartervalue(cursor.getString(cursor.getColumnIndex("quartervalue")));
+            qc1Model.setMonthvalue(cursor.getString(cursor.getColumnIndex("monthvalue")));
+            qc1Model.setLegal_Entity_value(cursor.getString(cursor.getColumnIndex("Legal_Entity_value")));
+            qc1Model.setLevel2_value(cursor.getString(cursor.getColumnIndex("Level2_value")));
+            qc1Model.setLevel3_value(cursor.getString(cursor.getColumnIndex("Level3_value")));
+            qc1Model.setLevel4_value(cursor.getString(cursor.getColumnIndex("Level4_value")));
+            qc1Model.setLevel5_value(cursor.getString(cursor.getColumnIndex("Level5_value")));
+            qc1Model.setLevel6_value(cursor.getString(cursor.getColumnIndex("Level6_value")));
+            qc1Model.setLevel7_value(cursor.getString(cursor.getColumnIndex("Level7_value")));
+            qc1Model.setLocation_value(cursor.getString(cursor.getColumnIndex("Location_value")));
+            qc1Model.setProperty_value(cursor.getString(cursor.getColumnIndex("Property_value")));
+            qc1Model.setYeartext(cursor.getString(cursor.getColumnIndex("yeartext")));
+            qc1Model.setQuartertext(cursor.getString(cursor.getColumnIndex("quartertext")));
+            qc1Model.setMonthtext(cursor.getString(cursor.getColumnIndex("monthtext")));
+            qc1Model.setLegal_Entity_text(cursor.getString(cursor.getColumnIndex("Legal_Entity_text")));
+            qc1Model.setLevel2_text(cursor.getString(cursor.getColumnIndex("Level2_text")));
+            qc1Model.setLevel3_text(cursor.getString(cursor.getColumnIndex("Level3_text")));
+            qc1Model.setLevel4_text(cursor.getString(cursor.getColumnIndex("Level4_text")));
+            qc1Model.setLevel5_text(cursor.getString(cursor.getColumnIndex("Level5_text")));
+            qc1Model.setLevel6_text(cursor.getString(cursor.getColumnIndex("Level6_text")));
+            qc1Model.setLevel7_text(cursor.getString(cursor.getColumnIndex("Level7_text")));
+            qc1Model.setLocation_text(cursor.getString(cursor.getColumnIndex("Location_text")));
+            qc1Model.setProperty_text(cursor.getString(cursor.getColumnIndex("Property_text")));
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return qc1Model;
     }
 
     public class ViewHolder {

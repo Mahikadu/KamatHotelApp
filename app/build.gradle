@@ -49,4 +49,5 @@ dependencies {
         transitive = true
     }
     compile files('libs/itextpdf-5.4.1.jar')
+    compile 'cn.pedant.sweetalert:library:1.3'
 }

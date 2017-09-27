@@ -1,12 +1,15 @@
 package com.example.admin.kamathotelapp.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by Admin on 11-09-2017.
  */
 
-public class QC1Model implements Serializable {
+public class QC1Model implements Parcelable {
 
 
     String id;
@@ -481,4 +484,13 @@ public class QC1Model implements Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

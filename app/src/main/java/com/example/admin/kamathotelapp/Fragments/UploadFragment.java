@@ -32,6 +32,8 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
@@ -102,6 +104,7 @@ import java.util.Queue;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import in.gauriinfotech.commons.Commons;
 
 import com.itextpdf.text.Document;
@@ -2898,7 +2901,7 @@ public class UploadFragment extends Fragment {
             {
                 @Override
                 public void onClick (View v){
-               /* try {
+                try {
                     if (progress != null && !progress.isShowing()) {
                         progress.setMessage("Data is Submiting to server ...");
                         progress.show();
@@ -2906,7 +2909,7 @@ public class UploadFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }*/
+                }
                 int size = getAllSubmitData();
                 if (size > 0) {
                     new SaveInsertUpdate().execute();
@@ -3028,7 +3031,7 @@ public class UploadFragment extends Fragment {
             saveInsertUpdate.execute();*/
             String base64 = getBase64Image(filePath);
 
-            final File dwldsPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/" + fileName + ".pdf");
+          /*  final File dwldsPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/" + fileName + ".pdf");
             byte[] pdfAsBytes = Base64.decode(base64, 0);
             FileOutputStream os;
             try {
@@ -3040,7 +3043,7 @@ public class UploadFragment extends Fragment {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             getUploadData();
         } else {
@@ -4794,9 +4797,8 @@ public class UploadFragment extends Fragment {
 
     private SoapPrimitive SyncAllData() {
         SoapPrimitive objLead = null;
-        SoapPrimitive object = null;
-
         SOAPWebservice webService = new SOAPWebservice(getActivity());
+
         for (int k = 0; k < submitDatalist.size(); k++) {
             String base64 = "";
             uploadModel = submitDatalist.get(k);
@@ -4863,7 +4865,21 @@ public class UploadFragment extends Fragment {
         protected void onPostExecute(SoapPrimitive soapObject) {
             super.onPostExecute(soapObject);
             progress.dismiss();
-
+            new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText(loginId)
+                    .setContentText("Document Number Submitted Successfully")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            DashboardFragment fragment = new DashboardFragment();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_content, fragment);
+                            fragmentTransaction.commit();
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
 //            getUploadData();
 
 

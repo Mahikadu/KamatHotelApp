@@ -130,7 +130,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
         String[] strEmails = new String[]{
                 "tushar@adstringo.in","mahesh@sudesi.in"
         };
-        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
+        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo1);
 
         sendIntent.putExtra(Intent.EXTRA_EMAIL, strEmails);
         sendIntent.putExtra(Intent.EXTRA_TEXT, body);
@@ -146,7 +146,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
         b.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(when)
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.drawable.logo1)
                 .setTicker(tickerText)
                 .setContentTitle(tickerText + " report. Click to review and send.")
                 .setContentText("from " + applicationName + " Service")

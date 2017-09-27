@@ -22,6 +22,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
@@ -64,12 +66,15 @@ import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.dbConfig.DbHelper;
+import com.example.admin.kamathotelapp.libs.SOAPWebservice;
 import com.gun0912.tedpicker.ImagePickerActivity;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import org.ksoap2.serialization.SoapPrimitive;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -85,6 +90,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import in.gauriinfotech.commons.Commons;
 
 import static com.example.admin.kamathotelapp.Fragments.UploadFragment.setListViewHeightBasedOnItems;
@@ -99,6 +105,7 @@ public class QC1 extends Fragment {
     List<String> imagesUri;
     String imageFilename, imagePath;
     Image pickimage;
+    ProgressDialog progress;
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE_RESULT = 1;
 
     private boolean qc1lev2 = false;
@@ -121,7 +128,7 @@ public class QC1 extends Fragment {
             Status,Year,type,yearvalue,quartervalue,monthvalue,Legal_Entity_value,Level2_value,
             Level3_value,Level4_value,Level5_value,Level6_value,Level7_value,Location_value,Property_value,
             yeartext,quartertext,monthtext,Legal_Entity_text,Level2_text,Level3_text,Level4_text,Level5_text,
-            Level6_text,Level7_text,Location_text,Property_text;
+            Level6_text,Level7_text,Location_text,Property_text,TransID="";
 
     private Utils utils;
 
@@ -210,6 +217,7 @@ public class QC1 extends Fragment {
     public String loginId, password,roleID;
     LinearLayout qc1datalayout,qclayout;
     boolean clickflag = false;
+    Integer recordnumber;
 
     @InjectView(R.id.qc1LegalEntity)
     AutoCompleteTextView autoLegalEntity;
@@ -233,6 +241,10 @@ public class QC1 extends Fragment {
     Button btnUpdate;
     @InjectView(R.id.qc1btnCancel)
     Button btnCancel;
+    @InjectView(R.id.qc1btnApprove)
+    Button btnApprove;
+    @InjectView(R.id.qcbtnReject)
+    Button btnReject;
 
     public static Button btnAdd;
     public static int QID = 0;
@@ -269,6 +281,7 @@ public class QC1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_qc1, container, false);
         ButterKnife.inject(this, view);
         initView(view);
+        progress = new ProgressDialog(getContext());
         return view;
     }
 
@@ -324,14 +337,24 @@ public class QC1 extends Fragment {
         qc1Model = new QC1Model();
 
         fetchQC1Details(roleID);
-
+        qc1uploadModelList = new ArrayList<>();
         Bundle bundle = getArguments();
+
         if (bundle != null) {
-            clickflag = bundle.getBoolean("Click");
-            qc1Model = (QC1Model) bundle.getSerializable("QC1");
+            try {
+                clickflag = bundle.getBoolean("Click");
+//            qc1Model = (QC1Model) bundle.getSerializable("QC1");
+                recordnumber = bundle.getInt("position");
+                qc1uploadModelList = bundle.getParcelableArrayList("QC1_QIDlist");
+
+                qc1Model = qc1uploadModelList.get(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
         if (clickflag) {
-            qc1uploadModelList = new ArrayList<>();
+
             listqc.setVisibility(View.GONE);
             qclayout.setVisibility(View.GONE);
             qc1datalayout.setVisibility(View.VISIBLE);
@@ -346,7 +369,7 @@ public class QC1 extends Fragment {
             qc1no_files.setVisibility(View.GONE);
             qc1listUpload.setVisibility(View.VISIBLE);
 
-            qc1uploadModelList.add(qc1Model);
+            //qc1uploadModelList.add(qc1Model);
             setValues(qc1uploadModelList);
         }
 
@@ -2409,6 +2432,7 @@ public class QC1 extends Fragment {
                 Created_By = sharedPref.getLoginId();
                 Role_Id = sharedPref.getRoleID();
                 Created_Date = qc1Model.getCreatedDate();
+                TransID = qc1Model.getQ_Id();
                 Is_Download = "True";
                 Is_Edit = "True";
                 Is_View = "True";
@@ -2560,6 +2584,7 @@ public class QC1 extends Fragment {
                 Created_By = sharedPref.getLoginId();
                 Role_Id = sharedPref.getRoleID();
                 Created_Date = qc1Model.getCreatedDate();
+                TransID = qc1Model.getQ_Id();
                 Is_Download = "True";
                 Is_Edit = "True";
                 Is_View = "True";
@@ -2763,7 +2788,26 @@ public class QC1 extends Fragment {
             }
         });
 
+        btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateTrans updateTrans = new UpdateTrans();
+                updateTrans.execute();
+
+            }
+        });
+
+        btnReject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateTransReject updateTransReject = new UpdateTransReject();
+                updateTransReject.execute();
+            }
+        });
+
     }
+
+
 
     @Override
     public void onActivityResult ( int requestCode, int resultCode, Intent data){
@@ -2997,6 +3041,24 @@ public class QC1 extends Fragment {
         }else{
             Document_No = qc1Model.getDocNo();
             File_Name = Document_No;
+            if (Level2_value != null && Level2_value.length() > 0) {
+                File_Name = File_Name + "_" + Level2_value;
+            }
+            if (Level3_value != null && Level3_value.length() > 0) {
+                File_Name = File_Name + "_" + Level3_value;
+            }
+            if (Level4_value != null && Level4_value.length() > 0) {
+                File_Name = File_Name + "_" + Level4_value;
+            }
+            if (Level5_value != null && Level5_value.length() > 0) {
+                File_Name = File_Name + "_" + Level5_value;
+            }
+            if (Level6_value != null && Level6_value.length() > 0) {
+                File_Name = File_Name + "_" + Level6_value;
+            }
+            if (Level7_value != null && Level7_value.length() > 0) {
+                File_Name = File_Name + "_" + Level7_value;
+            }
             Id = String.valueOf(QID);
         }
 
@@ -3024,11 +3086,16 @@ public class QC1 extends Fragment {
         boolean result = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, utils.columnNames_QC1_Data, selectionArgs);
 
         if (result) {
-            System.out.println("Upload details are added");
-           /* SaveInsertUpdate saveInsertUpdate = new SaveInsertUpdate();
-            saveInsertUpdate.execute();*/
+            if (flag == 1) {
+                System.out.println("Upload details are added");
+                SaveTransDetails saveTransDetails = new SaveTransDetails();
+                saveTransDetails.execute();
+            }else if (flag == 2){
+                Edit_Details_QC1 edit_details = new Edit_Details_QC1();
+                edit_details.execute();
+            }
 
-           if(flag ==1) {
+          /* if(flag ==1) {
                String base64 = getBase64Image(File_Path);
 
                final File dwldsPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PDFfiles/" + fileName + ".pdf");
@@ -3045,7 +3112,7 @@ public class QC1 extends Fragment {
                    e.printStackTrace();
                }
 
-           }
+           }*/
            /* if(flag == 1) {
                 getUploadData(1);
             }else{
@@ -3075,6 +3142,71 @@ public class QC1 extends Fragment {
                 setValues(qc1uploadModelList);
             } while (cursor.moveToNext());
             cursor.close();
+        }
+    }
+
+    public void getStatusData(String id) {
+        Cursor cursor = null;
+        qc1uploadModelList.clear();
+        qc1Model = new QC1Model();
+        String strLastSynctable = "1";
+
+        String selection = "approve_sync"+ " = ?";
+        // WHERE clause arguments
+        String[] selectionArgs = {strLastSynctable};
+       boolean result = KHIL.dbCon.delete(DbHelper.QC1_DATA, selection, selectionArgs);
+        if (result) {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText(loginId)
+                    .setContentText("Document Number Approved Successfully")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            QC1 fragment2 = new QC1();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_content, fragment2);
+                            fragmentTransaction.commit();
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+            adapter = new QC1UploadAdapter(getActivity(), qc1uploadModelList);
+            qc1listUpload.setAdapter(adapter);
+            setListViewHeightBasedOnItems(qc1listUpload);
+            adapter.notifyDataSetChanged();
+        }
+    }
+    public void getStatusDataReject(String id) {
+        Cursor cursor = null;
+        qc1uploadModelList.clear();
+        qc1Model = new QC1Model();
+        String strLastSynctable = "1";
+
+        String selection = "reject_Sync"+ " = ?";
+        // WHERE clause arguments
+        String[] selectionArgs = {strLastSynctable};
+        boolean result = KHIL.dbCon.delete(DbHelper.QC1_DATA, selection, selectionArgs);
+        if (result) {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText(loginId)
+                    .setContentText("Document Number Rejected Successfully")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            QC1 fragment2 = new QC1();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_content, fragment2);
+                            fragmentTransaction.commit();
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+            adapter = new QC1UploadAdapter(getActivity(), qc1uploadModelList);
+            qc1listUpload.setAdapter(adapter);
+            setListViewHeightBasedOnItems(qc1listUpload);
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -4778,7 +4910,203 @@ public class QC1 extends Fragment {
         }
     }
 
-    /**
-     *   Finish
-     */
+    private class SaveTransDetails extends AsyncTask<Void, Void, SoapPrimitive> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress.setMessage("Please wait ...");
+            progress.show();
+        }
+
+        @Override
+        protected SoapPrimitive doInBackground(Void... params) {
+            SoapPrimitive soapObject = null;
+            SOAPWebservice webService = new SOAPWebservice(getActivity());
+            String Updated_By = Created_By;
+            String Updated_Date = Created_Date;
+            // TODO: 9/22/2017  Individuals_Id = "",NewProposal="",NewDocument_No="";
+            soapObject = webService.Save_Trans_Dtls(Role_Id,Legal_Entity_Id,Property_Id,Location_Id,Document_No,Created_By,Updated_By,Created_Date,Updated_Date,
+                   "","",TransID,Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Year,Quarter,Month,File_Name ,File_Path,File_Path_File_Name,
+                    File_Exten,Status,"");
+            return soapObject;
+        }
+
+        @Override
+        protected void onPostExecute(SoapPrimitive soapObject) {
+            super.onPostExecute(soapObject);
+            progress.dismiss();
+
+        }
+    }
+
+    private class Edit_Details_QC1 extends AsyncTask<Void, Void, SoapPrimitive> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress.setMessage("Please wait ...");
+            progress.show();
+        }
+
+        @Override
+        protected SoapPrimitive doInBackground(Void... params) {
+            SoapPrimitive soapObject = null;
+            SOAPWebservice webService = new SOAPWebservice(getActivity());
+            String Updated_By = Created_By;
+            String Updated_Date = Created_Date;
+            // TODO: 9/22/2017  Individuals_Id = "",NewProposal="",NewDocument_No="";
+
+            soapObject = webService.Edit_Details_QC1(Role_Id,Legal_Entity_Id,Property_Id,Location_Id,Document_No,Created_By,Updated_By,Created_Date,Updated_Date,
+                    "","",TransID,Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Year,Quarter,Month,File_Name ,File_Path,File_Path_File_Name,
+                    File_Exten,Status,"");
+            return soapObject;
+        }
+
+        @Override
+        protected void onPostExecute(SoapPrimitive soapObject) {
+            super.onPostExecute(soapObject);
+            progress.dismiss();
+
+        }
+    }
+    private class UpdateTrans extends AsyncTask<Void, Void, SoapPrimitive> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress.setMessage("Please wait ...");
+            progress.show();
+        }
+
+        @Override
+        protected SoapPrimitive doInBackground(Void... params) {
+
+            SoapPrimitive object = Approve();
+
+            return object;
+        }
+
+        @Override
+        protected void onPostExecute(SoapPrimitive soapObject) {
+            super.onPostExecute(soapObject);
+            progress.dismiss();
+            getStatusData(qc1Model.getQ_Id());
+        }
+    }
+
+    private SoapPrimitive Approve() {
+        SoapPrimitive objLead = null;
+        SOAPWebservice webService = new SOAPWebservice(getActivity());
+        if (qc1uploadModelList.size()>0){
+            for (int k = 0; k < qc1uploadModelList.size(); k++) {
+                qc1Model = qc1uploadModelList.get(k);
+
+                // TODO: 9/22/2017  Individuals_Id = "",NewProposal="",NewDocument_No="";
+                objLead = webService.Update_Trans(qc1Model.getRole_Id(),qc1Model.getLegal_Entity_Id(),qc1Model.getProperty_Id(),
+                        qc1Model.getLocation_Id(),qc1Model.getDocNo(),qc1Model.getCreatedBy(),qc1Model.getCreatedBy(),qc1Model.getCreatedDate(),
+                        qc1Model.getCreatedDate(),"","",qc1Model.getQ_Id(),qc1Model.getYear(),qc1Model.getQuarter(),qc1Model.getMonth(),
+                        "QC1Approved","");
+                String id = String.valueOf(objLead);
+                if (id.equalsIgnoreCase("null") || id.equals(null) || id.equals("0")) {
+                    String strLastSync = "0";
+                    String selection = "File_Name = ?";
+                    String[] selectionArgs = {qc1Model.getFile_Name()};
+                    String valuesArray[] = {strLastSync};
+                    String[] columnNames = {"approve_sync"};
+                    boolean result = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, columnNames, selectionArgs);
+                    if (result) {
+                        System.out.println("Document Reject");
+                    } else {
+                        System.out.println("FAILURE..!!");
+                    }
+
+                }else {
+                    String strLastSync = "1";
+                    String selection = "File_Name = ?";
+                    String[] selectionArgs = {qc1Model.getFile_Name()};
+                    String valuesArray[] = {strLastSync};
+                    String[] columnNames = {"approve_sync"};
+                    boolean result = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, columnNames, selectionArgs);
+                    if (result) {
+                        System.out.println("Document Approve");
+                    } else {
+                        System.out.println("FAILURE..!!");
+                    }
+
+                }
+
+            }
+        }
+        return objLead;
+    }
+    private class UpdateTransReject extends AsyncTask<Void, Void, SoapPrimitive> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress.setMessage("Please wait ...");
+            progress.show();
+        }
+
+        @Override
+        protected SoapPrimitive doInBackground(Void... params) {
+
+            SoapPrimitive object = Reject();
+
+            return object;
+        }
+
+        @Override
+        protected void onPostExecute(SoapPrimitive soapObject) {
+            super.onPostExecute(soapObject);
+            progress.dismiss();
+            getStatusDataReject(qc1Model.getQ_Id());
+        }
+    }
+    private SoapPrimitive Reject(){
+        SoapPrimitive objLead = null;
+        SOAPWebservice webService = new SOAPWebservice(getActivity());
+        if (qc1uploadModelList.size()>0){
+            for (int k = 0; k < qc1uploadModelList.size(); k++) {
+                qc1Model = qc1uploadModelList.get(k);
+
+                // TODO: 9/22/2017  Individuals_Id = "",NewProposal="",NewDocument_No="";
+                objLead = webService.Update_Trans(qc1Model.getRole_Id(),qc1Model.getLegal_Entity_Id(),qc1Model.getProperty_Id(),
+                        qc1Model.getLocation_Id(),qc1Model.getDocNo(),qc1Model.getCreatedBy(),qc1Model.getCreatedBy(),qc1Model.getCreatedDate(),
+                        qc1Model.getCreatedDate(),"","",qc1Model.getQ_Id(),qc1Model.getYear(),qc1Model.getQuarter(),qc1Model.getMonth(),
+                        "QC1Rejected","");
+                String id = String.valueOf(objLead);
+                if (id.equalsIgnoreCase("null") || id.equals(null) || id.equals("0")) {
+                    String strLastSync = "0";
+                    String selection = "File_Name = ?";
+                    String[] selectionArgs = {qc1Model.getFile_Name()};
+                    String valuesArray[] = {strLastSync};
+                    String[] columnNames = {"reject_Sync"};
+                    boolean result = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, columnNames, selectionArgs);
+                    if (result) {
+                        System.out.println("Document Rejected");
+                    } else {
+                        System.out.println("FAILURE..!!");
+                    }
+
+                }else {
+                    String strLastSync = "1";
+                    String selection = "File_Name = ?";
+                    String[] selectionArgs = {qc1Model.getFile_Name()};
+                    String valuesArray[] = {strLastSync};
+                    String[] columnNames = {"reject_Sync"};
+                    boolean result = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, columnNames, selectionArgs);
+                    if (result) {
+                        System.out.println("Document Rejected");
+                    } else {
+                        System.out.println("FAILURE..!!");
+                    }
+
+                }
+
+            }
+        }
+        return objLead;
+    }
 }
