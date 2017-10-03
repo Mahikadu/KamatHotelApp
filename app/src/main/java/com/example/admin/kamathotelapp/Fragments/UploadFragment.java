@@ -20,6 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.admin.kamathotelapp.NavigationDrawerActivity;
 import com.itextpdf.text.Image;
 
 import android.net.Uri;
@@ -36,6 +37,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
@@ -257,6 +259,7 @@ public class UploadFragment extends Fragment {
                              Bundle savedInstanceState) {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getActivity().setTitle("Upload");
+
         //////////Crash Report
 //        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
@@ -2907,19 +2910,28 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onClick (View v){
                     v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
-                try {
-                    if (progress != null && !progress.isShowing()) {
-                        progress.setMessage("Data is Submiting to server ...");
-                        progress.show();
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 int size = getAllSubmitData();
                 if (size > 0) {
+                    try {
+                        autoLegalEntity.setText("");
+                        autoIndividuals.setText("");
+                        etNewProposal.setText("");
+                        autoProperty.setText("");
+                        autoMonth.setText("");
+                        autoYear.setText("");
+                        autoQuarter.setText("");
+                        autoLoc.setText("");
+                        if (progress != null && !progress.isShowing()) {
+                            progress.setMessage("Data is Submiting to server ...");
+                            progress.show();
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     new SaveInsertUpdate().execute();
                 } else {
+                    progress.dismiss();
                     Toast.makeText(getActivity(), "No data for uploading ", Toast.LENGTH_SHORT).show();
                 }
 
@@ -2937,7 +2949,6 @@ public class UploadFragment extends Fragment {
             });
 
         }
-
 
         @Override
         public void onActivityResult ( int requestCode, int resultCode, Intent data){
@@ -4878,11 +4889,13 @@ public class UploadFragment extends Fragment {
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {
-                            DashboardFragment fragment = new DashboardFragment();
-                            FragmentManager fragmentManager = getFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.frame_content, fragment);
-                            fragmentTransaction.commit();
+                            Intent intent = new Intent(getContext(),NavigationDrawerActivity.class);
+                            startActivity(intent);
+//                            DashboardFragment fragment = new DashboardFragment();
+//                            FragmentManager fragmentManager = getFragmentManager();
+//                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                            fragmentTransaction.replace(R.id.frame_content, fragment);
+//                            fragmentTransaction.commit();
                             sDialog.dismissWithAnimation();
                         }
                     })
