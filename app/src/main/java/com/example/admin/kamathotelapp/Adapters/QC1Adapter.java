@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.admin.kamathotelapp.Fragments.QC1;
@@ -80,8 +81,15 @@ public class QC1Adapter extends BaseAdapter {
             viewHolder.txtQuater = (TextView) convertView.findViewById(R.id.txtQuater);
             viewHolder.txtMonth = (TextView) convertView.findViewById(R.id.txtMonth);
             viewHolder.txtStatus = (TextView) convertView.findViewById(R.id.txtStatus);
-//            viewHolder.txtDetails = (TextView) convertView.findViewById(R.id.txtDetails);
+            viewHolder.txtDetails = (TextView) convertView.findViewById(R.id.txtDetails);
             viewHolder.txtQC1 = (TextView) convertView.findViewById(R.id.txtQC1);
+            viewHolder.qc1_detailslayout = (LinearLayout) convertView.findViewById(R.id.qc1_detailslayout);
+            viewHolder.document_no = (TextView) convertView.findViewById(R.id.document_no);
+            viewHolder.filename_txt = (TextView) convertView.findViewById(R.id.filename_txt);
+            viewHolder.qc1_txt = (TextView) convertView.findViewById(R.id.qc1_txt);
+            viewHolder.view_txt = (TextView) convertView.findViewById(R.id.view_txt);
+            viewHolder.download_txt = (TextView) convertView.findViewById(R.id.download_txt);
+            viewHolder.closebtn = (TextView) convertView.findViewById(R.id.closebtn);
 
             viewHolder.txtQC1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,6 +126,29 @@ public class QC1Adapter extends BaseAdapter {
                 }
             });
 
+            viewHolder.txtDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    qc1QIDModelList = new ArrayList<>();
+                    qc1Model = qc1ModelList.get(position);
+
+                    viewHolder.qc1_detailslayout.setVisibility(View.VISIBLE);
+                    viewHolder.document_no.setText(qc1Model.getDocNo());
+                    viewHolder.filename_txt.setText(qc1Model.getFile_Name());
+                    viewHolder.qc1_txt.setText("QC1");
+                    viewHolder.view_txt.setText("View");
+                    viewHolder.download_txt.setText("Download");
+                }
+            });
+
+            viewHolder.closebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewHolder.qc1_detailslayout.setVisibility(View.GONE);
+                }
+            });
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (QC1Adapter.ViewHolder) convertView.getTag();
@@ -131,8 +162,7 @@ public class QC1Adapter extends BaseAdapter {
         viewHolder.txtQuater.setText(qc1Model.getQuartertext());
         viewHolder.txtMonth.setText(qc1Model.getMonthtext());
         viewHolder.txtStatus.setText(qc1Model.getStatus());
-//        viewHolder.txtDetails.setText(qc1Model.getd());
-//        viewHolder.txtQC1.setText(qc1Model.getq());
+
 
         return convertView;
     }
@@ -203,6 +233,8 @@ public class QC1Adapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        private TextView txtDept, txtDocumentNo, txtCreby, txtCredt, txtYear, txtQuater, txtMonth, txtStatus,txtQC1;
+        private TextView txtDept, txtDocumentNo, txtCreby, txtCredt, txtYear, txtQuater, txtMonth, txtStatus,txtDetails,
+                txtQC1,document_no,filename_txt,qc1_txt,view_txt,download_txt,closebtn;
+        private LinearLayout qc1_detailslayout;
     }
 }

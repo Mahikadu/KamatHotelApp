@@ -2731,6 +2731,7 @@ public class QC1 extends Fragment {
             @Override
             public void onClick (View v){
                 v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
+                choosefilelayout.setVisibility(View.VISIBLE);
                 qc1txtNoFile.setText("No file chosen");
                 btnAdd.setVisibility(View.VISIBLE);
                 qc1layout_edit.setVisibility(View.GONE);

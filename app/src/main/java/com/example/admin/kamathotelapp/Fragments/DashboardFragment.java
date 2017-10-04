@@ -236,20 +236,51 @@ public class DashboardFragment extends Fragment {
                    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
 
                        if (e.getXIndex() == 0) {
-                           String approved = "QC1Approved";
-                           chartdatalayout.setVisibility(View.VISIBLE);
-                           ChartData chartData = new ChartData();
-                           chartData.execute(approved);
+                           String approved = lables.get(0);
+                           if(approved.equalsIgnoreCase("QC1Approved")) {
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(approved);
+                           }else if(approved.equalsIgnoreCase("QC1Pending")){
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(approved);
+                           }else if(approved.equalsIgnoreCase("QC1Rejected")){
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(approved);
+                           }
                        } else if (e.getXIndex() == 1) {
-                           String pending = "QC1Pending";
-                           chartdatalayout.setVisibility(View.VISIBLE);
-                           ChartData chartData = new ChartData();
-                           chartData.execute(pending);
+                           String pending = lables.get(1);
+                           if(pending.equalsIgnoreCase("QC1Approved")) {
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(pending);
+                           }else if(pending.equalsIgnoreCase("QC1Pending")){
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(pending);
+                           }else if(pending.equalsIgnoreCase("QC1Rejected")){
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(pending);
+                           }
                        } else if (e.getXIndex() == 2) {
-                           String rejected = "QC1Rejected";
-                           chartdatalayout.setVisibility(View.VISIBLE);
-                           ChartData chartData = new ChartData();
-                           chartData.execute(rejected);
+                           String rejected = lables.get(2);
+                           if(rejected.equalsIgnoreCase("QC1Approved")) {
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(rejected);
+                           }else if(rejected.equalsIgnoreCase("QC1Pending")){
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(rejected);
+                           }else if(rejected.equalsIgnoreCase("QC1Rejected")){
+                               chartdatalayout.setVisibility(View.VISIBLE);
+                               ChartData chartData = new ChartData();
+                               chartData.execute(rejected);
+                           }
+
                        }
                    }
 
@@ -591,7 +622,9 @@ public class DashboardFragment extends Fragment {
 
         dashBoardDataModelArrayList = new ArrayList<>();
         try {
-            Cursor cursor = KHIL.dbCon.fetchAlldata(DbHelper.DASHBOARD_DATA);
+            Cursor cursor = null;
+            String where = " where roleId = '" + sharedPref.getRoleID() + "'";
+            cursor = KHIL.dbCon.fetchFromSelect(DbHelper.DASHBOARD_DATA, where);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 do {

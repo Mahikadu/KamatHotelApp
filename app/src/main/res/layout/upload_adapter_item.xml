@@ -120,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3sp"
                     android:layout_marginRight="3sp"
+                    android:drawableLeft="@drawable/edit"
                     android:textSize="15sp"
                     android:text="Edit"/>
 
@@ -129,6 +130,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3sp"
                     android:layout_marginRight="3sp"
+                    android:drawableLeft="@drawable/delete"
+                    android:textSize="12sp"
                     android:text="Delete"/>
 
             </LinearLayout>

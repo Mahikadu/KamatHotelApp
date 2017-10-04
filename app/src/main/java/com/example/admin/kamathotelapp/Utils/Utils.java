@@ -50,7 +50,7 @@ public class Utils {
         String[] master7Array = {"id","value","text","parent_Ref","aID","role_ID","data_level","quater_Id","updated_date"};
         columnNamesM_Level_Data = Arrays.copyOf(master7Array, master7Array.length);
 
-        String[] master8Array = {"id","inv_count", "status"};
+        String[] master8Array = {"id","inv_count", "status","roleId"};
         columnNames_Dashboard_Data = Arrays.copyOf(master8Array, master8Array.length);
 
         String[] master9Array = {"id","Created_By", "Created_Date","Document_No","File_Exten","File_Name","File_Path",

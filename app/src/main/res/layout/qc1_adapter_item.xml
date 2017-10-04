@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:background="@color/black">
 
            <LinearLayout
@@ -123,6 +124,7 @@
                 android:background="@drawable/table_row_item"
                 android:gravity="center"
                 android:text="QC1"
+                android:drawableLeft="@drawable/qc1"
                 android:textColor="@color/purpal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:fontFamily="@string/font_lightl"/>
@@ -166,4 +168,149 @@
             </LinearLayout>-->
 
         </LinearLayout>
+
+ <LinearLayout
+     android:id="@+id/qc1_detailslayout"
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_weight="1"
+     android:visibility="gone">
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/actionbar"
+      android:weightSum="1">
+
+  <TextView
+      android:id="@+id/document_no"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.9"
+      android:background="@drawable/table_row_item"
+      android:gravity="left"
+      android:padding="5dp"
+      android:text="Doc No"
+      android:textColor="@color/black"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:fontFamily="@string/font_lightl"/>
+
+  <TextView
+      android:id="@+id/closebtn"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.1"
+      android:background="@drawable/table_row_item"
+      android:gravity="center"
+      android:padding="5dp"
+      android:text="X"
+      android:textColor="@color/black"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:fontFamily="@string/font_lightl"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/colorPrimary"
+      android:weightSum="1">
+
+   <TextView
+       android:id="@+id/filename_title"
+       android:layout_width="0dp"
+       android:layout_height="match_parent"
+       android:layout_weight="0.7"
+       android:background="@drawable/table_row_item"
+       android:gravity="left"
+       android:padding="5dp"
+       android:text="File Name"
+       android:textColor="@color/black"
+       android:textAppearance="?android:attr/textAppearanceMedium"
+       android:fontFamily="@string/font_lightl"/>
+
+   <TextView
+       android:id="@+id/action_title"
+       android:layout_width="0dp"
+       android:layout_height="match_parent"
+       android:layout_weight="0.3"
+       android:background="@drawable/table_row_item"
+       android:gravity="left"
+       android:padding="5dp"
+       android:text="Action"
+       android:textColor="@color/black"
+       android:textAppearance="?android:attr/textAppearanceMedium"
+       android:fontFamily="@string/font_lightl"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/white"
+      android:weightSum="1">
+
+   <TextView
+       android:id="@+id/filename_txt"
+       android:layout_width="0dp"
+       android:layout_height="match_parent"
+       android:layout_weight="0.7"
+       android:background="@drawable/table_row_item"
+       android:gravity="left"
+       android:padding="5dp"
+       android:text="File Name"
+       android:textColor="@color/black"
+       android:textAppearance="?android:attr/textAppearanceSmall"
+       android:fontFamily="@string/font_lightl"/>
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="0dp"
+       android:layout_height="match_parent"
+       android:background="@drawable/table_row_item"
+       android:layout_weight="0.3"
+       >
+
+    <TextView
+        android:id="@+id/qc1_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="5dp"
+        android:text="QC1"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/view_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="5dp"
+        android:text="View"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
+        android:id="@+id/download_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="5dp"
+        android:text="Download"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="@string/font_lightl"/>
+
+   </LinearLayout>
+
+  </LinearLayout>
+
+ </LinearLayout>
 </LinearLayout>

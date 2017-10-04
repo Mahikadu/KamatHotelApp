@@ -1122,7 +1122,7 @@ public class MainActivity extends AppCompatActivity {
                     // WHERE clause arguments
                     String[] selectionArgs = {id+""};
                     //            "id","value", "text", "parent_Ref", "updated_date"
-                    String valuesArray[] = {id+"", Inv_count, status};
+                    String valuesArray[] = {id+"", Inv_count, status, roleId};
                     boolean output = KHIL.dbCon.updateBulk(DbHelper.DASHBOARD_DATA, selection, valuesArray, utils.columnNames_Dashboard_Data, selectionArgs);
                 }
             } catch (Exception e) {
