@@ -18,6 +18,8 @@
     <string name="text_footer">Powered By Sudesi Infotech © 2017</string>
     <string name="text_footer1">UAT v1.0</string>
 
+    <string name="text_forgot">Forgot Password?</string>
+
     <string-array name="legal_entity">
         <item>Kamats Club Pvt Ltd</item>
         <item>Kamat Hospitality &amp; Consultancy Pvt Ltd</item>

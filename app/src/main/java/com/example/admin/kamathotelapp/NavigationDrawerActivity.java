@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.example.admin.kamathotelapp.Fragments.ChangePassFragement;
 import com.example.admin.kamathotelapp.Fragments.DashboardFragment;
 import com.example.admin.kamathotelapp.Fragments.QC1;
 import com.example.admin.kamathotelapp.Fragments.ScanFragment;
@@ -110,6 +111,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.qc1) {
             getSupportActionBar().setTitle("QC1");
             QC1 fragment = new QC1();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment);
+            fragmentTransaction.commit();
+        }else if (id == R.id.changepass) {
+            getSupportActionBar().setTitle("Change Password");
+            ChangePassFragement fragment = new ChangePassFragement();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_content,fragment);
             fragmentTransaction.commit();

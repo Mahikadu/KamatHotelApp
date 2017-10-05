@@ -685,7 +685,7 @@ public class QC1 extends Fragment {
                     } else if (strLegalEntity.equalsIgnoreCase("New Proposal")) {
                         cardNewProposal.setVisibility(View.VISIBLE);
                         cardIndividuals.setVisibility(View.GONE);
-                        cardProperty.setVisibility(View.GONE);
+                        cardProperty.setVisibility(View.VISIBLE);
                     } else {
                         cardIndividuals.setVisibility(View.GONE);
                         cardNewProposal.setVisibility(View.GONE);

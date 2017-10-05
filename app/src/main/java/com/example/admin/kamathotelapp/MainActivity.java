@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.kamathotelapp.Model.DashBoardDataModel;
 import com.example.admin.kamathotelapp.Model.PropertyModel;
@@ -57,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
     EditText etPassword;
     @InjectView(R.id.btnLogin)
     Button btnLogin;
-    private String uname, pwd;
+    @InjectView(R.id.tvforgot)
+    TextView tvforgot;
+    private String uname, pwd,message,id,email_id;
     private SharedPref sharedPref;
     View focusView = null;
     private static final int RECORD_REQUEST_CODE = 101;
@@ -149,6 +153,14 @@ public class MainActivity extends AppCompatActivity {
                 etPassword.setFocusableInTouchMode(true);
                 etPassword.setCursorVisible(true);
                 return false;
+            }
+        });
+
+        tvforgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ForgotPassword forgotPassword = new ForgotPassword();
+                forgotPassword.execute();
             }
         });
 
@@ -1680,6 +1692,94 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
+        }
+    }
+
+    public class ForgotPassword extends AsyncTask<Void, Void, SoapObject> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected SoapObject doInBackground(Void... params) {
+            SoapObject object2 = null;
+            try {
+                object2 = ws.getEmailID(uname);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return object2;
+        }
+
+        @Override
+        protected void onPostExecute(SoapObject soapObject) {
+            super.onPostExecute(soapObject);
+            try {
+
+                String response = String.valueOf(soapObject);
+                System.out.println("Response =>: " + response);
+
+                for (int i = 0; i < soapObject.getPropertyCount(); i++) {
+                    SoapObject root = (SoapObject) soapObject.getProperty(i);
+
+
+                    if (root.getProperty("email_id") != null) {
+
+                        if (!root.getProperty("email_id").toString().equalsIgnoreCase("anyType{}")) {
+                            email_id = root.getProperty("email_id").toString();
+
+                        } else {
+                            email_id = "";
+                        }
+                    } else {
+                        email_id = "";
+                    }
+
+                    if (root.getProperty("id") != null) {
+
+                        if (!root.getProperty("id").toString().equalsIgnoreCase("anyType{}")) {
+                            id = root.getProperty("id").toString();
+
+                        } else {
+                            id = "";
+                        }
+                    } else {
+                        id = "";
+                    }
+                    if (root.getProperty("message") != null) {
+
+                        if (!root.getProperty("message").toString().equalsIgnoreCase("anyType{}")) {
+                            message = root.getProperty("message").toString();
+
+                        } else {
+                            message = "";
+                        }
+                    } else {
+                        message = "";
+                    }
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            /*if(email_id != null || !email_id.equals("")){
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_EMAIL , email_id);
+                i.putExtra(Intent.EXTRA_SUBJECT, "F");
+                i.putExtra(Intent.EXTRA_TEXT , "body of email");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(MyActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+            }*/
         }
     }
 }

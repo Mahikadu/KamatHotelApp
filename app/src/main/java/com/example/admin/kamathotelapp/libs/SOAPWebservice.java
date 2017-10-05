@@ -428,4 +428,68 @@ public class SOAPWebservice {
         }
     }
 
+	// GetEmailID
+	public SoapObject getEmailID(String username) {
+		SoapObject result = null;
+
+		try {
+			SoapObject request = new SoapObject("http://tempuri.org/",
+					"getEmailID");// soap object
+			request.addProperty("Username", username);
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);// soap envelop with version
+			envelope.setOutputSoapObject(request); // set request object
+			envelope.dotNet = true;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);// http
+			// transport
+			// call
+			androidHttpTransport.call("http://tempuri.org/IService1/getEmailID",
+					envelope);
+
+			// response soap object
+			result = (SoapObject) envelope.getResponse();
+			Log.e("result", result.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+	}
+
+	// GetEmailID
+	public SoapObject changepassword(String rollId, String newpass,String username) {
+		SoapObject result = null;
+
+		try {
+			SoapObject request = new SoapObject("http://tempuri.org/",
+					"changepassword");// soap object
+			request.addProperty("id", rollId);
+			request.addProperty("NewPassword", newpass);
+			request.addProperty("Username", username);
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+					SoapEnvelope.VER11);// soap envelop with version
+			envelope.setOutputSoapObject(request); // set request object
+			envelope.dotNet = true;
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);// http
+			// transport
+			// call
+			androidHttpTransport.call("http://tempuri.org/IService1/changepassword",
+					envelope);
+
+			// response soap object
+			result = (SoapObject) envelope.getResponse();
+			Log.e("result", result.toString());
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+	}
+
 }

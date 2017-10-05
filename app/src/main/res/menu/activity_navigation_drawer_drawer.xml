@@ -19,6 +19,12 @@
         android:icon="@drawable/qc1"
         android:visible="false"
         android:title="QC1"/>
+
+    <item
+        android:id="@+id/changepass"
+        android:icon="@drawable/qc1"
+        android:title="Change Password"/>
+
     <item
         android:id="@+id/logout2"
         android:icon="@drawable/logout2"

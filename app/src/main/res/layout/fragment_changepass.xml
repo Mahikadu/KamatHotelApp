@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.admin.kamathotelapp.MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:text="Change Password"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black"
+                android:fontFamily="@string/font_lightl"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorCardViewBackground"
+                android:elevation="4dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="5dp"
+                card_view:cardUseCompatPadding="true">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorCardViewBackground">
+
+                    <EditText
+                        android:id="@+id/etpass"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/colorCardViewBackground"
+                        android:cursorVisible="false"
+                        android:ems="10"
+                        android:hint="password"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:longClickable="false"
+                        android:maxLength="50"
+                        android:maxLines="1"
+                        android:nextFocusDown="@+id/etconfirmpass"
+                        android:padding="10dp" />
+                </android.support.design.widget.TextInputLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/colorCardViewBackground"
+                android:elevation="4dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="5dp"
+                card_view:cardUseCompatPadding="true">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorCardViewBackground">
+
+                    <EditText
+                        android:id="@+id/etconfirmpass"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/colorCardViewBackground"
+                        android:cursorVisible="false"
+                        android:ems="10"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:longClickable="false"
+                        android:maxLength="50"
+                        android:maxLines="1"
+                        android:nextFocusDown="@+id/btnsubmit"
+                        android:padding="10dp" />
+                </android.support.design.widget.TextInputLayout>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/errormsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:text="**Password do not match**"
+                android:visibility="gone"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/holo_red_dark"
+                android:fontFamily="@string/font_lightl"/>
+
+
+            <Button
+                android:id="@+id/btnsubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_corner_orrange_bg"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Submit"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
