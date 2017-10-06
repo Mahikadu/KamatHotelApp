@@ -2,6 +2,7 @@ package com.example.admin.kamathotelapp.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.admin.kamathotelapp.MainActivity;
+import com.example.admin.kamathotelapp.NavigationDrawerActivity;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
 import com.example.admin.kamathotelapp.Utils.Utils;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by Admin on 05-10-2017.
@@ -101,10 +104,10 @@ public class ChangePassFragement extends Fragment {
 
                 if(!Pass.contains(confirmPass)){
                     errormsg.setVisibility(View.VISIBLE);
+                }else {
+                    ChangePassword changePassword = new ChangePassword();
+                    changePassword.execute();
                 }
-
-                ChangePassword changePassword = new ChangePassword();
-                changePassword.execute();
             }
         });
 
@@ -139,8 +142,22 @@ public class ChangePassFragement extends Fragment {
                 String response = String.valueOf(soapObject);
                 System.out.println("Response =>: " + response);
 
-               if(response.equalsIgnoreCase("")){
+               if(!response.equalsIgnoreCase("Not Updated")){
+                   pass.setText("");
+                   confirmpass.setText("");
+                   new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                           .setTitleText(sharedPref.getLoginId())
+                           .setContentText("Password Changed Sucessfully.")
+                           .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                               @Override
+                               public void onClick(SweetAlertDialog sDialog) {
+                                   Intent intent = new Intent(getContext(),NavigationDrawerActivity.class);
+                                   startActivity(intent);
 
+                                   sDialog.dismissWithAnimation();
+                               }
+                           })
+                           .show();
                }
 
 

@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                         uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
                         uname.equalsIgnoreCase("personal") || uname.equalsIgnoreCase("QC1finance") || uname.equalsIgnoreCase("csQC1") || uname.equalsIgnoreCase("cmdQC1") ||
                         uname.equalsIgnoreCase("hrQC1") || uname.equalsIgnoreCase("legalQC1") || uname.equalsIgnoreCase("marketingQC1") ||
-                        uname.equalsIgnoreCase("personalQC1")) && pwd.equals("password")) {
+                        uname.equalsIgnoreCase("personalQC1")) ) {
 
                     if (UtilityClass.isConnectingToInternet(MainActivity.this)) {
                         UserLogin login = new UserLogin();
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     focusView=etUserName;
                     focusView.requestFocus();
                     return;
-                } else if(!pwd.equals("password")) {
+                } else if(pwd==null || pwd.equalsIgnoreCase("")) {
                     etPassword.setError("Wrong Password");
                     focusView = etPassword;
                     focusView.requestFocus();

@@ -12,18 +12,92 @@
         android:layout_margin="4dp"
         android:background="@drawable/rounded_corner_orrange_bg"
         android:padding="15dp"
-        android:textSize="16dp"
         android:text="Search"
         android:textColor="@android:color/white"
-         />
+        android:textSize="16dp" />
+
+    <LinearLayout
+        android:id="@+id/searchlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSearch"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="0.7">
+
+
+                    <EditText
+                        android:id="@+id/etsearchdoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:ems="10"
+                        android:layout_marginTop="10dp"
+                        android:layout_toLeftOf="@+id/Searchbtn"
+                        android:padding="10dp"
+                        android:hint="Search Document"
+                        android:textSize="15dp"
+                        android:imeOptions="actionNext"
+                        android:textColor="@color/app_text_color"
+                        android:inputType="text"
+                        android:longClickable="false"
+                        android:maxLength="50"
+                        android:maxLines="1" />
+
+
+            <Button
+                android:id="@+id/Searchbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_corner_orrange_bg"
+                android:padding="15dp"
+                android:text="Search"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <Button
+                android:id="@+id/btnAdvSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_corner_orrange_bg"
+                android:padding="15dp"
+                android:layout_alignParentRight="true"
+                android:text="Advance Search"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:orientation="vertical"
+        android:layout_below="@+id/searchlayout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="@color/black"
-        android:layout_below="@+id/btnSearch">
+        android:orientation="vertical">
 
     </LinearLayout>
 
@@ -33,28 +107,33 @@
         android:layout_above="@+id/footer"
         android:layout_below="@+id/line"
         android:layout_marginBottom="5dp"
-        android:orientation="vertical"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:layout_height="200dp"
-                android:layout_width="match_parent"
-                android:id="@+id/bargraph"
-                />
-
             <LinearLayout
-                android:id="@+id/line1"
+                android:id="@+id/barchartlayout"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:orientation="vertical"
-                android:background="@color/black"
-                >
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/bargraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <LinearLayout
+                    android:id="@+id/line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -64,7 +143,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <android.support.v7.widget.CardView
+               <!-- <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_gravity="center_horizontal"
@@ -147,7 +226,7 @@
                     </android.support.design.widget.TextInputLayout>
 
                 </android.support.v7.widget.CardView>
-
+-->
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -187,6 +266,85 @@
                             android:windowSoftInputMode="stateHidden"
                             app:customFont="@string/font_lightl" />
 
+                    </android.support.design.widget.TextInputLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/dashindividualscardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@android:color/white"
+                    android:visibility="gone"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="2dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <AutoCompleteTextView
+                            android:id="@+id/dashIndividuals"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:clickable="false"
+                            android:completionThreshold="1"
+                            android:focusable="false"
+                            android:gravity="center_vertical"
+                            android:hint="Individuals"
+                            android:imeOptions="actionNext"
+                            android:inputType="none"
+                            android:maxLength="50"
+                            android:nextFocusDown="@+id/spinProperty"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/app_text_color"
+                            android:textIsSelectable="true"
+                            android:textSize="15dp"
+                            android:windowSoftInputMode="stateHidden"
+                            app:customFont="@string/font_lightl" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/dashnewProposalcardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@android:color/white"
+                    android:visibility="gone"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="2dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/dashetNewProposal"
+                            android:layout_width="match_parent"
+                            android:layout_height="42dp"
+                            android:layout_centerHorizontal="true"
+                            android:ems="10"
+                            android:padding="10dp"
+                            android:hint="New Proposal"
+                            android:textSize="15dp"
+                            android:imeOptions="actionNext"
+                            android:textColor="@color/app_text_color"
+                            android:inputType="text"
+                            android:longClickable="false"
+                            android:maxLength="50"
+                            android:maxLines="1" />
                     </android.support.design.widget.TextInputLayout>
 
                 </android.support.v7.widget.CardView>
@@ -415,6 +573,277 @@
                         </android.support.design.widget.TextInputLayout>
 
                     </android.support.v7.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/linetextview"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/colorPrimary" />
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dashlevel2cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/white"
+                        android:visibility="visible"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/dashlevel2txtlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dashLevel2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:completionThreshold="1"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="50"
+                                android:nextFocusDown="@+id/dashLevel3"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/app_text_color"
+                                android:textIsSelectable="true"
+                                android:textSize="15dp"
+                                android:windowSoftInputMode="stateHidden"
+                                app:customFont="@string/font_lightl" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dashlevel3cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/white"
+                        android:visibility="gone"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/dashlevel3txtlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dashLevel3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:completionThreshold="1"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="50"
+                                android:nextFocusDown="@+id/dashLevel4"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/app_text_color"
+                                android:textIsSelectable="true"
+                                android:textSize="15dp"
+                                android:windowSoftInputMode="stateHidden"
+                                app:customFont="@string/font_lightl" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dashlevel4cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/white"
+                        android:visibility="gone"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/dashlevel4txtlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dashLevel4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:completionThreshold="1"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="50"
+                                android:nextFocusDown="@+id/dashLevel5"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/app_text_color"
+                                android:textIsSelectable="true"
+                                android:textSize="15dp"
+                                android:windowSoftInputMode="stateHidden"
+                                app:customFont="@string/font_lightl" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dashlevel5cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/white"
+                        android:visibility="gone"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/dashlevel5txtlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dashLevel5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:completionThreshold="1"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="50"
+                                android:nextFocusDown="@+id/dashLevel6"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/app_text_color"
+                                android:textIsSelectable="true"
+                                android:textSize="15dp"
+                                android:windowSoftInputMode="stateHidden"
+                                app:customFont="@string/font_lightl" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dashlevel6cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/white"
+                        android:visibility="gone"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/dashlevel6txtlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dashLevel6"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:completionThreshold="1"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="50"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/app_text_color"
+                                android:textIsSelectable="true"
+                                android:textSize="15dp"
+                                android:windowSoftInputMode="stateHidden"
+                                app:customFont="@string/font_lightl" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dashlevel7cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/white"
+                        android:visibility="gone"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/dashlevel7txtlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dashLevel7"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:clickable="false"
+                                android:completionThreshold="1"
+                                android:focusable="false"
+                                android:gravity="center_vertical"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="50"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/app_text_color"
+                                android:textIsSelectable="true"
+                                android:textSize="15dp"
+                                android:windowSoftInputMode="stateHidden"
+                                app:customFont="@string/font_lightl" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
                 </LinearLayout>
 
                 <Button
@@ -431,27 +860,6 @@
                     android:textSize="16dp" />
             </LinearLayout>
 
-            <!--   <HorizontalScrollView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content">
-
-                   <LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:orientation="vertical">
-
-                       <include
-                           layout="@layout/dashboard_header"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                            />
-
-                       <ListView
-                           android:id="@+id/listViewDashboard"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content" />
-                   </LinearLayout>
-               </HorizontalScrollView>-->
 
             <LinearLayout
                 android:id="@+id/dashboardlayout"
@@ -460,79 +868,77 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/black">
-
-                <TextView
-                    android:id="@+id/Documentlist"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/table_row_item"
-                    android:fontFamily="@string/font_lightl"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="Document List"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-                <LinearLayout
-                    android:id="@+id/dash_header"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:orientation="vertical">
+                    android:background="@color/black">
 
-                    <include
-                        android:id="@+id/layout_header"
-                        layout="@layout/dashboard_heading"
+                    <TextView
+                        android:id="@+id/Documentlist"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp">
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/table_row_item"
+                        android:fontFamily="@string/font_lightl"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Document List"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
 
-                    </include>
 
-                    <ListView
-                        android:id="@+id/listDashboard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <ScrollView
+
+                    <LinearLayout
+                        android:id="@+id/dash_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/layout_header"
+                            layout="@layout/dashboard_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp">
+
+                        </include>
+
+                        <ListView
+                            android:id="@+id/listDashboard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <TableLayout
-                            android:id="@+id/tableLaout_lead"
+                        <ScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:shrinkColumns="*"
-                            android:stretchColumns="*">
-                        </TableLayout>
-                    </ScrollView>
+                            android:layout_height="match_parent">
+
+                            <TableLayout
+                                android:id="@+id/tableLaout_lead"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:shrinkColumns="*"
+                                android:stretchColumns="*"></TableLayout>
+                        </ScrollView>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
             </LinearLayout>
 
 
@@ -540,9 +946,9 @@
                 android:id="@+id/chartdatalayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_marginTop="10dp">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -569,29 +975,28 @@
                         <ListView
                             android:id="@+id/listDashchart"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            />
+                            android:layout_height="match_parent" />
                     </LinearLayout>
 
-                   <!-- <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <!-- <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent">
 
-                        <ScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                         <ScrollView
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent">
 
-                            <TableLayout
-                                android:id="@+id/tableLaout_chart"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="5dp"
-                                android:paddingRight="5dp"
-                                android:shrinkColumns="*"
-                                android:stretchColumns="*">
-                            </TableLayout>
-                        </ScrollView>
-                    </LinearLayout>-->
+                             <TableLayout
+                                 android:id="@+id/tableLaout_chart"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="match_parent"
+                                 android:paddingLeft="5dp"
+                                 android:paddingRight="5dp"
+                                 android:shrinkColumns="*"
+                                 android:stretchColumns="*">
+                             </TableLayout>
+                         </ScrollView>
+                     </LinearLayout>-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -602,32 +1007,32 @@
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvFooter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:fontFamily="@string/font_lightl"
-        android:padding="5dp"
-        android:text="@string/text_footer"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black" />
+        <TextView
+            android:id="@+id/tvFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:fontFamily="@string/font_lightl"
+            android:padding="5dp"
+            android:text="@string/text_footer"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black" />
 
-    <TextView
-        android:id="@+id/tvFooter1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:fontFamily="@string/font_lightl"
-        android:padding="5dp"
-        android:text="@string/text_footer1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black" />
+        <TextView
+            android:id="@+id/tvFooter1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:fontFamily="@string/font_lightl"
+            android:padding="5dp"
+            android:text="@string/text_footer1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 

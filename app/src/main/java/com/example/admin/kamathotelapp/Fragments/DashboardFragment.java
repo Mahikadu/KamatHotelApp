@@ -12,7 +12,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -37,6 +40,8 @@ import com.example.admin.kamathotelapp.MainActivity;
 import com.example.admin.kamathotelapp.Model.ChartDataModel;
 import com.example.admin.kamathotelapp.Model.DashBoardDataModel;
 import com.example.admin.kamathotelapp.Model.DashboardModel;
+import com.example.admin.kamathotelapp.Model.LocationModel;
+import com.example.admin.kamathotelapp.Model.PropertyModel;
 import com.example.admin.kamathotelapp.NavigationDrawerActivity;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
@@ -67,16 +72,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class DashboardFragment extends Fragment {
 
     private AutoCompleteTextView autoLegal, autoProp, autoLoc, autoYr, autoQuarter, autoMonth;
-    private LinearLayout detailsLayout,dashboardlayout,chartdatalayout;
+    private LinearLayout detailsLayout,dashboardlayout,chartdatalayout,barchartlayout,searchlayout;
     DashboardModel dashboardModel;
     List<DashboardModel> dashboardModelList;
     List<ChartDataModel>chartModelList;
     DashboardAdapter dashboardAdapter;
     ChartAdapter chartAdapter;
-    private Button search,loadRecord;
+    private Button search,loadRecord,Searchbtn,btnAdvSearch;
+    EditText etsearchdoc;
     private TableLayout tableLayout,tableLaout_chart;
     private String strQuarter="",Inv_count,status,Created_By,LegalEntity,type_of_document,
             selected_document,supporting_document,annexure,Location,Property;
@@ -95,12 +104,29 @@ public class DashboardFragment extends Fragment {
     SOAPWebservice ws;
     ProgressDialog progress;
 
+    @InjectView(R.id.dashIndividuals)
+    AutoCompleteTextView autoIndividuals;
+    @InjectView(R.id.dashetNewProposal)
+    EditText etNewProposal;
+
     ArrayList<String> lables;
     ArrayList<BarEntry> barEntries;
     ArrayList<DashBoardDataModel> dashBoardDataModelArrayList;
 
     DashBoardDataModel dashBoardDataModel;
     ChartDataModel chartDataModel;
+
+    public static AutoCompleteTextView dashtxtL2, dashtxtL3, dashtxtL4, dashtxtL5, dashtxtL6, dashtxtL7;
+    public static CardView dashcardlevel2, dashcardlevel3, dashcardlevel4, dashcardlevel5, dashcardlevel6,
+            dashcardlevel7, dashcardNewProposal, dashcardIndividuals, dashcardProperty;
+    public static TextInputLayout dashlevel2txtlayout, dashlevel3txtlayout, dashlevel4txtlayout,
+            dashlevel5txtlayout, dashlevel6txtlayout, dashlevel7txtlayout;
+
+    private String strLegalEntity;
+    private String legalEntityString, propertyString, monthString, yearString, quarterString = "", locString;
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +142,7 @@ public class DashboardFragment extends Fragment {
 //        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getActivity()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        ButterKnife.inject(this, view);
         initView(view);
         return view;
     }
@@ -127,6 +154,8 @@ public class DashboardFragment extends Fragment {
         detailsLayout = (LinearLayout)view.findViewById(R.id.detailsLayout);
         dashboardlayout = (LinearLayout) view.findViewById(R.id.dashboardlayout);
         chartdatalayout = (LinearLayout) view.findViewById(R.id.chartdatalayout);
+        barchartlayout = (LinearLayout) view.findViewById(R.id.barchartlayout);
+        searchlayout = (LinearLayout) view.findViewById(R.id.searchlayout);
         search = (Button)view.findViewById(R.id.btnSearch);
         loadRecord = (Button)view.findViewById(R.id.btnLoad);
         autoLegal = (AutoCompleteTextView)view.findViewById(R.id.autoLegalEntity);
@@ -137,6 +166,35 @@ public class DashboardFragment extends Fragment {
         autoMonth = (AutoCompleteTextView)view.findViewById(R.id.autoMonth);
         listDashboard = (ListView) view.findViewById(R.id.listDashboard);
         listDashchart = (ListView) view.findViewById(R.id.listDashchart);
+
+        //................Auto Complete Text View......
+        dashtxtL2 = (AutoCompleteTextView) view.findViewById(R.id.dashLevel2);
+        dashtxtL3 = (AutoCompleteTextView) view.findViewById(R.id.dashLevel3);
+        dashtxtL4 = (AutoCompleteTextView) view.findViewById(R.id.dashLevel4);
+        dashtxtL5 = (AutoCompleteTextView) view.findViewById(R.id.dashLevel5);
+        dashtxtL6 = (AutoCompleteTextView) view.findViewById(R.id.dashLevel6);
+        dashtxtL7 = (AutoCompleteTextView) view.findViewById(R.id.dashLevel7);
+
+        //      cardview
+        dashcardNewProposal = (CardView) view.findViewById(R.id.dashnewProposalcardview);
+        dashcardIndividuals = (CardView) view.findViewById(R.id.dashindividualscardview);
+        dashcardlevel2 = (CardView) view.findViewById(R.id.dashlevel2cardview);
+        dashcardlevel3 = (CardView) view.findViewById(R.id.dashlevel3cardview);
+        dashcardlevel4 = (CardView) view.findViewById(R.id.dashlevel4cardview);
+        dashcardlevel5 = (CardView) view.findViewById(R.id.dashlevel5cardview);
+        dashcardlevel6 = (CardView) view.findViewById(R.id.dashlevel6cardview);
+        dashcardlevel7 = (CardView) view.findViewById(R.id.dashlevel7cardview);
+
+        dashlevel2txtlayout = (TextInputLayout) view.findViewById(R.id.dashlevel2txtlayout);
+        dashlevel3txtlayout = (TextInputLayout) view.findViewById(R.id.dashlevel3txtlayout);
+        dashlevel4txtlayout = (TextInputLayout) view.findViewById(R.id.dashlevel4txtlayout);
+        dashlevel5txtlayout = (TextInputLayout) view.findViewById(R.id.dashlevel5txtlayout);
+        dashlevel6txtlayout = (TextInputLayout) view.findViewById(R.id.dashlevel6txtlayout);
+        dashlevel7txtlayout = (TextInputLayout) view.findViewById(R.id.dashlevel7txtlayout);
+
+        Searchbtn = (Button)view.findViewById(R.id.Searchbtn);
+        btnAdvSearch = (Button)view.findViewById(R.id.btnAdvSearch);
+        etsearchdoc = (EditText)view.findViewById(R.id.etsearchdoc);
 
 
         listDashchart.setOnTouchListener(new ListView.OnTouchListener()
@@ -296,7 +354,7 @@ public class DashboardFragment extends Fragment {
        }
         ////////////////////////////////////////////
 
-        dashboardModel  = new DashboardModel();
+       /* dashboardModel  = new DashboardModel();
         dashboardModelList = new ArrayList<>();
         dashboardModel.setRole("HR");
         dashboardModel.setDocNo("5_6/1/2017 1:59:43 PM_366d6bb9-b186-43ce-9b2c-682e5deb81bd");
@@ -308,7 +366,7 @@ public class DashboardFragment extends Fragment {
         dashboardModel.setStatus("Approved");
         dashboardModelList.add(dashboardModel);
         dashboardAdapter = new DashboardAdapter(getContext(), dashboardModelList);
-        listDashboard.setAdapter(dashboardAdapter);
+        listDashboard.setAdapter(dashboardAdapter);*/
 
         List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
         List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
@@ -320,17 +378,30 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
-//                detailsLayout.setVisibility(View.VISIBLE);
-//                search.setVisibility(View.GONE);
-//                dashboardlayout.setVisibility(View.GONE);
+               // detailsLayout.setVisibility(View.VISIBLE);
+                search.setVisibility(View.GONE);
+                searchlayout.setVisibility(View.VISIBLE);
+                dashboardlayout.setVisibility(View.VISIBLE);
+                barchartlayout.setVisibility(View.GONE);
             }
         });
+
+        btnAdvSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
+                searchlayout.setVisibility(View.GONE);
+                dashboardlayout.setVisibility(View.GONE);
+                detailsLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
         loadRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 detailsLayout.setVisibility(View.GONE);
-                search.setVisibility(View.VISIBLE);
+ //               search.setVisibility(View.VISIBLE);
                 dashboardlayout.setVisibility(View.VISIBLE);
             }
         });
@@ -376,6 +447,436 @@ public class DashboardFragment extends Fragment {
                 return false;
             }
         });
+
+       /* autoLegal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (strLegalArray != null && strLegalArray.length > 0) {
+                    String ID = "";
+                    strLegalEntity = autoLegal.getText().toString();
+                    legalEntityString = parent.getItemAtPosition(position).toString();
+                    for (int i = 0; i < listLegal.size(); i++) {
+                        legalEntityModel = listLegal.get(i);
+                        String entity = legalEntityModel.getText();
+                        if (entity.equalsIgnoreCase(legalEntityString)) {
+                            ID = legalEntityModel.getId();
+                            legalEntityID = ID;
+                            legalEntityValue = legalEntityModel.getValue();
+                        }
+                    }
+                    autoProperty.setText("");
+                    autoIndividuals.setText("");
+                    autoLoc.setText("");
+//                    long positionId = id+1;
+                    if (strLegalEntity.equalsIgnoreCase("Individuals")) {
+
+                        dashcardIndividuals.setVisibility(View.VISIBLE);
+                        dashcardNewProposal.setVisibility(View.GONE);
+                        cardProperty.setVisibility(View.VISIBLE);
+
+                        listIndividuals = new ArrayList<>();
+                        String individuals = "";
+                        String where1 = " where parent_Ref = " + "'" + legalEntityID + "'";
+                        String text = "text";
+                        Cursor cursor = KHIL.dbCon.fetchFromSelectDistinctWhere(text, DbHelper.M_Legal_Entity, where1);
+                        if (cursor != null && cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+                                individuals = cursor.getString(cursor.getColumnIndex("text"));
+                                listIndividuals.add(individuals);
+                            } while (cursor.moveToNext());
+                            cursor.close();
+                        }
+
+
+                        if (listIndividuals != null && listIndividuals.size() > 0) {
+
+                            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listIndividuals) {
+                                @Override
+                                public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                    View v = null;
+                                    // If this is the initial dummy entry, make it hidden
+                                    if (position == 0) {
+                                        TextView tv = new TextView(getContext());
+                                        tv.setHeight(0);
+                                        tv.setVisibility(View.GONE);
+                                        v = tv;
+                                    } else {
+                                        // Pass convertView as null to prevent reuse of special case views
+                                        v = super.getDropDownView(position, null, parent);
+                                    }
+                                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                    parent.setVerticalScrollBarEnabled(false);
+                                    return v;
+                                }
+                            };
+
+                            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            autoIndividuals.setAdapter(adapter1);
+                        }
+
+                        autoIndividuals.setOnTouchListener(new View.OnTouchListener() {
+
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                autoIndividuals.showDropDown();
+                                return false;
+                            }
+                        });
+                        autoIndividuals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            String eid = "", parentref;
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                String individual = parent.getItemAtPosition(position).toString();
+                                autoProperty.setText("");
+                                autoLoc.setText("");
+
+                                for (int i = 0; i < listLegalAll.size(); i++) {
+                                    legalEntityModel = listLegalAll.get(i);
+                                    String text = legalEntityModel.getText();
+                                    if (text.equalsIgnoreCase(individual)) {
+                                        eid = legalEntityModel.getId();
+                                        parentref = legalEntityModel.getParent_Ref();
+
+                                        individualID = eid;
+                                        individualValue = legalEntityModel.getValue();
+
+                                        listProperty = new ArrayList<>();
+                                        String property = "";
+                                        String where1 = " where legal_Entity_Id = " + "'" + eid + "'";
+                                        String text1 = "text";
+                                        Cursor cursor = KHIL.dbCon.fetchFromSelect(DbHelper.M_Property, where1);
+                                        if (cursor != null && cursor.getCount() > 0) {
+                                            cursor.moveToFirst();
+                                            do {
+                                                propertyModel = new PropertyModel();
+                                                propertyModel.setId(cursor.getString(cursor.getColumnIndex("id")));
+                                                propertyModel.setText(cursor.getString(cursor.getColumnIndex("text")));
+                                                propertyModel.setValue(cursor.getString(cursor.getColumnIndex("value")));
+                                                propertyModel.setLegalEntityId(cursor.getString(cursor.getColumnIndex("legal_Entity_Id")));
+                                                listProperty.add(propertyModel);
+                                            } while (cursor.moveToNext());
+                                            cursor.close();
+                                        }
+                                        ///////////////Details of property
+                                        if (listProperty.size() > 0) {
+                                            strPropertyArray = new String[listProperty.size()];
+                                            for (int j = 0; j < listProperty.size(); j++) {
+                                                propertyModel = listProperty.get(j);
+                                                strPropertyArray[j] = propertyModel.getText();
+                                            }
+                                        }
+                                        if (listProperty != null && listProperty.size() > 0) {
+                                            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strPropertyArray) {
+                                                @Override
+                                                public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                                    View v = null;
+                                                    // If this is the initial dummy entry, make it hidden
+                                                    if (position == 0) {
+                                                        TextView tv = new TextView(getContext());
+                                                        tv.setHeight(0);
+                                                        tv.setVisibility(View.GONE);
+                                                        v = tv;
+                                                    } else {
+                                                        // Pass convertView as null to prevent reuse of special case views
+                                                        v = super.getDropDownView(position, null, parent);
+                                                    }
+                                                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                                    parent.setVerticalScrollBarEnabled(false);
+                                                    return v;
+                                                }
+                                            };
+
+                                            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                            autoProperty.setAdapter(adapter1);
+                                        }
+
+                                        autoProperty.setOnTouchListener(new View.OnTouchListener() {
+
+                                            @Override
+                                            public boolean onTouch(View v, MotionEvent event) {
+                                                autoProperty.showDropDown();
+                                                return false;
+                                            }
+                                        });
+
+                                        autoProperty.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                if (strPropertyArray != null && strPropertyArray.length > 0) {
+                                                    strProperty = autoProperty.getText().toString();
+                                                    propertyString = parent.getItemAtPosition(position).toString();
+
+                                                    for (int i = 0; i < listProperty.size(); i++) {
+                                                        propertyModel = listProperty.get(i);
+                                                        String text = propertyModel.getText();
+                                                        if (text.equalsIgnoreCase(propertyString)) {
+                                                            String propid = propertyModel.getId();
+                                                            propertyID = propid;
+                                                            propertyValue = propertyModel.getValue();
+
+                                                            listLoc = new ArrayList<>();
+                                                            String location = "";
+                                                            String where1 = " where property_id = " + "'" + propertyID + "'";
+                                                            Cursor cursor4 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Location, where1);
+                                                            if (cursor4 != null && cursor4.getCount() > 0) {
+                                                                cursor4.moveToFirst();
+                                                                do {
+                                                                    locationModel = new LocationModel();
+                                                                    locationModel.setId(cursor4.getString(cursor4.getColumnIndex("id")));
+                                                                    locationModel.setText(cursor4.getString(cursor4.getColumnIndex("text")));
+                                                                    locationModel.setValue(cursor4.getString(cursor4.getColumnIndex("value")));
+                                                                    locationModel.setProperty_id(cursor4.getString(cursor4.getColumnIndex("property_id")));
+                                                                    listLoc.add(locationModel);
+                                                                } while (cursor4.moveToNext());
+                                                                cursor4.close();
+                                                            }
+                                                            ///////////////////////////////
+                                                            ///////////////Details of Location
+                                                            if (listLoc.size() > 0) {
+                                                                strLocArray = new String[listLoc.size()];
+                                                                //   strLeadArray[0] = "Select Source Lead";
+                                                                for (int m = 0; m < listLoc.size(); m++) {
+                                                                    locationModel = listLoc.get(m);
+                                                                    strLocArray[m] = locationModel.getText();
+                                                                }
+                                                            }
+                                                            if (listLoc != null && listLoc.size() > 0) {
+                                                                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLocArray) {
+                                                                    @Override
+                                                                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                                                        View v = null;
+                                                                        // If this is the initial dummy entry, make it hidden
+                                                                        if (position == 0) {
+                                                                            TextView tv = new TextView(getContext());
+                                                                            tv.setHeight(0);
+                                                                            tv.setVisibility(View.GONE);
+                                                                            v = tv;
+                                                                        } else {
+                                                                            // Pass convertView as null to prevent reuse of special case views
+                                                                            v = super.getDropDownView(position, null, parent);
+                                                                        }
+                                                                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                                                        parent.setVerticalScrollBarEnabled(false);
+                                                                        return v;
+                                                                    }
+                                                                };
+
+                                                                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                autoLoc.setAdapter(adapter1);
+                                                            }
+
+                                                            autoLoc.setOnTouchListener(new View.OnTouchListener() {
+                                                                @Override
+                                                                public boolean onTouch(View v, MotionEvent event) {
+                                                                    autoLoc.showDropDown();
+                                                                    return false;
+                                                                }
+                                                            });
+
+                                                            autoLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                @Override
+                                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                    if (strLocArray != null && strLocArray.length > 0) {
+                                                                        strLoc = autoLoc.getText().toString();
+                                                                        locString = parent.getItemAtPosition(position).toString();
+
+                                                                        for (int i = 0; i < listLoc.size(); i++) {
+                                                                            locationModel = listLoc.get(i);
+                                                                            String text = locationModel.getText();
+                                                                            if (text.equalsIgnoreCase(locString)) {
+                                                                                locationID = locationModel.getId();
+                                                                                locationValue = locationModel.getValue();
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+
+                            }
+                        });
+
+                    } else if (strLegalEntity.equalsIgnoreCase("New Proposal")) {
+                        cardNewProposal.setVisibility(View.VISIBLE);
+                        cardIndividuals.setVisibility(View.GONE);
+                        cardProperty.setVisibility(View.VISIBLE);
+                    } else {
+                        cardIndividuals.setVisibility(View.GONE);
+                        cardNewProposal.setVisibility(View.GONE);
+                        cardProperty.setVisibility(View.VISIBLE);
+
+                        listProperty = new ArrayList<>();
+                        String property = "";
+                        String where1 = " where legal_Entity_Id = " + "'" + legalEntityID + "'";
+                        Cursor cursor = KHIL.dbCon.fetchFromSelect(DbHelper.M_Property, where1);
+                        if (cursor != null && cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            do {
+                                propertyModel = new PropertyModel();
+                                propertyModel.setId(cursor.getString(cursor.getColumnIndex("id")));
+                                propertyModel.setText(cursor.getString(cursor.getColumnIndex("text")));
+                                propertyModel.setValue(cursor.getString(cursor.getColumnIndex("value")));
+                                propertyModel.setLegalEntityId(cursor.getString(cursor.getColumnIndex("legal_Entity_Id")));
+                                listProperty.add(propertyModel);
+                            } while (cursor.moveToNext());
+                            cursor.close();
+                        }
+                        ///////////////Details of property
+                        if (listProperty.size() > 0) {
+                            strPropertyArray = new String[listProperty.size()];
+                            for (int j = 0; j < listProperty.size(); j++) {
+                                propertyModel = listProperty.get(j);
+                                strPropertyArray[j] = propertyModel.getText();
+                            }
+                        }
+
+                        if (listProperty != null && listProperty.size() > 0) {
+                            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strPropertyArray) {
+                                @Override
+                                public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                    View v = null;
+                                    // If this is the initial dummy entry, make it hidden
+                                    if (position == 0) {
+                                        TextView tv = new TextView(getContext());
+                                        tv.setHeight(0);
+                                        tv.setVisibility(View.GONE);
+                                        v = tv;
+                                    } else {
+                                        // Pass convertView as null to prevent reuse of special case views
+                                        v = super.getDropDownView(position, null, parent);
+                                    }
+                                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                    parent.setVerticalScrollBarEnabled(false);
+                                    return v;
+                                }
+                            };
+
+                            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            autoProperty.setAdapter(adapter1);
+                        }
+
+                        autoProperty.setOnTouchListener(new View.OnTouchListener() {
+
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                autoProperty.showDropDown();
+                                return false;
+                            }
+                        });
+
+                        autoProperty.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                if (strPropertyArray != null && strPropertyArray.length > 0) {
+                                    strProperty = autoProperty.getText().toString();
+                                    propertyString = parent.getItemAtPosition(position).toString();
+
+                                    for (int i = 0; i < listProperty.size(); i++) {
+                                        propertyModel = listProperty.get(i);
+                                        String text = propertyModel.getText();
+                                        if (text.equalsIgnoreCase(propertyString)) {
+                                            String propid = propertyModel.getId();
+                                            propertyID = propid;
+                                            propertyValue = propertyModel.getValue();
+
+
+                                            listLoc = new ArrayList<>();
+                                            String location = "";
+                                            String where1 = " where property_id = " + "'" + propertyID + "'";
+                                            Cursor cursor4 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Location, where1);
+                                            if (cursor4 != null && cursor4.getCount() > 0) {
+                                                cursor4.moveToFirst();
+                                                do {
+                                                    locationModel = new LocationModel();
+                                                    locationModel.setId(cursor4.getString(cursor4.getColumnIndex("id")));
+                                                    locationModel.setText(cursor4.getString(cursor4.getColumnIndex("text")));
+                                                    locationModel.setValue(cursor4.getString(cursor4.getColumnIndex("value")));
+                                                    locationModel.setProperty_id(cursor4.getString(cursor4.getColumnIndex("property_id")));
+                                                    listLoc.add(locationModel);
+                                                } while (cursor4.moveToNext());
+                                                cursor4.close();
+                                            }
+                                            ///////////////////////////////
+                                            ///////////////Details of Location
+                                            if (listLoc.size() > 0) {
+                                                strLocArray = new String[listLoc.size()];
+                                                //   strLeadArray[0] = "Select Source Lead";
+                                                for (int m = 0; m < listLoc.size(); m++) {
+                                                    locationModel = listLoc.get(m);
+                                                    strLocArray[m] = locationModel.getText();
+                                                }
+                                            }
+                                            if (listLoc != null && listLoc.size() > 0) {
+                                                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLocArray) {
+                                                    @Override
+                                                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                                                        View v = null;
+                                                        // If this is the initial dummy entry, make it hidden
+                                                        if (position == 0) {
+                                                            TextView tv = new TextView(getContext());
+                                                            tv.setHeight(0);
+                                                            tv.setVisibility(View.GONE);
+                                                            v = tv;
+                                                        } else {
+                                                            // Pass convertView as null to prevent reuse of special case views
+                                                            v = super.getDropDownView(position, null, parent);
+                                                        }
+                                                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                                                        parent.setVerticalScrollBarEnabled(false);
+                                                        return v;
+                                                    }
+                                                };
+
+                                                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                autoLoc.setAdapter(adapter1);
+                                            }
+
+                                            autoLoc.setOnTouchListener(new View.OnTouchListener() {
+                                                @Override
+                                                public boolean onTouch(View v, MotionEvent event) {
+                                                    autoLoc.showDropDown();
+                                                    return false;
+                                                }
+                                            });
+
+                                            autoLoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    if (strLocArray != null && strLocArray.length > 0) {
+                                                        strLoc = autoLoc.getText().toString();
+                                                        locString = parent.getItemAtPosition(position).toString();
+
+                                                        for (int i = 0; i < listLoc.size(); i++) {
+                                                            locationModel = listLoc.get(i);
+                                                            String text = locationModel.getText();
+                                                            if (text.equalsIgnoreCase(locString)) {
+                                                                locationID = locationModel.getId();
+                                                                locationValue = locationModel.getValue();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                }
+            }
+        });*/
 
         if (listProperty.size() > 0) {
             strPropertyArray = new String[listProperty.size()];

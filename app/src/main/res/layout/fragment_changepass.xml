@@ -101,7 +101,7 @@
                         android:cursorVisible="false"
                         android:ems="10"
                         android:hint="Confirm Password"
-                        android:inputType="textPassword"
+                        android:inputType="text"
                         android:longClickable="false"
                         android:maxLength="50"
                         android:maxLines="1"
