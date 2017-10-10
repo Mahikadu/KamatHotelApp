@@ -29,7 +29,7 @@ public class Utils {
         columnNamesUpload = Arrays.copyOf(uploadArray, uploadArray.length);
 
 
-        String[] master1Array = {"id","value", "text", "parent_Ref", "updated_date"};
+        String[] master1Array = {"id","legal_id","value", "text", "parent_Ref", "updated_date"};
         columnNamesM_Legal_Entity = Arrays.copyOf(master1Array, master1Array.length);
 
         String[] master2Array = {"id","value", "text", "parent_Ref","legal_Entity_Id","updated_date"};
@@ -59,7 +59,7 @@ public class Utils {
                 "Status","Year","type","last_sync","yearvalue","quartervalue","monthvalue","Legal_Entity_value","Level2_value",
                 "Level3_value","Level4_value","Level5_value","Level6_value","Level7_value","Location_value","Property_value",
                 "yeartext","quartertext","monthtext","Legal_Entity_text","Level2_text","Level3_text","Level4_text","Level5_text",
-                "Level6_text","Level7_text","Location_text","Property_text"};
+                "Level6_text","Level7_text","Location_text","Property_text","Individual_ID","Individual_Value","Individual_Text","New_Proposal"};
 
         columnNames_QC1_Data = Arrays.copyOf(master9Array, master9Array.length);
     }

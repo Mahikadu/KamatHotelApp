@@ -6,6 +6,8 @@ package com.example.admin.kamathotelapp.Model;
 
 public class LegalEntityModel {
     String id;
+
+    String legal_id;
     String value;
     String text;
     String parent_Ref;
@@ -16,6 +18,14 @@ public class LegalEntityModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getLegal_id() {
+        return legal_id;
+    }
+
+    public void setLegal_id(String legal_id) {
+        this.legal_id = legal_id;
     }
 
     public String getValue() {

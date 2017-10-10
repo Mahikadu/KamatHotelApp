@@ -40,8 +40,14 @@ import com.example.admin.kamathotelapp.MainActivity;
 import com.example.admin.kamathotelapp.Model.ChartDataModel;
 import com.example.admin.kamathotelapp.Model.DashBoardDataModel;
 import com.example.admin.kamathotelapp.Model.DashboardModel;
+import com.example.admin.kamathotelapp.Model.LegalEntityModel;
+import com.example.admin.kamathotelapp.Model.LeveldataModel;
 import com.example.admin.kamathotelapp.Model.LocationModel;
+import com.example.admin.kamathotelapp.Model.MonthModel;
 import com.example.admin.kamathotelapp.Model.PropertyModel;
+import com.example.admin.kamathotelapp.Model.QuaterModel;
+import com.example.admin.kamathotelapp.Model.UploadModel;
+import com.example.admin.kamathotelapp.Model.YearModel;
 import com.example.admin.kamathotelapp.NavigationDrawerActivity;
 import com.example.admin.kamathotelapp.R;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
@@ -77,7 +83,6 @@ import butterknife.InjectView;
 
 public class DashboardFragment extends Fragment {
 
-    private AutoCompleteTextView autoLegal, autoProp, autoLoc, autoYr, autoQuarter, autoMonth;
     private LinearLayout detailsLayout,dashboardlayout,chartdatalayout,barchartlayout,searchlayout;
     DashboardModel dashboardModel;
     List<DashboardModel> dashboardModelList;
@@ -87,27 +92,30 @@ public class DashboardFragment extends Fragment {
     private Button search,loadRecord,Searchbtn,btnAdvSearch;
     EditText etsearchdoc;
     private TableLayout tableLayout,tableLaout_chart;
-    private String strQuarter="",Inv_count,status,Created_By,LegalEntity,type_of_document,
+    private String Inv_count,status,Created_By,LegalEntity,type_of_document,
             selected_document,supporting_document,annexure,Location,Property;
-    String[] strLegalArray = null;
-    String[] strPropertyArray = null;
-    String[] strMonthArray = null;
-    String[] strYearArray = null;
-    String[] strQuarterArray = null;
-    String[] strLocArray = null;
-    String[] strLevel2Array = null;
-    String[] strLevel3Array = null;
-    List<String> listMonth;
+
     ListView listDashboard,listDashchart;
     HorizontalBarChart barChart;
-    private SharedPref sharedPref;
     SOAPWebservice ws;
     ProgressDialog progress;
 
+    @InjectView(R.id.dashLegalEntity)
+    AutoCompleteTextView autoLegalEntity;
     @InjectView(R.id.dashIndividuals)
     AutoCompleteTextView autoIndividuals;
     @InjectView(R.id.dashetNewProposal)
     EditText etNewProposal;
+    @InjectView(R.id.dashProperty)
+    AutoCompleteTextView autoProperty;
+    @InjectView(R.id.dashMonth)
+    AutoCompleteTextView autoMonth;
+    @InjectView(R.id.dashYear)
+    AutoCompleteTextView autoYear;
+    @InjectView(R.id.dashQuarter)
+    AutoCompleteTextView autoQuarter;
+    @InjectView(R.id.dashLoc)
+    AutoCompleteTextView autoLoc;
 
     ArrayList<String> lables;
     ArrayList<BarEntry> barEntries;
@@ -122,8 +130,75 @@ public class DashboardFragment extends Fragment {
     public static TextInputLayout dashlevel2txtlayout, dashlevel3txtlayout, dashlevel4txtlayout,
             dashlevel5txtlayout, dashlevel6txtlayout, dashlevel7txtlayout;
 
-    private String strLegalEntity;
     private String legalEntityString, propertyString, monthString, yearString, quarterString = "", locString;
+    private String strLegalEntity, strProperty, strMonth, strYear, strQuarter, strLoc;
+
+    private ArrayList<LegalEntityModel> listLegal, listLegalAll;
+    List<UploadModel> uploadModelList;
+    UploadModel uploadModel;
+    LegalEntityModel legalEntityModel;
+    public String legalEntityID, propertyID, individualID, locationID;
+    public String legalEntityValue, propertyValue, individualValue, locationValue;
+    private ArrayList<String> listIndividuals;
+    private ArrayList<YearModel> listYear;
+    YearModel yearModel;
+    private ArrayList<QuaterModel> listQuarter;
+    QuaterModel quaterModel;
+    private ArrayList<LeveldataModel> listLevelData;
+    LeveldataModel leveldataModel;
+    private ArrayList<PropertyModel> listProperty;
+    PropertyModel propertyModel;
+    private ArrayList<LocationModel> listLoc;
+    LocationModel locationModel;
+    private ArrayList<MonthModel> listMonth;
+    MonthModel monthModel;
+    public String txtL2Id, txtL3Id, txtL4Id, txtL5Id, txtL6Id, txtL7Id, monthID, yearID, quaterID;
+    private SharedPref sharedPref;
+    public String loginId, password,roleID;
+    private String valLevel2="", valLevel3="", valLevel4="", valLevel5="", valLevel6="", valLevel7="";
+    public String valuel2,valuel3,valuel4,valuel5,valuel6,valuel7;
+
+    private List<String> level2list,level3list,level4list,level5list,level6list;
+    private List<String> level4listHR, level5listHR, level6listHR;
+    private List<String> level4listCMD, level5listCMD, level6listCMD, level7listCMD;
+    private List<String> level2listCS,level3listCS,level4listCS;
+    private List<String> level4listMAR, level5listMAR, level6listMAR, level7listMAR;
+    private List<String> level3listPER, level4listPER, level5listPER;
+    private List<String> level4listLEGAL, level5listLEGAL, level6listLEGAL, level7listLEGAL;
+
+    String[] strLegalArray = null;
+    String[] strPropertyArray = null;
+    String[] strMonthArray = null;
+    String[] strYearArray = null;
+    String[] strQuarterArray = null;
+    String[] strLocArray = null;
+    String[] strLevel2Array = null;
+    String[] strLevel3Array = null;
+    String[] strLevel4Array = null;
+    String[] strLevel5Array = null;
+    String[] strLevel6Array = null;
+    String[] strLevel4ArrayHR = null;
+    String[] strLevel5ArrayHR = null;
+    String[] strLevel6ArrayHR = null;
+    String[] strLevel4ArrayCMD = null;
+    String[] strLevel5ArrayCMD = null;
+    String[] strLevel6ArrayCMD = null;
+    String[] strLevel7ArrayCMD = null;
+    String[] strLevel2ArrayCS = null;
+    String[] strLevel3ArrayCS = null;
+    String[] strLevel4ArrayCS = null;
+    String[] strLevel4ArrayMAR = null;
+    String[] strLevel5ArrayMAR = null;
+    String[] strLevel6ArrayMAR = null;
+    String[] strLevel7ArrayMAR = null;
+    String[] strLevel3ArrayPer = null;
+    String[] strLevel4ArrayPer = null;
+    String[] strLevel5ArrayPer = null;
+    String[] strLevel4ArrayLEGAL = null;
+    String[] strLevel5ArrayLEGAL = null;
+    String[] strLevel6ArrayLEGAL = null;
+    String[] strLevel7ArrayLEGAL = null;
+
 
 
 
@@ -148,6 +223,12 @@ public class DashboardFragment extends Fragment {
     }
 
     void initView(View view) {
+
+        sharedPref = new SharedPref(getContext());
+        roleID = sharedPref.getRoleID();
+        loginId = sharedPref.getLoginId();
+        password = sharedPref.getPassword();
+
         barChart = (HorizontalBarChart) view.findViewById(R.id.bargraph);
         tableLayout = (TableLayout) view.findViewById(R.id.tableLaout_lead);
        // tableLaout_chart = (TableLayout) view.findViewById(R.id.tableLaout_chart);
@@ -158,12 +239,7 @@ public class DashboardFragment extends Fragment {
         searchlayout = (LinearLayout) view.findViewById(R.id.searchlayout);
         search = (Button)view.findViewById(R.id.btnSearch);
         loadRecord = (Button)view.findViewById(R.id.btnLoad);
-        autoLegal = (AutoCompleteTextView)view.findViewById(R.id.autoLegalEntity);
-        autoProp = (AutoCompleteTextView)view.findViewById(R.id.autoProperty);
-        autoLoc = (AutoCompleteTextView)view.findViewById(R.id.autoLocation);
-        autoYr = (AutoCompleteTextView)view.findViewById(R.id.autoYear);
-        autoQuarter = (AutoCompleteTextView)view.findViewById(R.id.autoQuarter);
-        autoMonth = (AutoCompleteTextView)view.findViewById(R.id.autoMonth);
+
         listDashboard = (ListView) view.findViewById(R.id.listDashboard);
         listDashchart = (ListView) view.findViewById(R.id.listDashchart);
 
@@ -178,6 +254,7 @@ public class DashboardFragment extends Fragment {
         //      cardview
         dashcardNewProposal = (CardView) view.findViewById(R.id.dashnewProposalcardview);
         dashcardIndividuals = (CardView) view.findViewById(R.id.dashindividualscardview);
+        dashcardProperty = (CardView) view.findViewById(R.id.dashpropertycardview);
         dashcardlevel2 = (CardView) view.findViewById(R.id.dashlevel2cardview);
         dashcardlevel3 = (CardView) view.findViewById(R.id.dashlevel3cardview);
         dashcardlevel4 = (CardView) view.findViewById(R.id.dashlevel4cardview);
@@ -352,27 +429,6 @@ public class DashboardFragment extends Fragment {
        }catch (Exception e){
            e.printStackTrace();
        }
-        ////////////////////////////////////////////
-
-       /* dashboardModel  = new DashboardModel();
-        dashboardModelList = new ArrayList<>();
-        dashboardModel.setRole("HR");
-        dashboardModel.setDocNo("5_6/1/2017 1:59:43 PM_366d6bb9-b186-43ce-9b2c-682e5deb81bd");
-        dashboardModel.setFileName("cd7524eb-4929-42e9-8706-34c2433e84f2_Penguins.jpg");
-        dashboardModel.setCreatedBy("hr");
-        dashboardModel.setCreatedDate("2017-06-02");
-        dashboardModel.setYear("2017");
-        dashboardModel.setMonth("June");
-        dashboardModel.setStatus("Approved");
-        dashboardModelList.add(dashboardModel);
-        dashboardAdapter = new DashboardAdapter(getContext(), dashboardModelList);
-        listDashboard.setAdapter(dashboardAdapter);*/
-
-        List<String> listLegal = Arrays.asList(getResources().getStringArray(R.array.legal_entity));
-        List<String> listProperty = Arrays.asList(getResources().getStringArray(R.array.property));
-        List<String> listYear = Arrays.asList(getResources().getStringArray(R.array.year));
-        List<String> listQuarter = Arrays.asList(getResources().getStringArray(R.array.quarter));
-        List<String> listLoc = Arrays.asList(getResources().getStringArray(R.array.location));
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,6 +439,7 @@ public class DashboardFragment extends Fragment {
                 searchlayout.setVisibility(View.VISIBLE);
                 dashboardlayout.setVisibility(View.VISIBLE);
                 barchartlayout.setVisibility(View.GONE);
+                chartdatalayout.setVisibility(View.GONE);
             }
         });
 
@@ -402,18 +459,26 @@ public class DashboardFragment extends Fragment {
                 view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 detailsLayout.setVisibility(View.GONE);
  //               search.setVisibility(View.VISIBLE);
+                searchlayout.setVisibility(View.VISIBLE);
                 dashboardlayout.setVisibility(View.VISIBLE);
             }
         });
 
+
+        uploadModelList = new ArrayList<>();
+        uploadModel = new UploadModel();
+
+        fetchLegalEntity();
+        FetchLeveldata();
+        /////////Details of legal Entity
         if (listLegal.size() > 0) {
             strLegalArray = new String[listLegal.size()];
-            //   strLeadArray[0] = "Select Source Lead";
             for (int i = 0; i < listLegal.size(); i++) {
-                strLegalArray[i] = listLegal.get(i);
+                legalEntityModel = listLegal.get(i);
+                String text = legalEntityModel.getText();
+                strLegalArray[i] = text;
             }
         }
-
         if (listLegal != null && listLegal.size() > 0) {
             ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLegalArray) {
                 @Override
@@ -436,30 +501,29 @@ public class DashboardFragment extends Fragment {
             };
 
             adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoLegal.setAdapter(adapter1);
+            autoLegalEntity.setAdapter(adapter1);
         }
 
-        autoLegal.setOnTouchListener(new View.OnTouchListener() {
+        autoLegalEntity.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                autoLegal.showDropDown();
+                autoLegalEntity.showDropDown();
                 return false;
             }
         });
-
-       /* autoLegal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoLegalEntity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (strLegalArray != null && strLegalArray.length > 0) {
                     String ID = "";
-                    strLegalEntity = autoLegal.getText().toString();
+                    strLegalEntity = autoLegalEntity.getText().toString();
                     legalEntityString = parent.getItemAtPosition(position).toString();
                     for (int i = 0; i < listLegal.size(); i++) {
                         legalEntityModel = listLegal.get(i);
                         String entity = legalEntityModel.getText();
                         if (entity.equalsIgnoreCase(legalEntityString)) {
-                            ID = legalEntityModel.getId();
+                            ID = legalEntityModel.getLegal_id();
                             legalEntityID = ID;
                             legalEntityValue = legalEntityModel.getValue();
                         }
@@ -472,7 +536,7 @@ public class DashboardFragment extends Fragment {
 
                         dashcardIndividuals.setVisibility(View.VISIBLE);
                         dashcardNewProposal.setVisibility(View.GONE);
-                        cardProperty.setVisibility(View.VISIBLE);
+                        dashcardProperty.setVisibility(View.VISIBLE);
 
                         listIndividuals = new ArrayList<>();
                         String individuals = "";
@@ -536,7 +600,7 @@ public class DashboardFragment extends Fragment {
                                     legalEntityModel = listLegalAll.get(i);
                                     String text = legalEntityModel.getText();
                                     if (text.equalsIgnoreCase(individual)) {
-                                        eid = legalEntityModel.getId();
+                                        eid = legalEntityModel.getLegal_id();
                                         parentref = legalEntityModel.getParent_Ref();
 
                                         individualID = eid;
@@ -707,13 +771,13 @@ public class DashboardFragment extends Fragment {
                         });
 
                     } else if (strLegalEntity.equalsIgnoreCase("New Proposal")) {
-                        cardNewProposal.setVisibility(View.VISIBLE);
-                        cardIndividuals.setVisibility(View.GONE);
-                        cardProperty.setVisibility(View.VISIBLE);
+                        dashcardNewProposal.setVisibility(View.VISIBLE);
+                        dashcardIndividuals.setVisibility(View.GONE);
+                        dashcardProperty.setVisibility(View.VISIBLE);
                     } else {
-                        cardIndividuals.setVisibility(View.GONE);
-                        cardNewProposal.setVisibility(View.GONE);
-                        cardProperty.setVisibility(View.VISIBLE);
+                        dashcardIndividuals.setVisibility(View.GONE);
+                        dashcardNewProposal.setVisibility(View.GONE);
+                        dashcardProperty.setVisibility(View.VISIBLE);
 
                         listProperty = new ArrayList<>();
                         String property = "";
@@ -876,105 +940,21 @@ public class DashboardFragment extends Fragment {
 
                 }
             }
-        });*/
-
-        if (listProperty.size() > 0) {
-            strPropertyArray = new String[listProperty.size()];
-            //   strLeadArray[0] = "Select Source Lead";
-            for (int i = 0; i < listProperty.size(); i++) {
-                strPropertyArray[i] = listProperty.get(i);
-            }
-        }
-
-        if (listProperty != null && listProperty.size() > 0) {
-
-            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strPropertyArray) {
-                @Override
-                public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                    View v = null;
-                    // If this is the initial dummy entry, make it hidden
-                    if (position == 0) {
-                        TextView tv = new TextView(getContext());
-                        tv.setHeight(0);
-                        tv.setVisibility(View.GONE);
-                        v = tv;
-                    } else {
-                        // Pass convertView as null to prevent reuse of special case views
-                        v = super.getDropDownView(position, null, parent);
-                    }
-                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
-                    parent.setVerticalScrollBarEnabled(false);
-                    return v;
-                }
-            };
-
-            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoProp.setAdapter(adapter2);
-        }
-
-        autoProp.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                autoProp.showDropDown();
-                return false;
-            }
         });
 
-        if (listLoc.size() > 0) {
-            strLocArray = new String[listLoc.size()];
-            //   strLeadArray[0] = "Select Source Lead";
-            for (int i = 0; i < listLoc.size(); i++) {
-                strLocArray[i] = listLoc.get(i);
-            }
-        }
 
-        if (listLoc != null && listLoc.size() > 0) {
-
-            ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLocArray) {
-                @Override
-                public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                    View v = null;
-                    // If this is the initial dummy entry, make it hidden
-                    if (position == 0) {
-                        TextView tv = new TextView(getContext());
-                        tv.setHeight(0);
-                        tv.setVisibility(View.GONE);
-                        v = tv;
-                    } else {
-                        // Pass convertView as null to prevent reuse of special case views
-                        v = super.getDropDownView(position, null, parent);
-                    }
-                    // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
-                    parent.setVerticalScrollBarEnabled(false);
-                    return v;
+        if (listYear != null) {
+            if (listYear.size() > 0) {
+                strYearArray = new String[listYear.size()];
+                //   strLeadArray[0] = "Select Source Lead";
+                for (int i = 0; i < listYear.size(); i++) {
+                    yearModel = listYear.get(i);
+                    strYearArray[i] = yearModel.getText();
                 }
-            };
-
-            adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoLoc.setAdapter(adapter3);
-        }
-
-        autoLoc.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                autoLoc.showDropDown();
-                return false;
-            }
-        });
-
-        if (listYear.size() > 0) {
-            strYearArray = new String[listYear.size()];
-            //   strLeadArray[0] = "Select Source Lead";
-            for (int i = 0; i < listYear.size(); i++) {
-                strYearArray[i] = listYear.get(i);
             }
         }
-
         if (listYear != null && listYear.size() > 0) {
-
-            ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strYearArray) {
+            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strYearArray) {
                 @Override
                 public View getDropDownView(int position, View convertView, ViewGroup parent) {
                     View v = null;
@@ -994,30 +974,51 @@ public class DashboardFragment extends Fragment {
                 }
             };
 
-            adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoYr.setAdapter(adapter4);
+            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            autoYear.setAdapter(adapter1);
         }
 
-        autoYr.setOnTouchListener(new View.OnTouchListener() {
+        autoYear.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                autoYr.showDropDown();
+                autoYear.showDropDown();
                 return false;
             }
         });
 
+        autoYear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                autoQuarter.setText("");
+                autoMonth.setText("");
+                if (strYearArray != null && strYearArray.length > 0) {
+                    strYear = autoYear.getText().toString();
+                    yearString = parent.getItemAtPosition(position).toString();
+                    for (int i = 0; i < listYear.size(); i++) {
+                        yearModel = listYear.get(i);
+                        String text = yearModel.getText();
+                        if (text.equalsIgnoreCase(yearString)) {
+                            yearID = yearModel.getValue();
+                        }
+                    }
+                }
+
+            }
+        });
+
+        ///////////////////////////////
+        ///////////////Details of Quarter
         if (listQuarter.size() > 0) {
             strQuarterArray = new String[listQuarter.size()];
-            //   strLeadArray[0] = "Select Source Lead";
             for (int i = 0; i < listQuarter.size(); i++) {
-                strQuarterArray[i] = listQuarter.get(i);
+                quaterModel = listQuarter.get(i);
+                strQuarterArray[i] = quaterModel.getText();
             }
         }
-
         if (listQuarter != null && listQuarter.size() > 0) {
-
-            ArrayAdapter<String> adapter5 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strQuarterArray) {
+            ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strQuarterArray) {
                 @Override
                 public View getDropDownView(int position, View convertView, ViewGroup parent) {
                     View v = null;
@@ -1037,8 +1038,8 @@ public class DashboardFragment extends Fragment {
                 }
             };
 
-            adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            autoQuarter.setAdapter(adapter5);
+            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            autoQuarter.setAdapter(adapter1);
         }
 
         autoQuarter.setOnTouchListener(new View.OnTouchListener() {
@@ -1053,68 +1054,1277 @@ public class DashboardFragment extends Fragment {
         autoQuarter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                autoMonth.setText("");
                 if (strQuarterArray != null && strQuarterArray.length > 0) {
-
-                    strQuarter = parent.getItemAtPosition(position).toString();
-
-                    if(strQuarter.equalsIgnoreCase("Quarter 1")) {
-                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q1));
-                    } else if(strQuarter.equalsIgnoreCase("Quarter 2")) {
-                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q2));
-                    } else if(strQuarter.equalsIgnoreCase("Quarter 3")) {
-                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q3));
-                    } else if(strQuarter.equalsIgnoreCase("Quarter 4")) {
-                        listMonth = Arrays.asList(getResources().getStringArray(R.array.month_q4));
-                    }
-
-                    if (listMonth != null) {
-                        if (listMonth.size() > 0) {
-                            strMonthArray = new String[listMonth.size()];
-                            //   strLeadArray[0] = "Select Source Lead";
-                            for (int i = 0; i < listMonth.size(); i++) {
-                                strMonthArray[i] = listMonth.get(i);
-                            }
+                    strQuarter = autoQuarter.getText().toString();
+                    quarterString = parent.getItemAtPosition(position).toString();
+                    for (int i = 0; i < listQuarter.size(); i++) {
+                        quaterModel = listQuarter.get(i);
+                        String text = quaterModel.getText();
+                        if (text.equalsIgnoreCase(quarterString)) {
+                            quaterID = quaterModel.getValue();
                         }
                     }
-
-                    if (listMonth != null && listMonth.size() > 0) {
-
-                        ArrayAdapter<String> adapter6 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strMonthArray) {
-                            @Override
-                            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                                View v = null;
-                                // If this is the initial dummy entry, make it hidden
-                                if (position == 0) {
-                                    TextView tv = new TextView(getContext());
-                                    tv.setHeight(0);
-                                    tv.setVisibility(View.GONE);
-                                    v = tv;
-                                } else {
-                                    // Pass convertView as null to prevent reuse of special case views
-                                    v = super.getDropDownView(position, null, parent);
-                                }
-                                // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
-                                parent.setVerticalScrollBarEnabled(false);
-                                return v;
-                            }
-                        };
-
-                        adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        autoMonth.setAdapter(adapter6);
-                    }
-
-
-                    autoMonth.setOnTouchListener(new View.OnTouchListener() {
-
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            autoMonth.showDropDown();
-                            return false;
-                        }
-                    });
                 }
+                listMonth = new ArrayList<>();
+                String month = "";
+                String where = " where quater_id = " + "'" + quarterString + "'";
+                Cursor cursor3 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Month, where);
+                if (cursor3 != null && cursor3.getCount() > 0) {
+                    cursor3.moveToFirst();
+                    do {
+                        monthModel = new MonthModel();
+                        monthModel.setId(cursor3.getString(cursor3.getColumnIndex("id")));
+                        monthModel.setText(cursor3.getString(cursor3.getColumnIndex("text")));
+                        monthModel.setValue(cursor3.getString(cursor3.getColumnIndex("value")));
+                        monthModel.setQuarter_id(cursor3.getString(cursor3.getColumnIndex("quater_id")));
+                        listMonth.add(monthModel);
+                    } while (cursor3.moveToNext());
+                    cursor3.close();
+                }
+
+                if (listMonth != null) {
+                    if (listMonth.size() > 0) {
+                        strMonthArray = new String[listMonth.size()];
+                        for (int i = 0; i < listMonth.size(); i++) {
+                            monthModel = listMonth.get(i);
+                            strMonthArray[i] = monthModel.getText();
+                        }
+                    }
+                }
+                if (listMonth != null && listMonth.size() > 0) {
+                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strMonthArray) {
+                        @Override
+                        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                            View v = null;
+                            // If this is the initial dummy entry, make it hidden
+                            if (position == 0) {
+                                TextView tv = new TextView(getContext());
+                                tv.setHeight(0);
+                                tv.setVisibility(View.GONE);
+                                v = tv;
+                            } else {
+                                // Pass convertView as null to prevent reuse of special case views
+                                v = super.getDropDownView(position, null, parent);
+                            }
+                            // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                            parent.setVerticalScrollBarEnabled(false);
+                            return v;
+                        }
+                    };
+
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    autoMonth.setAdapter(adapter1);
+                }
+
+                autoMonth.setOnTouchListener(new View.OnTouchListener() {
+
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        autoMonth.showDropDown();
+                        return false;
+                    }
+                });
+
+                autoMonth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (strMonthArray != null && strMonthArray.length > 0) {
+                            monthString = parent.getItemAtPosition(position).toString();
+
+                            for (int i = 0; i < listMonth.size(); i++) {
+                                monthModel = listMonth.get(i);
+                                String text = monthModel.getText();
+                                if (text.equalsIgnoreCase(monthString)) {
+                                    monthID = monthModel.getValue();
+                                }
+                            }
+                        }
+                    }
+                });
+
             }
         });
+
+
+        ///////////////////////// Level data set to Autocompletetextview
+
+        if (loginId.equalsIgnoreCase("finance") || loginId.equalsIgnoreCase("financeqc1") ) {
+            dashtxtL2.setHint("Financial Type");
+            fetchLevel2dataFin();
+
+            dashtxtL2.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel3.setVisibility(View.GONE);
+                    dashcardlevel4.setVisibility(View.GONE);
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+
+                    dashtxtL3.setHint("");
+                    dashtxtL3.setText("");
+                    dashtxtL4.setText("");
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel3 = "";
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    dashtxtL2.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel2txtlayout.setHint("Financial Type");
+                    if (strLevel2Array != null && strLevel2Array.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel2 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel2)) {
+                                aid = leveldataModel.getaID();
+                                txtL2Id = aid;
+                                valuel2 = leveldataModel.getValue();
+
+                            }
+                        }
+                        if (valLevel2 != null && valLevel2.length() > 0) {
+                            fetchLevel3dataFin(aid);
+                            dashlevel3txtlayout.setHint(valLevel2);
+                            dashcardlevel3.setVisibility(View.VISIBLE);
+                            dashtxtL3.setVisibility(View.VISIBLE);
+                            //qc1lev3 = true;
+                        }else {
+                            dashcardlevel3.setVisibility(View.GONE);
+                            //qc1lev3 = false;
+                        }
+                    }
+                }
+            });
+
+            ///////////////////////////////////////
+            //////////////////Level 3 details
+
+            dashtxtL3.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel4.setVisibility(View.GONE);
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.setText("");
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL3.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel3Array != null && strLevel3Array.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel3 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel3)) {
+                                aid = leveldataModel.getaID();
+                                txtL3Id = aid;
+                                valuel3 = leveldataModel.getValue();
+                            }
+                        }
+                        if (valLevel3 != null && valLevel3.length() > 0) {
+                            fetchLevel4data(aid);
+                            if (level4list.size() > 0) {
+                                dashcardlevel4.setVisibility(View.VISIBLE);
+                                dashlevel4txtlayout.setHint(valLevel3);
+                                //qc1lev4 = true;
+                            } else {
+                                dashcardlevel4.setVisibility(View.GONE);
+                                //qc1lev4 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            ///////////////////////////////////////
+
+            //////////////////Level 4 details
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    dashtxtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel4Array != null && strLevel4Array.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5data(aid);
+                            if (level5list.size() > 0) {
+                                dashlevel5txtlayout.setHint(valLevel4);
+                                dashcardlevel5.setVisibility(View.VISIBLE);
+                               // qc1lev5 = true;
+                            } else {
+                                dashcardlevel5.setVisibility(View.GONE);
+                               // qc1lev5 = false;
+                            }
+                        }
+
+                    }
+                }
+            });
+
+            ///////////////////////////////////////
+            //////////////////Level 5 details
+
+            dashtxtL5.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5Array != null && strLevel5Array.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
+                            }
+                        }
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6data(aid);
+                            if (level6list.size() > 0) {
+                                dashlevel6txtlayout.setHint(valLevel5);
+                                dashcardlevel6.setVisibility(View.VISIBLE);
+                                //qc1lev6 = true;
+                            } else {
+                                dashcardlevel6.setVisibility(View.GONE);
+                                //qc1lev6 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            ///////////////////////////////////////
+
+            //////////////////Level 6 details
+
+            dashtxtL6.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL7.setText("");
+                    valLevel7 = "";
+                    dashtxtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6Array != null && strLevel6Array.length > 0) {
+                        String aid = "";
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (loginId.equalsIgnoreCase("hr") || loginId.equalsIgnoreCase("hrqc1") ) {
+
+            dashcardlevel2.setVisibility(View.GONE);
+            dashcardlevel3.setVisibility(View.GONE);
+            dashcardlevel4.setVisibility(View.VISIBLE);
+            dashtxtL4.setHint("HR");
+
+            fetchLevel4dataHR();
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel4txtlayout.setHint("HR");
+                    if (strLevel4ArrayHR != null && strLevel4ArrayHR.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataHR(aid);
+                            dashlevel5txtlayout.setHint(valLevel4);
+                            dashcardlevel5.setVisibility(View.VISIBLE);
+                            //qc1lev5 = true;
+                        }else {
+                            dashcardlevel5.setVisibility(View.GONE);
+                            //qc1lev5 = false;
+                        }
+                    }
+                }
+            });
+
+            dashtxtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayHR != null && strLevel5ArrayHR.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
+                            }
+                        }
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataHR(aid);
+                            if (level6listHR.size() > 0) {
+                                dashlevel6txtlayout.setHint(valLevel5);
+                                dashcardlevel6.setVisibility(View.VISIBLE);
+                                //qc1lev6 = true;
+                            } else {
+                                dashcardlevel6.setVisibility(View.GONE);
+                                //qc1lev6 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL7.setText("");
+                    valLevel7 = "";
+                    dashtxtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayHR != null && strLevel6ArrayHR.length > 0) {
+                        String aid;
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (loginId.equalsIgnoreCase("cmd") || loginId.equalsIgnoreCase("cmdqc1") ) {
+
+            dashcardlevel2.setVisibility(View.GONE);
+            dashcardlevel3.setVisibility(View.GONE);
+
+            dashcardlevel4.setVisibility(View.VISIBLE);
+            dashtxtL4.setHint("Type");
+
+            fetchLevel4dataCMD();
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel4txtlayout.setHint("CMD");
+                    if (strLevel4ArrayCMD != null && strLevel4ArrayCMD.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataCMD(aid);
+                            if (level5listCMD.size() > 0) {
+                                dashlevel5txtlayout.setHint(valLevel4);
+                                dashcardlevel5.setVisibility(View.VISIBLE);
+                                //qc1lev5 = true;
+                            } else {
+                                dashcardlevel5.setVisibility(View.GONE);
+                               // qc1lev5 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayCMD != null && strLevel5ArrayCMD.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
+                            }
+                        }
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataCMD(aid);
+                            if (level6listCMD.size() > 0) {
+                                dashlevel6txtlayout.setHint(valLevel5);
+                                dashcardlevel6.setVisibility(View.VISIBLE);
+                                //qc1lev6 = true;
+                            } else {
+                                dashcardlevel6.setVisibility(View.GONE);
+                                //qc1lev6 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL7.setText("");
+                    valLevel7 = "";
+                    dashtxtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayCMD != null && strLevel6ArrayCMD.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel6 != null && valLevel6.length() > 0) {
+                            fetchLevel7dataCMD(aid);
+                            if (level7listCMD.size() > 0) {
+                                dashlevel7txtlayout.setHint(valLevel5);
+                                dashcardlevel7.setVisibility(View.VISIBLE);
+                                //qc1lev7 = true;
+                            } else {
+                                dashcardlevel7.setVisibility(View.GONE);
+                                //qc1lev7 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL7.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashtxtL7.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL7.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel7ArrayCMD != null && strLevel7ArrayCMD.length > 0) {
+                        String aid = "";
+                        valLevel7 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel7)) {
+                                aid = leveldataModel.getaID();
+                                txtL7Id = aid;
+                                valuel7 = leveldataModel.getValue();
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (loginId.equalsIgnoreCase("cs") || loginId.equalsIgnoreCase("csqc1") ) {
+
+            fetchLevel2dataCS();
+            dashtxtL2.setHint("Type");
+
+            dashtxtL2.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel3.setVisibility(View.GONE);
+                    dashcardlevel4.setVisibility(View.GONE);
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL3.setText("");
+                    dashtxtL4.setText("");
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel3 = "";
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL2.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel2txtlayout.setHint("Type");
+                    if (strLevel2ArrayCS != null && strLevel2ArrayCS.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel2 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel2)) {
+                                aid = leveldataModel.getaID();
+                                txtL2Id = aid;
+                                valuel2 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel2 != null && valLevel2.length() > 0) {
+                            fetchLevel3dataCS(aid);
+                            dashlevel3txtlayout.setHint(valLevel2);
+                            dashcardlevel3.setVisibility(View.VISIBLE);
+                            //qc1lev3 = true;
+                        }else {
+                            dashcardlevel3.setVisibility(View.GONE);
+                            //qc1lev3 = false;
+                        }
+                    }
+                }
+            });
+
+            dashtxtL3.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel4.setVisibility(View.GONE);
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.setText("");
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL3.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel3ArrayCS != null && strLevel3ArrayCS.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel3 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel3)) {
+                                aid = leveldataModel.getaID();
+                                txtL3Id = aid;
+                                valuel3 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel3 != null && valLevel3.length() > 0) {
+                            fetchLevel4dataCS(aid);
+                            if (level4listCS.size() > 0) {
+                                dashcardlevel4.setVisibility(View.VISIBLE);
+                                dashlevel4txtlayout.setHint(valLevel3);
+                                //qc1lev4 = true;
+                            } else {
+                                dashcardlevel4.setVisibility(View.GONE);
+                                //qc1lev4 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashtxtL4.showDropDown();
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel4ArrayCS != null && strLevel4ArrayCS.length > 0) {
+                        String aid = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+
+                    }
+                }
+            });
+        } else if (loginId.equalsIgnoreCase("marketing") || loginId.equalsIgnoreCase("marketingqc1") ) {
+
+            dashcardlevel2.setVisibility(View.GONE);
+            dashcardlevel3.setVisibility(View.GONE);
+
+            dashcardlevel4.setVisibility(View.VISIBLE);
+            dashtxtL4.setHint("Occupancy");
+            fetchLevel4dataMAR();
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel4txtlayout.setHint("Occupancy");
+                    if (strLevel4ArrayMAR != null && strLevel4ArrayMAR.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataMAR(aid);
+                            if (level5listMAR.size() > 0) {
+                                dashlevel5txtlayout.setHint(valLevel4);
+                                dashcardlevel5.setVisibility(View.VISIBLE);
+                                //qc1lev5 = true;
+                            } else {
+                                dashcardlevel5.setVisibility(View.GONE);
+                                //qc1lev5 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayMAR != null && strLevel5ArrayMAR.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataMAR(aid);
+                            if (level6listMAR.size() > 0) {
+                                dashlevel6txtlayout.setHint(valLevel5);
+                                dashcardlevel6.setVisibility(View.VISIBLE);
+                                //qc1lev6 = true;
+                            } else {
+                                dashcardlevel6.setVisibility(View.GONE);
+                                //qc1lev6 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL7.setText("");
+                    valLevel7 = "";
+                    dashtxtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayMAR != null && strLevel6ArrayMAR.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel6 != null && valLevel6.length() > 0) {
+                            fetchLevel7dataMAR(aid);
+                            if (level7listMAR.size() > 0) {
+                                dashlevel7txtlayout.setHint(valLevel6);
+                                dashcardlevel7.setVisibility(View.VISIBLE);
+                                //qc1lev7 = true;
+                            } else {
+                                dashcardlevel7.setVisibility(View.GONE);
+                                //qc1lev7 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL7.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashtxtL7.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL7.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel7ArrayMAR != null && strLevel7ArrayMAR.length > 0) {
+                        String aid = "";
+                        valLevel7 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel7)) {
+                                aid = leveldataModel.getaID();
+                                txtL7Id = aid;
+                                valuel7 = leveldataModel.getValue();
+                            }
+                        }
+                    }
+                }
+            });
+
+        } else if (loginId.equalsIgnoreCase("Personal") || loginId.equalsIgnoreCase("Personalqc1") ) {
+
+            dashcardlevel2.setVisibility(View.GONE);
+            dashcardlevel3.setVisibility(View.VISIBLE);
+            dashtxtL3.setHint("Type");
+
+            fetchLevel3dataPER();
+
+            dashtxtL3.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel4.setVisibility(View.GONE);
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.setText("");
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel4 = "";
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL3.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel3txtlayout.setHint("Type");
+                    if (strLevel3ArrayPer != null && strLevel3ArrayPer.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel3 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel3)) {
+                                aid = leveldataModel.getaID();
+                                txtL3Id = aid;
+                                valuel3 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel3 != null && valLevel3.length() > 0) {
+                            fetchLevel4dataPER(aid);
+                            if (level4listPER.size() > 0) {
+                                dashcardlevel4.setVisibility(View.VISIBLE);
+                                dashlevel4txtlayout.setHint(valLevel3);
+                                //qc1lev4 = true;
+                            } else {
+                                dashcardlevel4.setVisibility(View.GONE);
+                                //qc1lev4 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    valLevel5 = "";
+                    valLevel6 = "";
+                    valLevel7 = "";
+                    dashtxtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel4ArrayPer != null && strLevel4ArrayPer.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataPER(aid);
+                            if (level5listPER.size() > 0) {
+                                dashlevel5txtlayout.setHint(valLevel4);
+                                dashcardlevel5.setVisibility(View.VISIBLE);
+                                //qc1lev5 = true;
+                            } else {
+                                dashcardlevel5.setVisibility(View.GONE);
+                                //qc1lev5 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    dashtxtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayPer != null && strLevel5ArrayPer.length > 0) {
+                        String aid = "";
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (loginId.equalsIgnoreCase("legal") || loginId.equalsIgnoreCase("legalqc1") ) {
+
+            dashcardlevel2.setVisibility(View.GONE);
+            dashcardlevel3.setVisibility(View.GONE);
+
+            dashcardlevel4.setVisibility(View.VISIBLE);
+
+            dashtxtL4.setHint("Legal");
+            fetchLevel4dataLEGAL();
+
+            dashtxtL4.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel5.setVisibility(View.GONE);
+                    dashtxtL5.setText("");
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL4.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    dashlevel4txtlayout.setHint("Legal");
+                    if (strLevel4ArrayLEGAL != null && strLevel4ArrayLEGAL.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel4 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel4)) {
+                                aid = leveldataModel.getaID();
+                                txtL4Id = aid;
+                                valuel4 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel4 != null && valLevel4.length() > 0) {
+                            fetchLevel5dataLEGAL(aid);
+                            dashlevel5txtlayout.setHint(valLevel4);
+                            dashcardlevel5.setVisibility(View.VISIBLE);
+                            //qc1lev5 = true;
+                        }else {
+                            dashcardlevel6.setVisibility(View.GONE);
+                            //qc1lev5 = false;
+                        }
+                    }
+                }
+            });
+
+            dashtxtL5.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel6.setVisibility(View.GONE);
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL6.setText("");
+                    dashtxtL7.setText("");
+                    dashtxtL5.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel5ArrayLEGAL != null && strLevel5ArrayLEGAL.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel5 = parent.getItemAtPosition(position).toString();
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel5)) {
+                                aid = leveldataModel.getaID();
+                                txtL5Id = aid;
+                                valuel5 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel5 != null && valLevel5.length() > 0) {
+                            fetchLevel6dataLEGAL(aid);
+                            if (level6listLEGAL.size() > 0) {
+                                dashlevel6txtlayout.setHint(valLevel5);
+                                dashcardlevel6.setVisibility(View.VISIBLE);
+                                //qc1lev6 = true;
+                            } else {
+                                dashcardlevel6.setVisibility(View.GONE);
+                                //qc1lev6 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL6.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashcardlevel7.setVisibility(View.GONE);
+                    dashtxtL7.setText("");
+                    dashtxtL6.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL6.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel6ArrayLEGAL != null && strLevel6ArrayLEGAL.length > 0) {
+                        String aid = "", parentref = "";
+                        valLevel6 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel6)) {
+                                aid = leveldataModel.getaID();
+                                txtL6Id = aid;
+                                valuel6 = leveldataModel.getValue();
+                            }
+                        }
+
+                        if (valLevel6 != null && valLevel6.length() > 0) {
+                            fetchLevel7dataLEGAL(aid);
+                            if (level7listLEGAL.size() > 0) {
+                                dashlevel7txtlayout.setHint(valLevel6);
+                                dashcardlevel7.setVisibility(View.VISIBLE);
+                                //qc1lev7 = true;
+                            } else {
+                                dashcardlevel7.setVisibility(View.GONE);
+                                //qc1lev7 = false;
+                            }
+                        }
+                    }
+                }
+            });
+
+            dashtxtL7.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    dashtxtL7.showDropDown();
+                    return false;
+                }
+            });
+
+            dashtxtL7.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (strLevel7ArrayLEGAL != null && strLevel7ArrayLEGAL.length > 0) {
+                        String aid = "";
+                        valLevel7 = parent.getItemAtPosition(position).toString();
+
+                        for (int i = 0; i < listLevelData.size(); i++) {
+                            leveldataModel = listLevelData.get(i);
+                            String text = leveldataModel.getText();
+                            if (text.equalsIgnoreCase(valLevel7)) {
+                                aid = leveldataModel.getaID();
+                                txtL7Id = aid;
+                                valuel7 = leveldataModel.getValue();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        ///////////////////////////////////Finish////////////////////
 
 
     }
@@ -1340,5 +2550,1468 @@ public class DashboardFragment extends Fragment {
             }
         }
     }
+
+    private void fetchLegalEntity() {
+        listLegal = new ArrayList<>();
+        String where = " where parent_Ref = " + "'" + "0" + "'";
+        String text = "text";
+        Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Legal_Entity, where);
+        if (cursor1 != null && cursor1.getCount() > 0) {
+            cursor1.moveToFirst();
+            do {
+                legalEntityModel = new LegalEntityModel();
+                legalEntityModel.setId(cursor1.getString(cursor1.getColumnIndex("id")));
+                legalEntityModel.setLegal_id(cursor1.getString(cursor1.getColumnIndex("legal_id")));
+                legalEntityModel.setText(cursor1.getString(cursor1.getColumnIndex("text")));
+                legalEntityModel.setValue(cursor1.getString(cursor1.getColumnIndex("value")));
+                legalEntityModel.setParent_Ref(cursor1.getString(cursor1.getColumnIndex("parent_Ref")));
+                listLegal.add(legalEntityModel);
+            } while (cursor1.moveToNext());
+            cursor1.close();
+        }
+
+        listLegalAll = new ArrayList<>();
+        Cursor cursorAll = KHIL.dbCon.fetchAlldata(DbHelper.M_Legal_Entity);
+        if (cursorAll != null && cursorAll.getCount() > 0) {
+            cursorAll.moveToFirst();
+            do {
+                legalEntityModel = new LegalEntityModel();
+                legalEntityModel.setId(cursorAll.getString(cursorAll.getColumnIndex("id")));
+                legalEntityModel.setLegal_id(cursorAll.getString(cursorAll.getColumnIndex("legal_id")));
+                legalEntityModel.setText(cursorAll.getString(cursorAll.getColumnIndex("text")));
+                legalEntityModel.setValue(cursorAll.getString(cursorAll.getColumnIndex("value")));
+                legalEntityModel.setParent_Ref(cursorAll.getString(cursorAll.getColumnIndex("parent_Ref")));
+
+                listLegalAll.add(legalEntityModel);
+            } while (cursorAll.moveToNext());
+            cursorAll.close();
+        }
+
+
+        listYear = new ArrayList<>();
+        String year = "";
+        Cursor cursor2 = KHIL.dbCon.fetchAlldata(DbHelper.M_Year);
+        if (cursor2 != null && cursor2.getCount() > 0) {
+            cursor2.moveToFirst();
+            do {
+//                year = cursor2.getString(cursor2.getColumnIndex("text"));
+                yearModel = new YearModel();
+                yearModel.setId(cursor2.getString(cursor2.getColumnIndex("id")));
+                yearModel.setText(cursor2.getString(cursor2.getColumnIndex("text")));
+                yearModel.setValue(cursor2.getString(cursor2.getColumnIndex("value")));
+                listYear.add(yearModel);
+            } while (cursor2.moveToNext());
+            cursor2.close();
+        }
+
+        listQuarter = new ArrayList<>();
+        String quater = "";
+        Cursor cursor3 = KHIL.dbCon.fetchAlldata(DbHelper.M_Quater);
+        if (cursor3 != null && cursor3.getCount() > 0) {
+            cursor3.moveToFirst();
+            do {
+//                quater = cursor3.getString(cursor3.getColumnIndex("text"));
+                quaterModel = new QuaterModel();
+                quaterModel.setId(cursor3.getString(cursor3.getColumnIndex("id")));
+                quaterModel.setText(cursor3.getString(cursor3.getColumnIndex("text")));
+                quaterModel.setValue(cursor3.getString(cursor3.getColumnIndex("value")));
+
+                listQuarter.add(quaterModel);
+            } while (cursor3.moveToNext());
+            cursor3.close();
+        }
+
+
+    }
+
+    private void FetchLeveldata() {
+        listLevelData = new ArrayList<>();
+        String where = " where role_ID = " + "'" + roleID + "'";
+        Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data, where);
+        if (cursor1 != null && cursor1.getCount() > 0) {
+            cursor1.moveToFirst();
+            do {
+                leveldataModel = new LeveldataModel();
+                leveldataModel.setId(cursor1.getString(cursor1.getColumnIndex("id")));
+                leveldataModel.setValue(cursor1.getString(cursor1.getColumnIndex("value")));
+                leveldataModel.setText(cursor1.getString(cursor1.getColumnIndex("text")));
+                leveldataModel.setParentRef(cursor1.getString(cursor1.getColumnIndex("parent_Ref")));
+                leveldataModel.setaID(cursor1.getString(cursor1.getColumnIndex("aID")));
+                leveldataModel.setRoleID(cursor1.getString(cursor1.getColumnIndex("role_ID")));
+                leveldataModel.setDataLevel(cursor1.getString(cursor1.getColumnIndex("data_level")));
+                leveldataModel.setQuaterId(cursor1.getString(cursor1.getColumnIndex("quater_Id")));
+                listLevelData.add(leveldataModel);
+            } while (cursor1.moveToNext());
+            cursor1.close();
+        }
+    }
+
+    /**
+     * Fetching All Level Data User vise
+     */
+
+    public void fetchLevel2dataFin() {
+        try {
+            level2list = new ArrayList<>();
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "1" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String level2Fin = "";
+                    level2Fin = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level2list.add(level2Fin);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level2list);
+            if (level2list.size() > 0) {
+                strLevel2Array = new String[level2list.size()];
+                for (int i = 0; i < level2list.size(); i++) {
+                    strLevel2Array[i] = level2list.get(i);
+                }
+            }
+            if (level2list != null && level2list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel2Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL2.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel3dataFin(String aID) {
+        try {
+
+            level3list = new ArrayList<>();
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "2" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level3list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level3list);
+            if (level3list.size() > 0) {
+                strLevel3Array = new String[level3list.size()];
+                for (int i = 0; i < level3list.size(); i++) {
+                    strLevel3Array[i] = level3list.get(i);
+                }
+            }
+            if (level3list != null && level3list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel3Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL3.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4data(String aID) {
+        try {
+            level4list = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "3" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+
+            Collections.sort(level4list);
+            if (level4list.size() > 0) {
+                strLevel4Array = new String[level4list.size()];
+                for (int i = 0; i < level4list.size(); i++) {
+                    strLevel4Array[i] = level4list.get(i);
+                }
+            }
+            if (level4list != null && level4list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5data(String aID) {
+        try {
+
+            level5list = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "4" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5list);
+            if (level5list.size() > 0) {
+                strLevel5Array = new String[level5list.size()];
+                for (int i = 0; i < level5list.size(); i++) {
+                    strLevel5Array[i] = level5list.get(i);
+                }
+            }
+            if (level5list != null && level5list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6data(String aID) {
+        try {
+
+            level6list = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";//"'" + "and data_level = "+ "'" + "5" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level6list.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level6list);
+            if (level6list.size() > 0) {
+                strLevel6Array = new String[level6list.size()];
+                for (int i = 0; i < level6list.size(); i++) {
+                    strLevel6Array[i] = level6list.get(i);
+                }
+            }
+            if (level6list != null && level6list.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6Array) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataHR() {
+        try {
+            level4listHR = new ArrayList<>();
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String hr = "";
+                    hr = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4listHR.add(hr);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listHR);
+            if (level4listHR.size() > 0) {
+                strLevel4ArrayHR = new String[level4listHR.size()];
+                for (int i = 0; i < level4listHR.size(); i++) {
+                    strLevel4ArrayHR[i] = level4listHR.get(i);
+                }
+            }
+            if (level4listHR != null && level4listHR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayHR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataHR(String aID) {
+        try {
+
+            level5listHR = new ArrayList<>();
+            String level5 = "";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "4" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    level5 = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listHR.add(level5);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listHR);
+            if (level5listHR.size() > 0) {
+                strLevel5ArrayHR = new String[level5listHR.size()];
+                for (int i = 0; i < level5listHR.size(); i++) {
+                    strLevel5ArrayHR[i] = level5listHR.get(i);
+                }
+            }
+            if (level5listHR != null && level5listHR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayHR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataHR(String aID) {
+        try {
+
+            level6listHR = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";//"'" + "and data_level = "+ "'" + "5" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level6listHR.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level6listHR);
+            if (level6listHR.size() > 0) {
+                strLevel6ArrayHR = new String[level6listHR.size()];
+                for (int i = 0; i < level6listHR.size(); i++) {
+                    strLevel6ArrayHR[i] = level6listHR.get(i);
+                }
+            }
+            if (level6listHR != null && level6listHR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayHR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataCMD() {
+        try {
+            level4listCMD = new ArrayList<>();
+
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "4" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String cmd = "";
+                    cmd = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4listCMD.add(cmd);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listCMD);
+            if (level4listCMD.size() > 0) {
+                strLevel4ArrayCMD = new String[level4listCMD.size()];
+                for (int i = 0; i < level4listCMD.size(); i++) {
+                    strLevel4ArrayCMD[i] = level4listCMD.get(i);
+                }
+            }
+            if (level4listCMD != null && level4listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataCMD(String aID) {
+        try {
+            level5listCMD = new ArrayList<>();
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "5" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listCMD.add(temp);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level5listCMD);
+            if (level5listCMD.size() > 0) {
+                strLevel5ArrayCMD = new String[level5listCMD.size()];
+                for (int i = 0; i < level5listCMD.size(); i++) {
+                    strLevel5ArrayCMD[i] = level5listCMD.get(i);
+                }
+            }
+            if (level5listCMD != null && level5listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataCMD(String aID) {
+        try {
+
+            level6listCMD = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "6" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level6listCMD.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level6listCMD);
+            if (level6listCMD.size() > 0) {
+                strLevel6ArrayCMD = new String[level6listCMD.size()];
+                for (int i = 0; i < level6listCMD.size(); i++) {
+                    strLevel6ArrayCMD[i] = level6listCMD.get(i);
+                }
+            }
+            if (level6listCMD != null && level6listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel7dataCMD(String aID) {
+        try {
+
+            level7listCMD = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID +"'"+ "and parent_Ref = "+ "'" + aID + "'";// "'" + "and data_level = "+ "'" + "7" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level7listCMD.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level7listCMD);
+            if (level7listCMD.size() > 0) {
+                strLevel7ArrayCMD = new String[level7listCMD.size()];
+                for (int i = 0; i < level7listCMD.size(); i++) {
+                    strLevel7ArrayCMD[i] = level7listCMD.get(i);
+                }
+            }
+            if (level7listCMD != null && level7listCMD.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel7ArrayCMD) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL7.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel2dataCS() {
+        try {
+            level2listCS = new ArrayList<>();
+
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "1" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level2listCS.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level2listCS);
+            if (level2listCS.size() > 0) {
+                strLevel2ArrayCS = new String[level2listCS.size()];
+                for (int i = 0; i < level2listCS.size(); i++) {
+                    strLevel2ArrayCS[i] = level2listCS.get(i);
+                }
+            }
+            if (level2listCS != null && level2listCS.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel2ArrayCS) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL2.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel3dataCS(String aID) {
+        try {
+            level3listCS = new ArrayList<>();
+
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//"and data_level = "+ "'" + "2" +
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level3listCS.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level3listCS);
+            if (level3listCS.size() > 0) {
+                strLevel3ArrayCS = new String[level3listCS.size()];
+                for (int i = 0; i < level3listCS.size(); i++) {
+                    strLevel3ArrayCS[i] = level3listCS.get(i);
+                }
+            }
+            if (level3listCS != null && level3listCS.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel3ArrayCS) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL3.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataCS(String aID) {
+        try {
+            level4listCS = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "3"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4listCS.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level4listCS);
+            if (level4listCS.size() > 0) {
+                strLevel4ArrayCS = new String[level4listCS.size()];
+                for (int i = 0; i < level4listCS.size(); i++) {
+                    strLevel4ArrayCS[i] = level4listCS.get(i);
+                }
+            }
+            if (level4listCS != null && level4listCS.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayCS) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataMAR() {
+        try {
+            level4listMAR = new ArrayList<>();
+
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String mar = "";
+                    mar = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4listMAR.add(mar);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listMAR);
+            if (level4listMAR.size() > 0) {
+                strLevel4ArrayMAR = new String[level4listMAR.size()];
+                for (int i = 0; i < level4listMAR.size(); i++) {
+                    strLevel4ArrayMAR[i] = level4listMAR.get(i);
+                }
+            }
+            if (level4listMAR != null && level4listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataMAR(String aID) {
+        try {
+
+            level5listMAR = new ArrayList<>();
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "4" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listMAR.add(temp);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listMAR);
+            if (level5listMAR.size() > 0) {
+                strLevel5ArrayMAR= new String[level5listMAR.size()];
+                for (int i = 0; i < level5listMAR.size(); i++) {
+                    strLevel5ArrayMAR[i] = level5listMAR.get(i);
+                }
+            }
+            if (level5listMAR != null && level5listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataMAR(String aID) {
+        try {
+            level6listMAR = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "5" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level6listMAR.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level6listMAR);
+            if (level6listMAR.size() > 0) {
+                strLevel6ArrayMAR = new String[level6listMAR.size()];
+                for (int i = 0; i < level6listMAR.size(); i++) {
+                    strLevel6ArrayMAR[i] = level6listMAR.get(i);
+                }
+            }
+            if (level6listMAR != null && level6listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel7dataMAR(String aID) {
+        try {
+
+            level7listMAR = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "6" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level7listMAR.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level7listMAR);
+            if (level7listMAR.size() > 0) {
+                strLevel7ArrayMAR = new String[level7listMAR.size()];
+                for (int i = 0; i < level7listMAR.size(); i++) {
+                    strLevel7ArrayMAR[i] = level7listMAR.get(i);
+                }
+            }
+            if (level7listMAR != null && level7listMAR.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel7ArrayMAR) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL7.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel3dataPER() {
+        try {
+            level3listPER = new ArrayList<>();
+
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "2" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String branch = "";
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level3listPER.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level3listPER);
+            if (level3listPER.size() > 0) {
+                strLevel3ArrayPer = new String[level3listPER.size()];
+                for (int i = 0; i < level3listPER.size(); i++) {
+                    strLevel3ArrayPer[i] = level3listPER.get(i);
+                }
+            }
+            if (level3listPER != null && level3listPER.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel3ArrayPer) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL3.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataPER(String aID) {
+        try {
+            level4listPER = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "4" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4listPER.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level4listPER);
+            if (level4listPER.size() > 0) {
+                strLevel4ArrayPer = new String[level4listPER.size()];
+                for (int i = 0; i < level4listPER.size(); i++) {
+                    strLevel4ArrayPer[i] = level4listPER.get(i);
+                }
+            }
+            if (level4listPER != null && level4listPER.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayPer) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataPER(String aID) {
+        try {
+            level5listPER = new ArrayList<>();
+            String branch = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "5" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    branch = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listPER.add(branch);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level5listPER);
+            if (level5listPER.size() > 0) {
+                strLevel5ArrayPer = new String[level5listPER.size()];
+                for (int i = 0; i < level5listPER.size(); i++) {
+                    strLevel5ArrayPer[i] = level5listPER.get(i);
+                }
+            }
+            if (level5listPER != null && level5listPER.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayPer) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel4dataLEGAL() {
+        try {
+            level4listLEGAL = new ArrayList<>();
+
+            String where = " where role_ID = " + "'" + roleID + "'" + "and data_level = "+ "'" + "3" + "'";
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    String legal = "";
+                    legal = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level4listLEGAL.add(legal);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+            Collections.sort(level4listLEGAL);
+            if (level4listLEGAL.size() > 0) {
+                strLevel4ArrayLEGAL = new String[level4listLEGAL.size()];
+                for (int i = 0; i < level4listLEGAL.size(); i++) {
+                    strLevel4ArrayLEGAL[i] = level4listLEGAL.get(i);
+                }
+            }
+            if (level4listLEGAL != null && level4listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel4ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL4.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel5dataLEGAL(String aID) {
+        try {
+
+            level5listLEGAL = new ArrayList<>();
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "4" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level5listLEGAL.add(temp);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level5listLEGAL);
+            if (level5listLEGAL.size() > 0) {
+                strLevel5ArrayLEGAL= new String[level5listLEGAL.size()];
+                for (int i = 0; i < level5listLEGAL.size(); i++) {
+                    strLevel5ArrayLEGAL[i] = level5listLEGAL.get(i);
+                }
+            }
+            if (level5listLEGAL != null && level5listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel5ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL5.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel6dataLEGAL(String aID) {
+        try {
+            level6listLEGAL = new ArrayList<>();
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "5" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level6listLEGAL.add(temp);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level6listLEGAL);
+            if (level6listLEGAL.size() > 0) {
+                strLevel6ArrayLEGAL = new String[level6listLEGAL.size()];
+                for (int i = 0; i < level6listLEGAL.size(); i++) {
+                    strLevel6ArrayLEGAL[i] = level6listLEGAL.get(i);
+                }
+            }
+            if (level6listLEGAL != null && level6listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel6ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL6.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchLevel7dataLEGAL(String aID) {
+        try {
+            level7listLEGAL = new ArrayList<>();
+            String temp = "";
+            String where = " where role_ID = " + "'" + roleID + "'" + "and parent_Ref = "+ "'" + aID + "'";//+ "and data_level = "+ "'" + "6" + "'"
+            Cursor cursor1 = KHIL.dbCon.fetchFromSelect(DbHelper.M_Level_Data,where);
+            if (cursor1 != null && cursor1.getCount() > 0) {
+                cursor1.moveToFirst();
+                do {
+                    temp = cursor1.getString(cursor1.getColumnIndex("text"));
+                    level7listLEGAL.add(temp);
+                } while (cursor1.moveToNext());
+                cursor1.close();
+            }
+
+            Collections.sort(level7listLEGAL);
+            if (level7listLEGAL.size() > 0) {
+                strLevel7ArrayLEGAL = new String[level7listLEGAL.size()];
+                for (int i = 0; i < level7listLEGAL.size(); i++) {
+                    strLevel7ArrayLEGAL[i] = level7listLEGAL.get(i);
+                }
+            }
+            if (level7listLEGAL != null && level7listLEGAL.size() > 0) {
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, strLevel7ArrayLEGAL) {
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View v = null;
+                        // If this is the initial dummy entry, make it hidden
+                        if (position == 0) {
+                            TextView tv = new TextView(getContext());
+                            tv.setHeight(0);
+                            tv.setVisibility(View.GONE);
+                            v = tv;
+                        } else {
+                            // Pass convertView as null to prevent reuse of special case views
+                            v = super.getDropDownView(position, null, parent);
+                        }
+                        // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                        parent.setVerticalScrollBarEnabled(false);
+                        return v;
+                    }
+                };
+
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dashtxtL7.setAdapter(adapter1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /////////////////END
 
 }

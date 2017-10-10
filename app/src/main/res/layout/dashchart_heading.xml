@@ -5,6 +5,20 @@
     android:background="@color/black">
 
     <TextView
+        android:id="@+id/tvLegalentity1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Dept"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+    <TextView
         android:id="@+id/tvLegalentity"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -102,6 +116,23 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:fontFamily="@string/font_lightl"/>
+
+
+    <TextView
+        android:id="@+id/tvAction"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@drawable/table_row_item"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Action"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@string/font_lightl"/>
+
+
 
 
 </LinearLayout>

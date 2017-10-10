@@ -212,6 +212,9 @@ public class QC1Adapter extends BaseAdapter {
             qc1Model.setLevel7_value(cursor.getString(cursor.getColumnIndex("Level7_value")));
             qc1Model.setLocation_value(cursor.getString(cursor.getColumnIndex("Location_value")));
             qc1Model.setProperty_value(cursor.getString(cursor.getColumnIndex("Property_value")));
+
+
+
             qc1Model.setYeartext(cursor.getString(cursor.getColumnIndex("yeartext")));
             qc1Model.setQuartertext(cursor.getString(cursor.getColumnIndex("quartertext")));
             qc1Model.setMonthtext(cursor.getString(cursor.getColumnIndex("monthtext")));
@@ -224,6 +227,11 @@ public class QC1Adapter extends BaseAdapter {
             qc1Model.setLevel7_text(cursor.getString(cursor.getColumnIndex("Level7_text")));
             qc1Model.setLocation_text(cursor.getString(cursor.getColumnIndex("Location_text")));
             qc1Model.setProperty_text(cursor.getString(cursor.getColumnIndex("Property_text")));
+
+            qc1Model.setIndividual_ID(cursor.getString(cursor.getColumnIndex("Individual_ID")));
+            qc1Model.setIndividual_Value(cursor.getString(cursor.getColumnIndex("Individual_Value")));
+            qc1Model.setIndividual_Text(cursor.getString(cursor.getColumnIndex("Individual_Text")));
+            qc1Model.setNew_Proposal(cursor.getString(cursor.getColumnIndex("New_Proposal")));
 
 
         } catch (Exception e) {

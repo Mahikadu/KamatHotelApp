@@ -12,6 +12,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+               <TextView
+                   android:id="@+id/txtdept"
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="0.7"
+                   android:background="@drawable/table_row_item"
+                   android:gravity="center"
+                   android:padding="10dp"
+                   android:text="Dept"
+                   android:textAppearance="?android:attr/textAppearanceSmall"
+                   android:fontFamily="@string/font_lightl"/>
+
             <TextView
                 android:id="@+id/txtLegal_Entity"
                 android:layout_width="0dp"
@@ -92,6 +104,34 @@ s
                 android:text="Annexure"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:fontFamily="@string/font_lightl"/>
+
+               <LinearLayout
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="0.8"
+                   android:gravity="center"
+                   android:background="@drawable/table_row_item"
+                   android:orientation="vertical">
+
+
+                   <TextView
+                       android:id="@+id/txtView"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="center"
+                       android:textAppearance="?android:attr/textAppearanceSmall"
+                       android:fontFamily="@string/font_lightl"
+                       android:text="View"/>
+
+                   <TextView
+                       android:id="@+id/txtDownload"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="center"
+                       android:textAppearance="?android:attr/textAppearanceSmall"
+                       android:fontFamily="@string/font_lightl"
+                       android:text="Download"/>
+               </LinearLayout>
 
 
         </LinearLayout>

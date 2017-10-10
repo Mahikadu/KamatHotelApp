@@ -39,6 +39,7 @@ public class QC1Model implements Parcelable {
     String Location_Id;
     String Property_Id;
     String Role_Id;
+    String Individual_ID;
     String type;
 
     String yearvalue;
@@ -53,6 +54,7 @@ public class QC1Model implements Parcelable {
     String Level7_value;
     String Location_value;
     String Property_value;
+    String Individual_Value;
 
     String yeartext;
     String quartertext;
@@ -66,6 +68,42 @@ public class QC1Model implements Parcelable {
     String Level7_text;
     String Location_text;
     String Property_text;
+
+    public String getNew_Proposal() {
+        return New_Proposal;
+    }
+
+    public void setNew_Proposal(String new_Proposal) {
+        New_Proposal = new_Proposal;
+    }
+
+    String New_Proposal;
+
+    public String getIndividual_ID() {
+        return Individual_ID;
+    }
+
+    public void setIndividual_ID(String individual_ID) {
+        Individual_ID = individual_ID;
+    }
+
+    public String getIndividual_Value() {
+        return Individual_Value;
+    }
+
+    public void setIndividual_Value(String individual_Value) {
+        Individual_Value = individual_Value;
+    }
+
+    public String getIndividual_Text() {
+        return Individual_Text;
+    }
+
+    public void setIndividual_Text(String individual_Text) {
+        Individual_Text = individual_Text;
+    }
+
+    String Individual_Text;
 
 
     public String getId() {

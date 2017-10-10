@@ -645,7 +645,7 @@ public class UploadFragment extends Fragment {
                         legalEntityModel = listLegal.get(i);
                         String entity = legalEntityModel.getText();
                         if (entity.equalsIgnoreCase(legalEntityString)) {
-                            ID = legalEntityModel.getId();
+                            ID = legalEntityModel.getLegal_id();
                             legalEntityID = ID;
                             legalEntityValue = legalEntityModel.getValue();
                         }
@@ -722,7 +722,7 @@ public class UploadFragment extends Fragment {
                                     legalEntityModel = listLegalAll.get(i);
                                     String text = legalEntityModel.getText();
                                     if (text.equalsIgnoreCase(individual)) {
-                                        eid = legalEntityModel.getId();
+                                        eid = legalEntityModel.getLegal_id();
                                         parentref = legalEntityModel.getParent_Ref();
 
                                         individualID = eid;
@@ -1285,7 +1285,7 @@ public class UploadFragment extends Fragment {
             }
         });
 
-        if ((loginId.equalsIgnoreCase("finance") || loginId.equalsIgnoreCase("QC1finance")) && password.equalsIgnoreCase("password")) {
+        if ((loginId.equalsIgnoreCase("finance") || loginId.equalsIgnoreCase("QC1finance"))) {
 
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
@@ -1541,8 +1541,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if ((loginId.equalsIgnoreCase("hr") || loginId.equalsIgnoreCase("hrQC1"))
-                && password.equalsIgnoreCase("password")) {
+        } else if ((loginId.equalsIgnoreCase("hr") || loginId.equalsIgnoreCase("hrQC1"))) {
 
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
@@ -1681,7 +1680,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if ((loginId.equalsIgnoreCase("cmd") || loginId.equalsIgnoreCase("cmdQC1")) && password.equalsIgnoreCase("password")) {
+        } else if ((loginId.equalsIgnoreCase("cmd") || loginId.equalsIgnoreCase("cmdQC1"))) {
 
 //            headLev2.setVisibility(View.GONE);
 //            headLev3.setVisibility(View.GONE);
@@ -1863,7 +1862,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if ((loginId.equalsIgnoreCase("cs") || loginId.equalsIgnoreCase("csQC1")) && password.equalsIgnoreCase("password")) {
+        } else if ((loginId.equalsIgnoreCase("cs") || loginId.equalsIgnoreCase("csQC1"))) {
 
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
@@ -2018,7 +2017,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if ((loginId.equalsIgnoreCase("marketing") || loginId.equalsIgnoreCase("marketingQC1")) && password.equalsIgnoreCase("password")) {
+        } else if ((loginId.equalsIgnoreCase("marketing") || loginId.equalsIgnoreCase("marketingQC1"))) {
 
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
@@ -2200,7 +2199,7 @@ public class UploadFragment extends Fragment {
                 }
             });
 
-        } else if ((loginId.equalsIgnoreCase("Personal") || loginId.equalsIgnoreCase("personalQC1")) && password.equalsIgnoreCase("password")) {
+        } else if ((loginId.equalsIgnoreCase("Personal") || loginId.equalsIgnoreCase("personalQC1"))) {
 
 //            headLev2.setVisibility(View.GONE);
             headLev2.setText("Type of Document");
@@ -2352,7 +2351,7 @@ public class UploadFragment extends Fragment {
                     }
                 }
             });
-        } else if ((loginId.equalsIgnoreCase("legal") || loginId.equalsIgnoreCase("legalQC1")) && password.equalsIgnoreCase("password")) {
+        } else if ((loginId.equalsIgnoreCase("legal") || loginId.equalsIgnoreCase("legalQC1"))) {
             headLev2.setText("Type of Document");
             headLev3.setText("Selected Document");
             headLev4.setText("Supporting Document");
@@ -4701,6 +4700,7 @@ public class UploadFragment extends Fragment {
             do {
                 legalEntityModel = new LegalEntityModel();
                 legalEntityModel.setId(cursor1.getString(cursor1.getColumnIndex("id")));
+                legalEntityModel.setLegal_id(cursor1.getString(cursor1.getColumnIndex("legal_id")));
                 legalEntityModel.setText(cursor1.getString(cursor1.getColumnIndex("text")));
                 legalEntityModel.setValue(cursor1.getString(cursor1.getColumnIndex("value")));
                 legalEntityModel.setParent_Ref(cursor1.getString(cursor1.getColumnIndex("parent_Ref")));
@@ -4716,6 +4716,7 @@ public class UploadFragment extends Fragment {
             do {
                 legalEntityModel = new LegalEntityModel();
                 legalEntityModel.setId(cursorAll.getString(cursorAll.getColumnIndex("id")));
+                legalEntityModel.setLegal_id(cursorAll.getString(cursorAll.getColumnIndex("legal_id")));
                 legalEntityModel.setText(cursorAll.getString(cursorAll.getColumnIndex("text")));
                 legalEntityModel.setValue(cursorAll.getString(cursorAll.getColumnIndex("value")));
                 legalEntityModel.setParent_Ref(cursorAll.getString(cursorAll.getColumnIndex("parent_Ref")));

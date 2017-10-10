@@ -14,7 +14,9 @@ public class SOAPWebservice {
 	Context context;
 
 
-	String url = "http://114.79.142.72:82/khil_wcf/service1.svc";
+	//String url = "http://114.79.142.72:82/khil_wcf/service1.svc";
+
+	String url = "http://192.168.0.154/khilwcf/service1.svc";
 
 
 	public SOAPWebservice(Context con) {

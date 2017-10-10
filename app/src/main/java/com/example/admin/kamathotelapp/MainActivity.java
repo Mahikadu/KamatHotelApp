@@ -17,6 +17,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,9 +46,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -61,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogin;
     @InjectView(R.id.tvforgot)
     TextView tvforgot;
-    private String uname, pwd,message,id,email_id;
+    private String uname, pwd,message,id,email_id,Link;
     private SharedPref sharedPref;
     View focusView = null;
     private static final int RECORD_REQUEST_CODE = 101;
@@ -73,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     SOAPWebservice ws;
     ProgressDialog progress;
     private String strUpdatedDate = "";
-    private String value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
+    private String legal_id,value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
             Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,
             Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Location_Id,Month,Property_Id,Quarter,Role_Id,
             Status,Year,type,yearvalue,quartervalue,monthvalue,Legal_Entity_value,Level2_value,
@@ -82,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
             Level6_text,Level7_text,Location_text,Property_text;
     private SimpleDateFormat dateFormatter;
     DashBoardDataModel dashboarddatamodel;
+
+    String password;
+
+    private static byte[] KEY_64 = { 42, 16, 93, (byte)156, 78, 4,(byte) 218, 32 };
+    private static byte[] IV_64 = { 55, 103, (byte) 246, 79, 36, 99, (byte) 167, 3 };
 
 
 
@@ -172,6 +188,17 @@ public class MainActivity extends AppCompatActivity {
                 uname = etUserName.getText().toString();
                 pwd = etPassword.getText().toString();
 
+                if(pwd != null){
+
+                    try {
+                        password = encryptText(pwd);
+                        Log.v("msg",password);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
                 if((uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
                         uname.equalsIgnoreCase("hr") || uname.equalsIgnoreCase("legal") || uname.equalsIgnoreCase("marketing") ||
                         uname.equalsIgnoreCase("personal") || uname.equalsIgnoreCase("QC1finance") || uname.equalsIgnoreCase("csQC1") || uname.equalsIgnoreCase("cmdQC1") ||
@@ -209,6 +236,30 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    // Encrypts string and encode in Base64
+    public static String encryptText(String plainText) throws Exception {
+
+       /* ByteBuffer byteBuffer = ByteBuffer.allocate(KEY_64.length * 4);
+        IntBuffer intBuffer = byteBuffer.asIntBuffer();
+        intBuffer.put(data);*/
+
+      //  byte[] array = byteBuffer.array();
+        // ---- Use specified 3DES key and IV from other source --------------
+        byte[] plaintext = plainText.getBytes();//input
+        byte[] tdesKeyData = KEY_64;// your encryption key
+        byte[] myIV = IV_64;// initialization vector
+
+        SecretKeySpec myKey = new SecretKeySpec(tdesKeyData, "DESede");
+        Cipher c3des = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        IvParameterSpec ivspec = new IvParameterSpec(myIV);
+
+        c3des.init(Cipher.ENCRYPT_MODE, myKey, ivspec);
+        byte[] cipherText = c3des.doFinal(plaintext);
+        String encryptedString = Base64.encodeToString(cipherText,Base64.DEFAULT);
+        // return Base64Coder.encodeString(new String(cipherText));
+        return encryptedString;
     }
 
     private void exportDB() {
@@ -286,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-            SoapObject object2 = ws.loginWebservice(uname,"Android",device_id,"App",pwd,version_code,version);
+            SoapObject object2 = ws.loginWebservice(uname,"Android",device_id,"App",password,version_code,version);
             return object2;
 
         }
@@ -374,6 +425,17 @@ public class MainActivity extends AppCompatActivity {
                         for (int j = 0; j < soapObject.getPropertyCount(); j++) {
                             SoapObject root = (SoapObject) soapObject.getProperty(j);
 
+                            if (root.getPropertyAsString("id") != null) {
+
+                                if (!root.getPropertyAsString("id").equalsIgnoreCase("anyType{}")) {
+                                    legal_id = root.getPropertyAsString("id");
+                                } else {
+                                    legal_id = "";
+                                }
+                            } else {
+                                legal_id = "";
+                            }
+
                             if (root.getPropertyAsString("value") != null) {
 
                                 if (!root.getPropertyAsString("value").equalsIgnoreCase("anyType{}")) {
@@ -411,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
                             // WHERE clause arguments
                             String[] selectionArgs = {id+""};
               //            "id","value", "text", "parent_Ref", "updated_date"
-                            String valuesArray[] = {id+"", value, text, parent_Ref, date};
+                            String valuesArray[] = {id+"",legal_id, value, text, parent_Ref, date};
                             boolean output = KHIL.dbCon.updateBulk(DbHelper.M_Legal_Entity, selection, valuesArray, utils.columnNamesM_Legal_Entity, selectionArgs);
 
                         }
@@ -1739,6 +1801,19 @@ public class MainActivity extends AppCompatActivity {
                         email_id = "";
                     }
 
+                    if (root.getProperty("Link") != null) {
+
+                        if (!root.getProperty("Link").toString().equalsIgnoreCase("anyType{}")) {
+                            Link = root.getProperty("Link").toString();
+
+                        } else {
+                            Link = "";
+                        }
+                    } else {
+                        Link = "";
+                    }
+
+
                     if (root.getProperty("id") != null) {
 
                         if (!root.getProperty("id").toString().equalsIgnoreCase("anyType{}")) {
@@ -1768,18 +1843,24 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            /*if(email_id != null || !email_id.equals("")){
+            if(email_id != null || !email_id.equals("")){
+                String link_val = "http://khil.smartforcecrm.com/Forgot/ForgotPassword/?Eid=" + roleId +"&UID="+ device_id;
+                String body = "<a href=\"" + link_val + "\">" + link_val + "</a>";
+                String data = "Hi,\n As a requested,below is a link to reset your Password for legal account.\nClick below to Reset Password\n\n" + body;
+
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_EMAIL , email_id);
-                i.putExtra(Intent.EXTRA_SUBJECT, "F");
-                i.putExtra(Intent.EXTRA_TEXT , "body of email");
+                i.putExtra(Intent.EXTRA_SUBJECT, "Forgot Password");
+                i.putExtra(Intent.EXTRA_TEXT , Html.fromHtml(data));
                 try {
                     startActivity(Intent.createChooser(i, "Send mail..."));
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(MyActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                 }
-            }*/
+            }
+
+
         }
     }
 }
