@@ -93,6 +93,9 @@ public class ChartAdapter extends BaseAdapter {
             TextView txtSelected_Document = (TextView) convertView.findViewById(R.id.txtSelected_Document);
             TextView txtSupporting_Document = (TextView) convertView.findViewById(R.id.txtSupporting_Document);
             TextView txtAnnexure = (TextView) convertView.findViewById(R.id.txtAnnexure);
+            TextView txtView = (TextView) convertView.findViewById(R.id.txtView);
+            TextView txtDownload = (TextView) convertView.findViewById(R.id.txtDownload);
+            TextView txtdelete = (TextView) convertView.findViewById(R.id.txtdelete);
 
 
             ChartDataModel chartDataModel = chartModelList.get(position);

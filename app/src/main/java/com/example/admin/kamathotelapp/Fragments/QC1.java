@@ -48,7 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.admin.kamathotelapp.Adapters.DashboardAdapter;
+
 import com.example.admin.kamathotelapp.Adapters.QC1Adapter;
 import com.example.admin.kamathotelapp.Adapters.QC1UploadAdapter;
 import com.example.admin.kamathotelapp.Adapters.UploadAdapter;

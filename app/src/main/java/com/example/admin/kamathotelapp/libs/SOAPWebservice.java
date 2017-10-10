@@ -161,13 +161,14 @@ public class SOAPWebservice {
 	}
 
 	// DashboardData
-	public SoapObject Dashboarddata(String username) {
+	public SoapObject Dashboarddata(String username,String userid) {
 		SoapObject result = null;
 
 		try {
 			SoapObject request = new SoapObject("http://tempuri.org/",
 					"Dashboarddata");// soap object
 			request.addProperty("Param", username);
+			request.addProperty("Id", userid);
 
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 					SoapEnvelope.VER11);// soap envelop with version
@@ -462,8 +463,8 @@ public class SOAPWebservice {
 	}
 
 	// GetEmailID
-	public SoapObject changepassword(String rollId, String newpass,String username) {
-		SoapObject result = null;
+	public SoapPrimitive changepassword(String rollId, String newpass,String username) {
+		SoapPrimitive result = null;
 
 		try {
 			SoapObject request = new SoapObject("http://tempuri.org/",
@@ -483,7 +484,7 @@ public class SOAPWebservice {
 					envelope);
 
 			// response soap object
-			result = (SoapObject) envelope.getResponse();
+			result = (SoapPrimitive) envelope.getResponse();
 			Log.e("result", result.toString());
 			return result;
 

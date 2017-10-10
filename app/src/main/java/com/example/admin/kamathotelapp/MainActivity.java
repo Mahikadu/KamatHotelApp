@@ -61,6 +61,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogin;
     @InjectView(R.id.tvforgot)
     TextView tvforgot;
-    private String uname, pwd,message,id,email_id,Link;
+    private String uname, pwd,message,id,email_id,Link,username;
     private SharedPref sharedPref;
     View focusView = null;
     private static final int RECORD_REQUEST_CODE = 101;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     SOAPWebservice ws;
     ProgressDialog progress;
     private String strUpdatedDate = "";
-    private String legal_id,value, text, parent_Ref, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
+    private String legal_id,value, text, parent_Ref,Individuals_Id,Individuals_text,Individuals_value,NewProposal, updated_date,date,roleId,property_id,Inv_count,status,Created_By,Created_Date,
             Document_No,File_Exten,File_Name,File_Path,File_Path_File_Name,Id,Is_Download,Is_Edit,Is_View,Legal_Entity_Id,
             Level2_Id,Level3_Id,Level4_Id,Level5_Id,Level6_Id,Level7_Id,Location_Id,Month,Property_Id,Quarter,Role_Id,
             Status,Year,type,yearvalue,quartervalue,monthvalue,Legal_Entity_value,Level2_value,
@@ -175,8 +176,16 @@ public class MainActivity extends AppCompatActivity {
         tvforgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ForgotPassword forgotPassword = new ForgotPassword();
-                forgotPassword.execute();
+                username = etUserName.getText().toString();
+                if(username==null || username.equalsIgnoreCase("")){
+                    etUserName.setError("Username is required");
+                    focusView=etUserName;
+                    focusView.requestFocus();
+                    return;
+                }else {
+                    ForgotPassword forgotPassword = new ForgotPassword();
+                    forgotPassword.execute();
+                }
             }
         });
 
@@ -188,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 uname = etUserName.getText().toString();
                 pwd = etPassword.getText().toString();
 
-                if(pwd != null){
+                /*if(pwd != null){
 
                     try {
                         password = encryptText(pwd);
@@ -196,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
 
 
                 if((uname.equalsIgnoreCase("finance") || uname.equalsIgnoreCase("cs") || uname.equalsIgnoreCase("cmd") ||
@@ -238,14 +247,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Encrypts string and encode in Base64
+   /* // Encrypts string and encode in Base64
     public static String encryptText(String plainText) throws Exception {
-
-       /* ByteBuffer byteBuffer = ByteBuffer.allocate(KEY_64.length * 4);
-        IntBuffer intBuffer = byteBuffer.asIntBuffer();
-        intBuffer.put(data);*/
-
-      //  byte[] array = byteBuffer.array();
         // ---- Use specified 3DES key and IV from other source --------------
         byte[] plaintext = plainText.getBytes();//input
         byte[] tdesKeyData = KEY_64;// your encryption key
@@ -260,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         String encryptedString = Base64.encodeToString(cipherText,Base64.DEFAULT);
         // return Base64Coder.encodeString(new String(cipherText));
         return encryptedString;
-    }
+    }*/
 
     private void exportDB() {
         File sd = Environment.getExternalStorageDirectory();
@@ -337,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-            SoapObject object2 = ws.loginWebservice(uname,"Android",device_id,"App",password,version_code,version);
+            SoapObject object2 = ws.loginWebservice(uname,"Android",device_id,"App",pwd,version_code,version);
             return object2;
 
         }
@@ -439,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
                             if (root.getPropertyAsString("value") != null) {
 
                                 if (!root.getPropertyAsString("value").equalsIgnoreCase("anyType{}")) {
-                                    value = root.getPropertyAsString("value");
+                                    value = root.getPropertyAsString("value").trim();
                                 } else {
                                     value = "";
                                 }
@@ -1144,7 +1147,7 @@ public class MainActivity extends AppCompatActivity {
         protected SoapObject doInBackground(Void... params) {
             SoapObject object2 = null;
             try {
-                object2 = ws.Dashboarddata(uname);
+                object2 = ws.Dashboarddata(uname,"2");
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -1333,6 +1336,34 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Id = "";
                     }
+
+                    if (root.getProperty("Individuals_Id") != null) {
+
+                        if (!root.getProperty("Individuals_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Individuals_Id = root.getProperty("Individuals_Id").toString();
+
+                        } else {
+                            Individuals_Id = "";
+                        }
+                    } else {
+                        Individuals_Id = "";
+                    }
+                    try {
+                        Cursor cursorindividual = null;
+                        String where = " where legal_id = '" + Individuals_Id + "'";
+                        cursorindividual = KHIL.dbCon.fetchFromSelect(DbHelper.M_Legal_Entity, where);
+                        if (cursorindividual != null && cursorindividual.getCount() > 0) {
+                            cursorindividual.moveToFirst();
+                            do {
+                                Individuals_Id = cursorindividual.getString(cursorindividual.getColumnIndex("legal_id"));
+                                Individuals_text = cursorindividual.getString(cursorindividual.getColumnIndex("text"));
+                                Individuals_value = cursorindividual.getString(cursorindividual.getColumnIndex("value"));
+                            } while (cursorindividual.moveToNext());
+                            cursorindividual.close();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     if (root.getProperty("Is_Download") != null) {
 
                         if (!root.getProperty("Is_Download").toString().equalsIgnoreCase("anyType{}")) {
@@ -1379,12 +1410,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         Cursor cursorlegal = null;
-                        String where = " where id = '" + Legal_Entity_Id + "'";
+                        String where = " where legal_id = '" + Legal_Entity_Id + "'";
                         cursorlegal = KHIL.dbCon.fetchFromSelect(DbHelper.M_Legal_Entity, where);
                         if (cursorlegal != null && cursorlegal.getCount() > 0) {
                             cursorlegal.moveToFirst();
                             do {
-                                Legal_Entity_Id = cursorlegal.getString(cursorlegal.getColumnIndex("id"));
+                                Legal_Entity_Id = cursorlegal.getString(cursorlegal.getColumnIndex("legal_id"));
                                 Legal_Entity_text = cursorlegal.getString(cursorlegal.getColumnIndex("text"));
                                 Legal_Entity_value = cursorlegal.getString(cursorlegal.getColumnIndex("value"));
                             } while (cursorlegal.moveToNext());
@@ -1615,6 +1646,18 @@ public class MainActivity extends AppCompatActivity {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+
+                    if (root.getProperty("NewProposal") != null) {
+
+                        if (!root.getProperty("NewProposal").toString().equalsIgnoreCase("anyType{}")) {
+                            NewProposal = root.getProperty("NewProposal").toString();
+
+                        } else {
+                            NewProposal = "";
+                        }
+                    } else {
+                        NewProposal = "";
+                    }
                     if (root.getProperty("Property_Id") != null) {
 
                         if (!root.getProperty("Property_Id").toString().equalsIgnoreCase("anyType{}")) {
@@ -1743,7 +1786,7 @@ public class MainActivity extends AppCompatActivity {
                             quartervalue,monthvalue,Legal_Entity_value,Level2_value,
                             Level3_value,Level4_value,Level5_value,Level6_value,Level7_value,Location_value,Property_value,
                             yeartext,quartertext,monthtext,Legal_Entity_text,Level2_text,Level3_text,Level4_text,Level5_text,
-                            Level6_text,Level7_text,Location_text,Property_text};
+                            Level6_text,Level7_text,Location_text,Property_text,Individuals_Id,Individuals_text,Individuals_value,NewProposal};
                     boolean output = KHIL.dbCon.updateBulk(DbHelper.QC1_DATA, selection, valuesArray, utils.columnNames_QC1_Data, selectionArgs);
                 }
             } catch (Exception e) {
@@ -1769,7 +1812,7 @@ public class MainActivity extends AppCompatActivity {
         protected SoapObject doInBackground(Void... params) {
             SoapObject object2 = null;
             try {
-                object2 = ws.getEmailID(uname);
+                object2 = ws.getEmailID(username);
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -1799,18 +1842,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         email_id = "";
-                    }
-
-                    if (root.getProperty("Link") != null) {
-
-                        if (!root.getProperty("Link").toString().equalsIgnoreCase("anyType{}")) {
-                            Link = root.getProperty("Link").toString();
-
-                        } else {
-                            Link = "";
-                        }
-                    } else {
-                        Link = "";
                     }
 
 
@@ -1843,24 +1874,20 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if(email_id != null || !email_id.equals("")){
-                String link_val = "http://khil.smartforcecrm.com/Forgot/ForgotPassword/?Eid=" + roleId +"&UID="+ device_id;
-                String body = "<a href=\"" + link_val + "\">" + link_val + "</a>";
-                String data = "Hi,\n As a requested,below is a link to reset your Password for legal account.\nClick below to Reset Password\n\n" + body;
+           if(message.equalsIgnoreCase("Mail Sent")){
 
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_EMAIL , email_id);
-                i.putExtra(Intent.EXTRA_SUBJECT, "Forgot Password");
-                i.putExtra(Intent.EXTRA_TEXT , Html.fromHtml(data));
-                try {
-                    startActivity(Intent.createChooser(i, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
-            }
+               new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                       .setTitleText(sharedPref.getLoginId())
+                       .setContentText("Email will be sent to register Email-Id to Reset Password")
+                       .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                           @Override
+                           public void onClick(SweetAlertDialog sDialog) {
 
-
+                               sDialog.dismissWithAnimation();
+                           }
+                       })
+                       .show();
+           }
         }
     }
 }

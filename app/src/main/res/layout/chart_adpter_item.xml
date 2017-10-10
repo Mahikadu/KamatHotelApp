@@ -59,7 +59,7 @@
                 android:text="Location"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:fontFamily="@string/font_lightl"/>
-s
+
 
             <TextView
                 android:id="@+id/txtType_Of_Document"
@@ -118,7 +118,8 @@ s
                        android:id="@+id/txtView"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:layout_gravity="center"
+                       android:layout_gravity="left"
+                       android:padding="3dp"
                        android:textAppearance="?android:attr/textAppearanceSmall"
                        android:fontFamily="@string/font_lightl"
                        android:text="View"/>
@@ -127,10 +128,20 @@ s
                        android:id="@+id/txtDownload"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:layout_gravity="center"
+                       android:layout_gravity="left"
+                       android:padding="3dp"
                        android:textAppearance="?android:attr/textAppearanceSmall"
                        android:fontFamily="@string/font_lightl"
                        android:text="Download"/>
+                   <TextView
+                       android:id="@+id/txtdelete"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="left"
+                       android:padding="3dp"
+                       android:textAppearance="?android:attr/textAppearanceSmall"
+                       android:fontFamily="@string/font_lightl"
+                       android:text="Delete"/>
                </LinearLayout>
 
 

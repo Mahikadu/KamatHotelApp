@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,6 +25,7 @@ import com.example.admin.kamathotelapp.Utils.Utils;
 import com.example.admin.kamathotelapp.libs.SOAPWebservice;
 
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 
 import java.util.ArrayList;
 
@@ -98,7 +100,7 @@ public class ChangePassFragement extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
                 Pass = pass.getText().toString();
                 confirmPass = confirmpass.getText().toString();
 
@@ -114,7 +116,7 @@ public class ChangePassFragement extends Fragment {
         return view;
     }
 
-    public class ChangePassword extends AsyncTask<Void, Void, SoapObject> {
+    public class ChangePassword extends AsyncTask<Void, Void, SoapPrimitive> {
 
         @Override
         protected void onPreExecute() {
@@ -123,8 +125,8 @@ public class ChangePassFragement extends Fragment {
         }
 
         @Override
-        protected SoapObject doInBackground(Void... params) {
-            SoapObject object2 = null;
+        protected SoapPrimitive doInBackground(Void... params) {
+            SoapPrimitive object2 = null;
             try {
                 object2 = ws.changepassword(sharedPref.getRoleID(),confirmPass,sharedPref.getLoginId());
 
@@ -135,14 +137,14 @@ public class ChangePassFragement extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(SoapObject soapObject) {
+        protected void onPostExecute(SoapPrimitive soapObject) {
             super.onPostExecute(soapObject);
             try {
 
                 String response = String.valueOf(soapObject);
                 System.out.println("Response =>: " + response);
 
-               if(!response.equalsIgnoreCase("Not Updated")){
+               if(response.equalsIgnoreCase("Updated Succesfully")){
                    pass.setText("");
                    confirmpass.setText("");
                    new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)

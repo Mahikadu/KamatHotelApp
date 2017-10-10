@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.admin.kamathotelapp.Fragments.DashboardFragment">
 
-    <Button
+   <!-- <Button
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,18 +14,17 @@
         android:padding="15dp"
         android:text="Search"
         android:textColor="@android:color/white"
-        android:textSize="16dp" />
+        android:textSize="16dp" />-->
 
     <LinearLayout
         android:id="@+id/searchlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSearch"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:weightSum="1">
 
         <RelativeLayout
@@ -35,24 +34,41 @@
             android:gravity="center"
             android:layout_weight="0.7">
 
+            <AutoCompleteTextView
+                android:id="@+id/etsearchdoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Document"
+                android:padding="10dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:windowSoftInputMode="stateHidden"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/Searchbtn"
+                android:textColorHint="@color/app_text_color"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:inputType="text"
+                android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/etsearchdoc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:ems="10"
-                        android:layout_marginTop="10dp"
-                        android:layout_toLeftOf="@+id/Searchbtn"
-                        android:padding="10dp"
-                        android:hint="Search Document"
-                        android:textSize="15dp"
-                        android:imeOptions="actionNext"
-                        android:textColor="@color/app_text_color"
-                        android:inputType="text"
-                        android:longClickable="false"
-                        android:maxLength="50"
-                        android:maxLines="1" />
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/etsearchdoc"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:ems="10"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:layout_toLeftOf="@+id/Searchbtn"-->
+                        <!--android:padding="10dp"-->
+                        <!--android:hint="Search Document"-->
+                        <!--android:textSize="15dp"-->
+                        <!--android:imeOptions="actionNext"-->
+                        <!--android:textColor="@color/app_text_color"-->
+                        <!--android:inputType="text"-->
+                        <!--android:longClickable="false"-->
+                        <!--android:maxLength="50"-->
+                        <!--android:maxLines="1" />-->
 
 
             <Button

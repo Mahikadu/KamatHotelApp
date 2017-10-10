@@ -89,8 +89,8 @@ public class DashboardFragment extends Fragment {
     List<ChartDataModel>chartModelList;
     DashboardAdapter dashboardAdapter;
     ChartAdapter chartAdapter;
-    private Button search,loadRecord,Searchbtn,btnAdvSearch;
-    EditText etsearchdoc;
+    private Button loadRecord,Searchbtn,btnAdvSearch;
+    AutoCompleteTextView etsearchdoc;
     private TableLayout tableLayout,tableLaout_chart;
     private String Inv_count,status,Created_By,LegalEntity,type_of_document,
             selected_document,supporting_document,annexure,Location,Property;
@@ -200,7 +200,7 @@ public class DashboardFragment extends Fragment {
     String[] strLevel7ArrayLEGAL = null;
 
 
-
+    String[] countryNameList = {"India", "China", "Australia", "New Zealand", "England", "Pakistan"};
 
 
     @Override
@@ -237,7 +237,7 @@ public class DashboardFragment extends Fragment {
         chartdatalayout = (LinearLayout) view.findViewById(R.id.chartdatalayout);
         barchartlayout = (LinearLayout) view.findViewById(R.id.barchartlayout);
         searchlayout = (LinearLayout) view.findViewById(R.id.searchlayout);
-        search = (Button)view.findViewById(R.id.btnSearch);
+        //search = (Button)view.findViewById(R.id.btnSearch);
         loadRecord = (Button)view.findViewById(R.id.btnLoad);
 
         listDashboard = (ListView) view.findViewById(R.id.listDashboard);
@@ -271,7 +271,14 @@ public class DashboardFragment extends Fragment {
 
         Searchbtn = (Button)view.findViewById(R.id.Searchbtn);
         btnAdvSearch = (Button)view.findViewById(R.id.btnAdvSearch);
-        etsearchdoc = (EditText)view.findViewById(R.id.etsearchdoc);
+        etsearchdoc = (AutoCompleteTextView)view.findViewById(R.id.etsearchdoc);
+
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, countryNameList);
+
+        etsearchdoc.setAdapter(adapter);
+        etsearchdoc.setThreshold(1);//start searching from 1 character
+        etsearchdoc.setAdapter(adapter);   //set the adapter for displaying country name list
+
 
 
         listDashchart.setOnTouchListener(new ListView.OnTouchListener()
@@ -430,7 +437,7 @@ public class DashboardFragment extends Fragment {
            e.printStackTrace();
        }
 
-        search.setOnClickListener(new View.OnClickListener() {
+      /*  search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
@@ -441,8 +448,17 @@ public class DashboardFragment extends Fragment {
                 barchartlayout.setVisibility(View.GONE);
                 chartdatalayout.setVisibility(View.GONE);
             }
-        });
+        });*/
 
+        Searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.button_click));
+                dashboardlayout.setVisibility(View.VISIBLE);
+                barchartlayout.setVisibility(View.GONE);
+                chartdatalayout.setVisibility(View.GONE);
+            }
+        });
         btnAdvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
