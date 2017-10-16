@@ -2,7 +2,9 @@ package com.example.admin.kamathotelapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,6 +23,8 @@ import com.example.admin.kamathotelapp.Fragments.ScanFragment;
 import com.example.admin.kamathotelapp.Fragments.UploadFragment;
 import com.example.admin.kamathotelapp.Utils.ExceptionHandler;
 import com.example.admin.kamathotelapp.Utils.SharedPref;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,6 +71,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new SweetAlertDialog(NavigationDrawerActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure want to logout?")
+                       /* .setContentText("Won't be able to recover this file!")
+                        .setConfirmText("Yes,delete it!")*/
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                // reuse previous dialog instance
+                                sDialog.setTitleText("Logout Sucessfully!")
+                                       /* .setContentText("Your imaginary file has been deleted!")*/
+                                        .setConfirmText("OK")
+                                        .setConfirmClickListener(null)
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            }
+                        })
+                        .show();
                 sharedPref.clearPref();
                 Intent intent = new Intent(NavigationDrawerActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -76,10 +96,25 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            super.onBackPressed();
+        }*/
+
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_content);
+        if (currentFragment instanceof DashboardFragment) {//the fragment on which you want to handle your back press
+            Log.i("BACK PRESSED", "BACK PRESSED");
+        }else if (currentFragment instanceof UploadFragment) {
+            Log.i("BACK PRESSED", "BACK PRESSED");
+        }else if (currentFragment instanceof ScanFragment) {
+            Log.i("BACK PRESSED", "BACK PRESSED");
+        }else if (currentFragment instanceof QC1) {
+            Log.i("BACK PRESSED", "BACK PRESSED");
+        }else if (currentFragment instanceof ChangePassFragement) {
+            Log.i("BACK PRESSED", "BACK PRESSED");
+        }else{
             super.onBackPressed();
         }
     }
