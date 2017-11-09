@@ -100,6 +100,9 @@ public class DashboardFragment extends Fragment {
     SOAPWebservice ws;
     ProgressDialog progress;
 
+    DashBoardDataModel dashboarddatamodel;
+    private Utils utils;
+
     @InjectView(R.id.dashLegalEntity)
     AutoCompleteTextView autoLegalEntity;
     @InjectView(R.id.dashIndividuals)
@@ -228,6 +231,7 @@ public class DashboardFragment extends Fragment {
         roleID = sharedPref.getRoleID();
         loginId = sharedPref.getLoginId();
         password = sharedPref.getPassword();
+        utils = new Utils(getContext());
 
         barChart = (HorizontalBarChart) view.findViewById(R.id.bargraph);
         tableLayout = (TableLayout) view.findViewById(R.id.tableLaout_lead);
@@ -279,6 +283,9 @@ public class DashboardFragment extends Fragment {
         etsearchdoc.setThreshold(1);//start searching from 1 character
         etsearchdoc.setAdapter(adapter);   //set the adapter for displaying country name list
 
+        // call Dashoboarddata AsynTask
+        DashboardData dashboardData = new DashboardData();
+        dashboardData.execute();
 
 
         listDashchart.setOnTouchListener(new ListView.OnTouchListener()
@@ -2345,6 +2352,79 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    public class DashboardData extends AsyncTask<Void, Void, SoapObject> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected SoapObject doInBackground(Void... params) {
+            SoapObject object2 = null;
+            try {
+                object2 = ws.Dashboarddata(loginId,"2");
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return object2;
+        }
+
+        @Override
+        protected void onPostExecute(SoapObject soapObject) {
+            super.onPostExecute(soapObject);
+            try {
+
+                String response = String.valueOf(soapObject);
+                System.out.println("Response =>: " + response);
+
+                int id = 0;
+                dashboarddatamodel = new DashBoardDataModel();
+                for (int i = 0; i < soapObject.getPropertyCount(); i++) {
+                    SoapObject root = (SoapObject) soapObject.getProperty(i);
+
+
+                    if (root.getProperty("Inv_count") != null) {
+
+                        if (!root.getProperty("Inv_count").toString().equalsIgnoreCase("anyType{}")) {
+                            Inv_count = root.getProperty("Inv_count").toString();
+
+                        } else {
+                            Inv_count = "";
+                        }
+                    } else {
+                        Inv_count = "";
+                    }
+                    //barEntries.add(new BarEntry(Float.valueOf(Inv_count),i));
+
+                    if (root.getProperty("status") != null) {
+
+                        if (!root.getProperty("status").toString().equalsIgnoreCase("anyType{}")) {
+                            status = root.getProperty("status").toString();
+
+                        } else {
+                            status = "";
+                        }
+                    } else {
+                        status = "";
+                    }
+
+                    String selection = "id = ?";
+                    id = id+1;
+                    // WHERE clause arguments
+                    String[] selectionArgs = {id+""};
+                    //            "id","value", "text", "parent_Ref", "updated_date"
+                    String valuesArray[] = {id+"", Inv_count, status, roleID};
+                    boolean output = KHIL.dbCon.updateBulk(DbHelper.DASHBOARD_DATA, selection, valuesArray, utils.columnNames_Dashboard_Data, selectionArgs);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void getDashboardData() {
 
         dashBoardDataModelArrayList = new ArrayList<>();
@@ -2566,6 +2646,282 @@ public class DashboardFragment extends Fragment {
             }
         }
     }
+
+    /*public class SearchData extends AsyncTask<Void, Void, SoapObject> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected SoapObject doInBackground(Void... params) {
+            SoapObject object2 = null;
+            try {
+                object2 = ws.SearchData(text);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return object2;
+        }
+
+        @Override
+        protected void onPostExecute(SoapObject soapObject) {
+            super.onPostExecute(soapObject);
+            try {
+
+                String response = String.valueOf(soapObject);
+                System.out.println("Response =>: " + response);
+
+
+                dashboardModel = new DashboardModel();
+                for (int i = 0; i < soapObject.getPropertyCount(); i++) {
+                    SoapObject root = (SoapObject) soapObject.getProperty(i);
+
+
+                    if (root.getProperty("Document_No") != null) {
+
+                        if (!root.getProperty("Document_No").toString().equalsIgnoreCase("anyType{}")) {
+                            Document_No = root.getProperty("Document_No").toString();
+
+                        } else {
+                            Document_No = "";
+                        }
+                    } else {
+                        Document_No = "";
+                    }
+
+                    if (root.getProperty("File_Name") != null) {
+
+                        if (!root.getProperty("File_Name").toString().equalsIgnoreCase("anyType{}")) {
+                            File_Name = root.getProperty("File_Name").toString();
+
+                        } else {
+                            File_Name = "";
+                        }
+                    } else {
+                        File_Name = "";
+                    }
+
+                    if (root.getProperty("Is_Download") != null) {
+
+                        if (!root.getProperty("Is_Download").toString().equalsIgnoreCase("anyType{}")) {
+                            Is_Download = root.getProperty("Is_Download").toString();
+
+                        } else {
+                            Is_Download = "";
+                        }
+                    } else {
+                        Is_Download = "";
+                    }
+
+                    if (root.getProperty("Is_Edit") != null) {
+
+                        if (!root.getProperty("Is_Edit").toString().equalsIgnoreCase("anyType{}")) {
+                            Is_Edit = root.getProperty("Is_Edit").toString();
+
+                        } else {
+                            Is_Edit = "";
+                        }
+                    } else {
+                        Is_Edit = "";
+                    }
+
+                    if (root.getProperty("Is_View") != null) {
+
+                        if (!root.getProperty("Is_View").toString().equalsIgnoreCase("anyType{}")) {
+                            Is_View = root.getProperty("Is_View").toString();
+
+                        } else {
+                            Is_View = "";
+                        }
+                    } else {
+                        Is_View = "";
+                    }
+
+                    if (root.getProperty("Legal_Entity") != null) {
+
+                        if (!root.getProperty("Legal_Entity").toString().equalsIgnoreCase("anyType{}")) {
+                            Legal_Entity = root.getProperty("Legal_Entity").toString();
+
+                        } else {
+                            Legal_Entity = "";
+                        }
+                    } else {
+                        Legal_Entity = "";
+                    }
+
+                    if (root.getProperty("Level2_id") != null) {
+
+                        if (!root.getProperty("Level2_id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level2_id = root.getProperty("Level2_id").toString();
+
+                        } else {
+                            Level2_id = "";
+                        }
+                    } else {
+                        Level2_id = "";
+                    }
+
+                    if (root.getProperty("Level3_id") != null) {
+
+                        if (!root.getProperty("Level3_id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level3_id = root.getProperty("Level3_id").toString();
+
+                        } else {
+                            Level3_id = "";
+                        }
+                    } else {
+                        Level3_id = "";
+                    }
+
+                    if (root.getProperty("Level4_id") != null) {
+
+                        if (!root.getProperty("Level4_id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level4_id = root.getProperty("Level4_id").toString();
+
+                        } else {
+                            Level4_id = "";
+                        }
+                    } else {
+                        Level4_id = "";
+                    }
+
+                    if (root.getProperty("Level5_id") != null) {
+
+                        if (!root.getProperty("Level5_id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level5_id = root.getProperty("Level5_id").toString();
+
+                        } else {
+                            Level5_id = "";
+                        }
+                    } else {
+                        Level5_id = "";
+                    }
+
+                    if (root.getProperty("Level6_id") != null) {
+
+                        if (!root.getProperty("Level6_id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level6_id = root.getProperty("Level6_id").toString();
+
+                        } else {
+                            Level6_id = "";
+                        }
+                    } else {
+                        Level6_id = "";
+                    }
+
+                    if (root.getProperty("Level7_id") != null) {
+
+                        if (!root.getProperty("Level7_id").toString().equalsIgnoreCase("anyType{}")) {
+                            Level7_id = root.getProperty("Level7_id").toString();
+
+                        } else {
+                            Level7_id = "";
+                        }
+                    } else {
+                        Level7_id = "";
+                    }
+
+                    if (root.getProperty("Location") != null) {
+
+                        if (!root.getProperty("Location").toString().equalsIgnoreCase("anyType{}")) {
+                            Location = root.getProperty("Location").toString();
+
+                        } else {
+                            Location = "";
+                        }
+                    } else {
+                        Location = "";
+                    }
+
+                    if (root.getProperty("Property") != null) {
+
+                        if (!root.getProperty("Property").toString().equalsIgnoreCase("anyType{}")) {
+                            Property = root.getProperty("Property").toString();
+
+                        } else {
+                            Property = "";
+                        }
+                    } else {
+                        Property = "";
+                    }
+
+                    if (root.getProperty("RoleName") != null) {
+
+                        if (!root.getProperty("RoleName").toString().equalsIgnoreCase("anyType{}")) {
+                            RoleName = root.getProperty("RoleName").toString();
+
+                        } else {
+                            RoleName = "";
+                        }
+                    } else {
+                        RoleName = "";
+                    }
+
+                    if (root.getProperty("Status") != null) {
+
+                        if (!root.getProperty("Status").toString().equalsIgnoreCase("anyType{}")) {
+                            Status = root.getProperty("Status").toString();
+
+                        } else {
+                            Status = "";
+                        }
+                    } else {
+                        Status = "";
+                    }
+
+                    if (root.getProperty("Trans_Dtl_Id") != null) {
+
+                        if (!root.getProperty("Trans_Dtl_Id").toString().equalsIgnoreCase("anyType{}")) {
+                            Trans_Dtl_Id = root.getProperty("Trans_Dtl_Id").toString();
+
+                        } else {
+                            Trans_Dtl_Id = "";
+                        }
+                    } else {
+                        Trans_Dtl_Id = "";
+                    }
+
+                    if (root.getProperty("message") != null) {
+
+                        if (!root.getProperty("message").toString().equalsIgnoreCase("anyType{}")) {
+                            message = root.getProperty("message").toString();
+
+                        } else {
+                            message = "";
+                        }
+                    } else {
+                        message = "";
+                    }
+
+                    if (root.getProperty("type") != null) {
+
+                        if (!root.getProperty("type").toString().equalsIgnoreCase("anyType{}")) {
+                            type = root.getProperty("type").toString();
+
+                        } else {
+                            type = "";
+                        }
+                    } else {
+                        type = "";
+                    }
+
+                    String selection = "id = ?";
+                    id = id+1;
+                    // WHERE clause arguments
+                    String[] selectionArgs = {id+""};
+                    //            "id","value", "text", "parent_Ref", "updated_date"
+                    String valuesArray[] = {id+"", Inv_count, status, roleID};
+                    boolean output = KHIL.dbCon.updateBulk(DbHelper.DASHBOARD_DATA, selection, valuesArray, utils.columnNames_Dashboard_Data, selectionArgs);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
 
     private void fetchLegalEntity() {
         listLegal = new ArrayList<>();
